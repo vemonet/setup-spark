@@ -5,7 +5,7 @@
 </p>
 
 
-This action sets up a Spark environment for use in GitHub Actions by:
+This action sets up a Apache Spark context in your environment for use in GitHub Actions by:
 
 - installing and adding `spark-submit` and `spark-shell` to PATH
 - setting `SPARK_HOME`, `PYSPARK_PYTHON` environment variable (and others) in the job
