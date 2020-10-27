@@ -8,7 +8,9 @@
 This action sets up a Spark environment for use in GitHub Actions by:
 
 - installing and adding `spark-submit` and `spark-shell` to PATH
-- setting `SPARK_HOME` environment variable (and others) in the job
+- setting `SPARK_HOME`, `PYSPARK_PYTHON` environment variable (and others) in the job
+
+This enables to test applications using a local Spark context.
 
 # Usage
 
@@ -34,7 +36,7 @@ steps:
 
 # Available versions of Spark
 
-`setup-spark` has only been tested for Apache Spark version `3.0.1`
+`setup-spark` has only been tested for Apache Spark version `3.0.1` and for Python applications.
 
 The Spark installation has been built based on [jupyter/docker-stack pyspark notebook Dockerfile](jupyter/docker-stack pyspark notebook Dockerfile)
 
