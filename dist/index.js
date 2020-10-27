@@ -20,11 +20,12 @@ try {
   process.env.APACHE_SPARK_VERSION = sparkVersion;
   process.env.HADOOP_VERSION = hadoopVersion;
 
+  process.chdir('/tmp');
+
   var command = `sudo apt-get update &&
     cd /tmp &&
     find -type f -printf %T+\\t%p\\n | sort -n &&
-    wget -q $(wget -qO- https://www.apache.org/dyn/closer.lua/spark/spark-${sparkVersion}/spark-${sparkVersion}-bin-hadoop${hadoopVersion}.tgz\?as_json | \
-    python -c "import sys, json; content=json.load(sys.stdin); print(content['preferred']+content['path_info'])") && \
+    wget -q $(wget -qO- https://www.apache.org/dyn/closer.lua/spark/spark-${sparkVersion}/spark-${sparkVersion}-bin-hadoop${hadoopVersion}.tgz?as_json | python -c "import sys, json; content=json.load(sys.stdin); print(content['preferred']+content['path_info'])") && \
     echo "${sparkChecksum} *spark-${sparkVersion}-bin-hadoop${hadoopVersion}.tgz" | sha512sum -c - && \
     sudo tar xzf "spark-${sparkVersion}-bin-hadoop${hadoopVersion}.tgz" -C /usr/local --owner root --group root --no-same-owner && \
     rm "spark-${sparkVersion}-bin-hadoop${hadoopVersion}.tgz" &&
@@ -46,6 +47,8 @@ try {
   process.env.SPARK_OPTS = `--driver-java-options=-Xms1024M --driver-java-options=-Xmx2048M --driver-java-options=-Dlog4j.logLevel=info`;
   process.env.PATH = process.env['PATH'] + `${sparkHome}/bin`;
 
+  console.log('process.env after the install:');
+  console.log(process.env);
   // const time = (new Date()).toTimeString();
   core.setOutput("spark-version", sparkVersion);
   // Get the JSON webhook payload for the event that triggered the workflow

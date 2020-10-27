@@ -39,6 +39,6 @@ jobs:
     - name: Check Spark
       run: |-
         echo $SPARK_HOME
-        ls -alh /usr/local/spark
+        find /usr/local -name "spark*"
       # spark-submit --version
       # spark-shell --version
