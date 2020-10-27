@@ -41,7 +41,8 @@ try {
   const sparkHome = '/usr/local/spark';
   const py4jVersion = core.getInput('py4j-version');
   const PYTHONPATH = `${sparkHome}/python:${sparkHome}/python/lib/py4j-${py4jVersion}-src.zip`;
-  const PYSPARK_PYTHON = '/usr/bin/python3';
+  // const PYSPARK_PYTHON = '/opt/hostedtoolcache/Python/3.7.9/x64/bin/python';
+  const PYSPARK_PYTHON = 'python';
 
   // Set environment variable for the job
   // See https://github.blog/changelog/2020-10-01-github-actions-deprecating-set-env-and-add-path-commands/
