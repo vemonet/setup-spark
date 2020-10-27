@@ -39,4 +39,6 @@ jobs:
     - name: Check Spark
       run: |-
         echo $SPARK_HOME
+        echo $PATH
+        sudo spark-submit --version
         spark-submit --version

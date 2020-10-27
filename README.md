@@ -7,10 +7,8 @@
 
 This action sets up a Spark environment for use in actions by:
 
-- optionally installing and adding to PATH a version of Python that is already installed in the tools cache.
-- downloading, installing and adding to PATH an available version of Python from GitHub Releases ([actions/python-versions](https://github.com/actions/python-versions/releases)) if a specific version is not available in the tools cache.
-- failing if a specific version of Python is not preinstalled or available for download.
-- registering problem matchers for error output.
+- installing and adding `spark-submit` and `spark-shell` to PATH
+- setting `SPARK_HOME` environment variable in the job
 
 # Usage
 
