@@ -1,22 +1,16 @@
 # setup-python V2
 
 <p align="left">
-  <a href="https://github.com/actions/setup-python"><img alt="GitHub Actions status" src="https://github.com/actions/setup-python/workflows/Main%20workflow/badge.svg"></a>
+  <a href="https://github.com/vemonet/setup-spark/actions"><img alt="GitHub Actions status" src="https://github.com/vemonet/setup-spark/workflows/Main%20workflow/badge.svg"></a>
 </p>
 
-This action sets up a Python environment for use in actions by:
+
+This action sets up a Spark environment for use in actions by:
 
 - optionally installing and adding to PATH a version of Python that is already installed in the tools cache.
 - downloading, installing and adding to PATH an available version of Python from GitHub Releases ([actions/python-versions](https://github.com/actions/python-versions/releases)) if a specific version is not available in the tools cache.
 - failing if a specific version of Python is not preinstalled or available for download.
 - registering problem matchers for error output.
-
-# What's new
-
-- Ability to download, install and set up Python packages from `actions/python-versions` that do not come preinstalled on runners.
-  - Allows for pinning to a specific patch version of Python without the worry of it ever being removed or changed.
-- Automatic setup and download of Python packages if using a self-hosted runner.
-- Support for pre-release versions of Python.
 
 # Usage
 
@@ -26,11 +20,10 @@ Basic:
 ```yaml
 steps:
 - uses: actions/checkout@v2
-- uses: actions/setup-python@v2
+- uses: actions/setup-spark@v1
   with:
-    python-version: '3.x' # Version range or exact version of a Python version to use, using SemVer's version range syntax
-    architecture: 'x64' # optional x64 or x86. Defaults to x64 if not specified
-- run: python my_script.py
+    spark-version: '3.0.1' # Exact version
+- run: spark-submit --version
 ```
 
 Matrix Testing:
