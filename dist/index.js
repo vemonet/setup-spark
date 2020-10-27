@@ -34,7 +34,7 @@ module.exports =
 /******/ 	// the startup function
 /******/ 	function startup() {
 /******/ 		// Load entry module and return exports
-/******/ 		return __webpack_require__(676);
+/******/ 		return __webpack_require__(314);
 /******/ 	};
 /******/
 /******/ 	// run startup
@@ -116,6 +116,78 @@ exports.issueCommand = issueCommand;
 /***/ (function(module) {
 
 module.exports = require("child_process");
+
+/***/ }),
+
+/***/ 314:
+/***/ (function(__unusedmodule, exports, __webpack_require__) {
+
+"use strict";
+
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const core = __importStar(__webpack_require__(470));
+// import * as finder from './find-python';
+const child_process_1 = __webpack_require__(129);
+const process = __importStar(__webpack_require__(765));
+// import * as os from 'os';
+// const core = require('@actions/core');
+// const { exec } = require('child_process');
+// const process = require('process');
+// const github = require('@actions/github');
+// See docs to create JS action: https://docs.github.com/en/free-pro-team@latest/actions/creating-actions/creating-a-javascript-action
+try {
+    const sparkVersion = core.getInput('spark-version');
+    const hadoopVersion = core.getInput('hadoop-version');
+    const sparkChecksum = core.getInput('spark-checksum');
+    console.log(`Spark version ${sparkVersion}!`);
+    console.log(process.env);
+    process.chdir('/tmp');
+    var command = `sudo apt-get update &&
+    cd /tmp &&
+    find -type f -printf %T+\\t%p\\n | sort -n &&
+    wget -q $(wget -qO- https://www.apache.org/dyn/closer.lua/spark/spark-${sparkVersion}/spark-${sparkVersion}-bin-hadoop${hadoopVersion}.tgz?as_json | python -c "import sys, json; content=json.load(sys.stdin); print(content['preferred']+content['path_info'])") &&
+    echo "${sparkChecksum} *spark-${sparkVersion}-bin-hadoop${hadoopVersion}.tgz" | sha512sum -c - && \
+    sudo tar xzf "spark-${sparkVersion}-bin-hadoop${hadoopVersion}.tgz" -C /usr/local &&
+    rm "spark-${sparkVersion}-bin-hadoop${hadoopVersion}.tgz" &&
+    sudo ln -s "/usr/local/spark-${sparkVersion}-bin-hadoop${hadoopVersion}" /usr/local/spark &&
+    sudo chown -R $(id -u):$(id -g) /usr/local/spark*`;
+    // Was originally: sudo tar xzf "spark-${sparkVersion}-bin-hadoop${hadoopVersion}.tgz" -C /usr/local --owner root --group root --no-same-owner &&
+    child_process_1.exec(command, (err, stdout, stderr) => {
+        console.log('stdout:');
+        console.log(stdout);
+        console.log('err:');
+        console.log(err);
+        console.log('stderr:');
+        console.log(stderr);
+    });
+    const sparkHome = '/usr/local/spark';
+    const py4jVersion = core.getInput('py4j-version');
+    const PYTHONPATH = `${sparkHome}/python:${sparkHome}/python/lib/py4j-${py4jVersion}-src.zip`;
+    const PYSPARK_PYTHON = '/usr/bin/python';
+    // Set environment variable for the job
+    // See https://github.blog/changelog/2020-10-01-github-actions-deprecating-set-env-and-add-path-commands/
+    // echo "HADOOP_VERSION=${hadoopVersion}" >> $GITHUB_ENV
+    child_process_1.exec(`echo "HADOOP_VERSION=${hadoopVersion}" >> $GITHUB_ENV`, (err, stdout, stderr) => { });
+    child_process_1.exec(`echo "APACHE_SPARK_VERSION=${sparkVersion}" >> $GITHUB_ENV`, (err, stdout, stderr) => { });
+    child_process_1.exec(`echo "SPARK_HOME=${sparkHome}" >> $GITHUB_ENV`, (err, stdout, stderr) => { });
+    child_process_1.exec(`echo "PYTHONPATH=${PYTHONPATH}" >> $GITHUB_ENV`, (err, stdout, stderr) => { });
+    child_process_1.exec(`echo "SPARK_OPTS=--driver-java-options=-Xms1024M --driver-java-options=-Xmx2048M --driver-java-options=-Dlog4j.logLevel=info" >> $GITHUB_ENV`, (err, stdout, stderr) => { });
+    child_process_1.exec(`echo "PATH=$PATH:${sparkHome}/bin" >> $GITHUB_ENV`, (err, stdout, stderr) => { });
+    child_process_1.exec(`echo "PYSPARK_PYTHON=${PYSPARK_PYTHON}" >> $GITHUB_ENV`, (err, stdout, stderr) => { });
+    child_process_1.exec(`echo "PYSPARK_DRIVER_PYTHON=${PYSPARK_PYTHON}" >> $GITHUB_ENV`, (err, stdout, stderr) => { });
+    core.setOutput("spark-version", sparkVersion);
+}
+catch (error) {
+    core.setFailed(error.message);
+}
+
 
 /***/ }),
 
@@ -454,72 +526,6 @@ exports.getState = getState;
 /***/ (function(module) {
 
 module.exports = require("path");
-
-/***/ }),
-
-/***/ 676:
-/***/ (function(__unusedmodule, __unusedexports, __webpack_require__) {
-
-const core = __webpack_require__(470);
-const { exec } = __webpack_require__(129);
-const process = __webpack_require__(765);
-// const github = require('@actions/github');
-
-// See docs to create JS action: https://docs.github.com/en/free-pro-team@latest/actions/creating-actions/creating-a-javascript-action
-
-try {
-  const sparkVersion = core.getInput('spark-version');
-  const hadoopVersion = core.getInput('hadoop-version');
-  const sparkChecksum = core.getInput('spark-checksum');
-  console.log(`Spark version ${sparkVersion}!`);
-  console.log(process.env);
-  process.chdir('/tmp');
-
-  var command = `sudo apt-get update &&
-    cd /tmp &&
-    find -type f -printf %T+\\t%p\\n | sort -n &&
-    wget -q $(wget -qO- https://www.apache.org/dyn/closer.lua/spark/spark-${sparkVersion}/spark-${sparkVersion}-bin-hadoop${hadoopVersion}.tgz?as_json | python -c "import sys, json; content=json.load(sys.stdin); print(content['preferred']+content['path_info'])") &&
-    echo "${sparkChecksum} *spark-${sparkVersion}-bin-hadoop${hadoopVersion}.tgz" | sha512sum -c - && \
-    sudo tar xzf "spark-${sparkVersion}-bin-hadoop${hadoopVersion}.tgz" -C /usr/local &&
-    rm "spark-${sparkVersion}-bin-hadoop${hadoopVersion}.tgz" &&
-    sudo ln -s "/usr/local/spark-${sparkVersion}-bin-hadoop${hadoopVersion}" /usr/local/spark &&
-    sudo chown -R $(id -u):$(id -g) /usr/local/spark*`
-  // Was originally: sudo tar xzf "spark-${sparkVersion}-bin-hadoop${hadoopVersion}.tgz" -C /usr/local --owner root --group root --no-same-owner &&
-
-  exec(command, (err, stdout, stderr) => {
-    console.log('stdout:');
-    console.log(stdout);
-    console.log('err:');
-    console.log(err);
-    console.log('stderr:');
-    console.log(stderr);
-  });
-  
-  const sparkHome = '/usr/local/spark';
-  const py4jVersion = core.getInput('py4j-version');
-  const PYTHONPATH = `${sparkHome}/python:${sparkHome}/python/lib/py4j-${py4jVersion}-src.zip`;
-  // const PYSPARK_PYTHON = '/opt/conda/bin/python3';
-
-  // Set environment variable for the job
-  // See https://github.blog/changelog/2020-10-01-github-actions-deprecating-set-env-and-add-path-commands/
-  // echo "HADOOP_VERSION=${hadoopVersion}" >> $GITHUB_ENV
-  exec(`echo "HADOOP_VERSION=${hadoopVersion}" >> $GITHUB_ENV`, (err, stdout, stderr) => { });
-  exec(`echo "APACHE_SPARK_VERSION=${sparkVersion}" >> $GITHUB_ENV`, (err, stdout, stderr) => { });
-  exec(`echo "SPARK_HOME=${sparkHome}" >> $GITHUB_ENV`, (err, stdout, stderr) => { });
-  exec(`echo "PYTHONPATH=${PYTHONPATH}" >> $GITHUB_ENV`, 
-        (err, stdout, stderr) => { });
-  exec(`echo "SPARK_OPTS=--driver-java-options=-Xms1024M --driver-java-options=-Xmx2048M --driver-java-options=-Dlog4j.logLevel=info" >> $GITHUB_ENV`, 
-        (err, stdout, stderr) => { });
-  exec(`echo "PATH=$PATH:${sparkHome}/bin" >> $GITHUB_ENV`, (err, stdout, stderr) => { });
-
-  exec(`echo "PYSPARK_PYTHON=${PYTHONPATH}" >> $GITHUB_ENV`, (err, stdout, stderr) => { });
-  exec(`echo "PYSPARK_DRIVER_PYTHON=${PYTHONPATH}" >> $GITHUB_ENV`, (err, stdout, stderr) => { });
-
-  core.setOutput("spark-version", sparkVersion);
-} catch (error) {
-  core.setFailed(error.message);
-}
-
 
 /***/ }),
 

@@ -42,7 +42,7 @@ try {
   const sparkHome = '/usr/local/spark';
   const py4jVersion = core.getInput('py4j-version');
   const PYTHONPATH = `${sparkHome}/python:${sparkHome}/python/lib/py4j-${py4jVersion}-src.zip`;
-  const PYSPARK_PYTHON = '/usr/bin/python';
+  // const PYSPARK_PYTHON = '/opt/conda/bin/python3';
 
   // Set environment variable for the job
   // See https://github.blog/changelog/2020-10-01-github-actions-deprecating-set-env-and-add-path-commands/
@@ -56,8 +56,8 @@ try {
         (err, stdout, stderr) => { });
   exec(`echo "PATH=$PATH:${sparkHome}/bin" >> $GITHUB_ENV`, (err, stdout, stderr) => { });
 
-  exec(`echo "PYSPARK_PYTHON=${PYSPARK_PYTHON}" >> $GITHUB_ENV`, (err, stdout, stderr) => { });
-  exec(`echo "PYSPARK_DRIVER_PYTHON=${PYSPARK_PYTHON}" >> $GITHUB_ENV`, (err, stdout, stderr) => { });
+  exec(`echo "PYSPARK_PYTHON=${PYTHONPATH}" >> $GITHUB_ENV`, (err, stdout, stderr) => { });
+  exec(`echo "PYSPARK_DRIVER_PYTHON=${PYTHONPATH}" >> $GITHUB_ENV`, (err, stdout, stderr) => { });
 
   core.setOutput("spark-version", sparkVersion);
 } catch (error) {

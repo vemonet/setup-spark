@@ -38,6 +38,7 @@ jobs:
 
     - name: Check Spark
       run: |-
+        which python
         echo $SPARK_HOME
         echo $PATH
         spark-submit --version

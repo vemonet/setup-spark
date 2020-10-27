@@ -1,14 +1,13 @@
 {
   "name": "setup-spark",
   "version": "0.0.1",
-  "private": true,
-  "description": "Setup spark action",
+  "description": "Setup Spark action",
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
     "format": "prettier --write **/*.ts",
     "format-check": "prettier --check **/*.ts",
-    "release": "ncc build src/index.js && git add -f dist/",
+    "release": "ncc build src/setup-spark.ts && git add -f dist/",
     "test": "jest"
   },
   "repository": {
@@ -40,11 +39,5 @@
     "prettier": "^2.0.2",
     "ts-jest": "^25.2.1",
     "typescript": "^3.8.3"
-  },
-  "husky": {
-    "skipCI": true,
-    "hooks": {
-      "pre-commit": "npm run build && npm run format-check"
-    }
   }
 }
