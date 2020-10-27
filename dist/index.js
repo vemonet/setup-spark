@@ -15,8 +15,9 @@ try {
   const sparkVersion = core.getInput('spark-version');
   const hadoopVersion = core.getInput('hadoop-version');
   console.log(`Spark version ${sparkVersion}!`);
-  process.env['APACHE_SPARK_VERSION'] = sparkVersion;
-  process.env['HADOOP_VERSION'] = hadoopVersion;
+  console.log(process.env);
+  process.env.APACHE_SPARK_VERSION = sparkVersion;
+  process.env.HADOOP_VERSION = hadoopVersion;
 
   var command = `apt-get update &&
     cd /tmp &&
