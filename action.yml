@@ -4,7 +4,7 @@ description: 'Set up Apache Spark and add the command-line tools to the PATH.'
 author: 'vemonet'
 inputs:
   spark-version:
-    description: "Version of the Spark version to use, using SemVer's version range syntax."
+    description: "Apache Spark version to use, using SemVer's version range syntax."
     default: '3.0.1'
     required: false
   hadoop-version:

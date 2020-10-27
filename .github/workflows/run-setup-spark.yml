@@ -37,8 +37,4 @@ jobs:
         spark-version: 3.0.1
 
     - name: Check Spark
-      run: |-
-        which python
-        echo $SPARK_HOME
-        echo $PATH
-        spark-submit --version
+      run: spark-submit --version
