@@ -22,7 +22,7 @@ try {
     rm "spark-${sparkVersion}-bin-hadoop${hadoopVersion}.tgz" &&
     sudo ln -s "/usr/local/spark-${sparkVersion}-bin-hadoop${hadoopVersion}" /usr/local/spark &&
     sudo chown -R $(id -u):$(id -g) /usr/local/spark*`
-  // sudo tar xzf "spark-${sparkVersion}-bin-hadoop${hadoopVersion}.tgz" -C /usr/local --owner root --group root --no-same-owner &&
+  // Was originally: sudo tar xzf "spark-${sparkVersion}-bin-hadoop${hadoopVersion}.tgz" -C /usr/local --owner root --group root --no-same-owner &&
 
   exec(command, (err, stdout, stderr) => {
     console.log('stdout:');

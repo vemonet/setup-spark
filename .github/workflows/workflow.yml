@@ -1,4 +1,4 @@
-name: Main workflow
+name: Run setup-spark action
 on:
   workflow_dispatch:
   push:
