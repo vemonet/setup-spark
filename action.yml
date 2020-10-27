@@ -1,6 +1,6 @@
 ---
-name: 'Setup Spark'
-description: 'Set up a specific version of Apache Spark and add the command-line tools to the PATH.'
+name: 'Setup Apache Spark'
+description: 'Set up Apache Spark and add the command-line tools to the PATH.'
 author: 'vemonet'
 inputs:
   spark-version:
@@ -25,7 +25,7 @@ inputs:
     required: false
 outputs:
   spark-version:
-    description: "The installed Spark version. Useful when given a version range as input."
+    description: "The installed Apache Spark version. Useful when given a version range as input."
 runs:
   using: 'node12'
   main: 'dist/index.js'

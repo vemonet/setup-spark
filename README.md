@@ -34,7 +34,7 @@ steps:
 - run: spark-submit --version
 ```
 
-# Available versions of Spark
+# Available versions of Apache Spark
 
 `setup-spark` has only been tested for Apache Spark version `3.0.1` and for Python applications.
 
