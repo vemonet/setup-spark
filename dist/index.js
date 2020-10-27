@@ -20,13 +20,13 @@ try {
   process.env.APACHE_SPARK_VERSION = sparkVersion;
   process.env.HADOOP_VERSION = hadoopVersion;
 
-  var command = `apt-get update &&
+  var command = `sudo apt-get update &&
     cd /tmp &&
     find -type f -printf %T+\\t%p\\n | sort -n &&
     wget -q $(wget -qO- https://www.apache.org/dyn/closer.lua/spark/spark-${sparkVersion}/spark-${sparkVersion}-bin-hadoop${hadoopVersion}.tgz\?as_json | \
     python -c "import sys, json; content=json.load(sys.stdin); print(content['preferred']+content['path_info'])") && \
     echo "${sparkChecksum} *spark-${sparkVersion}-bin-hadoop${hadoopVersion}.tgz" | sha512sum -c - && \
-    tar xzf "spark-${sparkVersion}-bin-hadoop${hadoopVersion}.tgz" -C /usr/local --owner root --group root --no-same-owner && \
+    sudo tar xzf "spark-${sparkVersion}-bin-hadoop${hadoopVersion}.tgz" -C /usr/local --owner root --group root --no-same-owner && \
     rm "spark-${sparkVersion}-bin-hadoop${hadoopVersion}.tgz" &&
     ln -s "/usr/local/spark-${sparkVersion}-bin-hadoop${hadoopVersion}" /usr/local/spark`
 
