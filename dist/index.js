@@ -1,15 +1,9 @@
-// const exec = util_1.promisify(childProcess.exec);
-// Use the exec command:
-// if (yield ioUtil.isDirectory(inputPath, true)) {
-//   yield exec(`apt-get update "${inputPath}"`);
-// }
-
-// See docs to create JS action: https://docs.github.com/en/free-pro-team@latest/actions/creating-actions/creating-a-javascript-action
-
 const core = require('@actions/core');
-// const github = require('@actions/github');
 const { exec } = require('child_process');
 const process = require('process');
+// const github = require('@actions/github');
+
+// See docs to create JS action: https://docs.github.com/en/free-pro-team@latest/actions/creating-actions/creating-a-javascript-action
 
 try {
   const sparkVersion = core.getInput('spark-version');
@@ -17,9 +11,6 @@ try {
   const sparkChecksum = core.getInput('spark-checksum');
   console.log(`Spark version ${sparkVersion}!`);
   console.log(process.env);
-  process.env.APACHE_SPARK_VERSION = sparkVersion;
-  process.env.HADOOP_VERSION = hadoopVersion;
-
   process.chdir('/tmp');
 
   var command = `sudo apt-get update &&
@@ -44,39 +35,40 @@ try {
   
   const sparkHome = '/usr/local/spark';
   const py4jVersion = core.getInput('py4j-version');
-  process.env.SPARK_HOME = sparkHome;
-  process.env.PYTHONPATH = `${sparkHome}/python:${sparkHome}/python/lib/py4j-${py4jVersion}-src.zip`;
-  process.env.SPARK_OPTS = `--driver-java-options=-Xms1024M --driver-java-options=-Xmx2048M --driver-java-options=-Dlog4j.logLevel=info`;
-  process.env.PATH = process.env['PATH'] + `${sparkHome}/bin`;
 
-  var exportCommand = `::set-env name=HADOOP_VERSION::${hadoopVersion} 
-    ::set-env name=APACHE_SPARK_VERSION::${sparkVersion} 
-    ::set-env name=HADOOP_VERSION::${hadoopVersion} 
-    ::set-env name=SPARK_HOME::${sparkHome} 
-    ::set-env name=PYTHONPATH::${sparkHome}/python:${sparkHome}/python/lib/py4j-${py4jVersion}-src.zip 
-    ::set-env name=SPARK_OPTS::--driver-java-options=-Xms1024M --driver-java-options=-Xmx2048M --driver-java-options=-Dlog4j.logLevel=info 
-    ::set-env name=PATH::$PATH:${sparkHome}/bin`
+  // echo "HADOOP_VERSION=${hadoopVersion}" >> $GITHUB_ENV
+  exec(`echo "HADOOP_VERSION=${hadoopVersion}" >> $GITHUB_ENV`, (err, stdout, stderr) => { });
+  exec(`echo "APACHE_SPARK_VERSION=${sparkVersion}" >> $GITHUB_ENV`, (err, stdout, stderr) => { });
+  exec(`echo "SPARK_HOME=${sparkHome}" >> $GITHUB_ENV`, (err, stdout, stderr) => { });
+  exec(`echo "PYTHONPATH=${sparkHome}/python:${sparkHome}/python/lib/py4j-${py4jVersion}-src.zip" >> $GITHUB_ENV`, 
+        (err, stdout, stderr) => { });
+  exec(`echo "SPARK_OPTS=--driver-java-options=-Xms1024M --driver-java-options=-Xmx2048M --driver-java-options=-Dlog4j.logLevel=info" >> $GITHUB_ENV`, 
+        (err, stdout, stderr) => { });
+  exec(`echo "PATH=$PATH:${sparkHome}/bin" >> $GITHUB_ENV`, (err, stdout, stderr) => { });
 
-    exec(exportCommand, (err, stdout, stderr) => {
-      console.log('exportCommand stdout:');
-      console.log(stdout);
-      console.log('exportCommand err:');
-      console.log(err);
-      console.log('exportCommand stderr:');
-      console.log(stderr);
-      console.log('exportCommand stderr:');
-      console.log(stderr);
-      console.log('process.env after the exportCommand:');
-      console.log(process.env);
-    });
 
-  console.log('process.env after the install:');
-  console.log(process.env);
-  // const time = (new Date()).toTimeString();
+  // var exportCommand = `::set-env name=HADOOP_VERSION::${hadoopVersion} 
+  //   ::set-env name=APACHE_SPARK_VERSION::${sparkVersion} 
+  //   ::set-env name=HADOOP_VERSION::${hadoopVersion} 
+  //   ::set-env name=SPARK_HOME::${sparkHome} 
+  //   ::set-env name=PYTHONPATH::${sparkHome}/python:${sparkHome}/python/lib/py4j-${py4jVersion}-src.zip 
+  //   ::set-env name=SPARK_OPTS::--driver-java-options=-Xms1024M --driver-java-options=-Xmx2048M --driver-java-options=-Dlog4j.logLevel=info 
+  //   ::set-env name=PATH::$PATH:${sparkHome}/bin`
+
+  //   exec(exportCommand, (err, stdout, stderr) => {
+  //     console.log('exportCommand stdout:');
+  //     console.log(stdout);
+  //     console.log('exportCommand err:');
+  //     console.log(err);
+  //     console.log('exportCommand stderr:');
+  //     console.log(stderr);
+  //     console.log('exportCommand stderr:');
+  //     console.log(stderr);
+  //     console.log('process.env after the exportCommand:');
+  //     console.log(process.env);
+  //   });
+
   core.setOutput("spark-version", sparkVersion);
-  // Get the JSON webhook payload for the event that triggered the workflow
-  // const payload = JSON.stringify(github.context.payload, undefined, 2)
-  // console.log(`The event payload: ${payload}`);
 } catch (error) {
   core.setFailed(error.message);
 }
