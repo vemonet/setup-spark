@@ -14,10 +14,18 @@ This action sets up a Spark environment for use in actions by:
 
 See [action.yml](action.yml) for complete rundown of the available parameters.
 
+You will need to also setup `python` and `java` in the job before setting up `spark`
+
 Basic:
 ```yaml
 steps:
 - uses: actions/checkout@v2
+- uses: actions/setup-python@v2
+  with:
+    python-version: '3.7'
+- uses: actions/setup-java@v1
+  with:
+    java-version: '11'
 - uses: vemonet/setup-spark@v1
   with:
     spark-version: '3.0.1' # Exact version

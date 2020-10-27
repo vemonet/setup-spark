@@ -36,6 +36,8 @@ try {
   const sparkHome = '/usr/local/spark';
   const py4jVersion = core.getInput('py4j-version');
 
+  // Set environment variable for the job
+  // See https://github.blog/changelog/2020-10-01-github-actions-deprecating-set-env-and-add-path-commands/
   // echo "HADOOP_VERSION=${hadoopVersion}" >> $GITHUB_ENV
   exec(`echo "HADOOP_VERSION=${hadoopVersion}" >> $GITHUB_ENV`, (err, stdout, stderr) => { });
   exec(`echo "APACHE_SPARK_VERSION=${sparkVersion}" >> $GITHUB_ENV`, (err, stdout, stderr) => { });
@@ -45,28 +47,6 @@ try {
   exec(`echo "SPARK_OPTS=--driver-java-options=-Xms1024M --driver-java-options=-Xmx2048M --driver-java-options=-Dlog4j.logLevel=info" >> $GITHUB_ENV`, 
         (err, stdout, stderr) => { });
   exec(`echo "PATH=$PATH:${sparkHome}/bin" >> $GITHUB_ENV`, (err, stdout, stderr) => { });
-
-
-  // var exportCommand = `::set-env name=HADOOP_VERSION::${hadoopVersion} 
-  //   ::set-env name=APACHE_SPARK_VERSION::${sparkVersion} 
-  //   ::set-env name=HADOOP_VERSION::${hadoopVersion} 
-  //   ::set-env name=SPARK_HOME::${sparkHome} 
-  //   ::set-env name=PYTHONPATH::${sparkHome}/python:${sparkHome}/python/lib/py4j-${py4jVersion}-src.zip 
-  //   ::set-env name=SPARK_OPTS::--driver-java-options=-Xms1024M --driver-java-options=-Xmx2048M --driver-java-options=-Dlog4j.logLevel=info 
-  //   ::set-env name=PATH::$PATH:${sparkHome}/bin`
-
-  //   exec(exportCommand, (err, stdout, stderr) => {
-  //     console.log('exportCommand stdout:');
-  //     console.log(stdout);
-  //     console.log('exportCommand err:');
-  //     console.log(err);
-  //     console.log('exportCommand stderr:');
-  //     console.log(stderr);
-  //     console.log('exportCommand stderr:');
-  //     console.log(stderr);
-  //     console.log('process.env after the exportCommand:');
-  //     console.log(process.env);
-  //   });
 
   core.setOutput("spark-version", sparkVersion);
 } catch (error) {
