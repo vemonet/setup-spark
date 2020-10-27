@@ -1,0 +1,41 @@
+---
+name: 'Setup Spark'
+description: 'Set up a specific version of Spark and add the command-line tools to the PATH.'
+author: 'vemonet'
+inputs:
+  spark-version:
+    description: "Version of the Spark version to use, using SemVer's version range syntax."
+    default: '3.0.1'
+    required: false
+  hadoop-version:
+    description: "Hadoop version"
+    default: '3.2'
+    required: false
+  spark-checksum:
+    description: "SPARK file checksum"
+    default: 'E8B47C5B658E0FBC1E57EEA06262649D8418AE2B2765E44DA53AAF50094877D17297CC5F0B9B35DF2CEEF830F19AA31D7E56EAD950BBE7F8830D6874F88CFC3C'
+    required: false
+  py4j-version:
+    description: "Py4j version."
+    default: '0.10.9'
+    required: false
+  openjdk-version: 
+    description: "Java OpenJDK version."
+    default: '11'
+    required: false
+  architecture:
+    description: 'The target architecture (x86, x64) of the Python interpreter.'
+    required: false
+  token:
+    description: Used to pull spark distributions. Since there's a default, this is typically not supplied by the user.
+    default: ${{ github.token }}
+    required: false
+outputs:
+  spark-version:
+    description: "The installed Spark version. Useful when given a version range as input."
+runs:
+  using: 'node12'
+  main: 'dist/index.js'
+branding:
+  icon: 'code'
+  color: 'yellow'
