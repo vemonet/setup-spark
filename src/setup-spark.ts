@@ -3,21 +3,16 @@ import { exec } from 'child_process';
 import * as process from 'process';
 // import * as os from 'os';
 
-// const core = require('@actions/core');
-// const { exec } = require('child_process');
-// const process = require('process');
-// const github = require('@actions/github');
-
 // See docs to create JS action: https://docs.github.com/en/free-pro-team@latest/actions/creating-actions/creating-a-javascript-action
 
 try {
   const sparkVersion = core.getInput('spark-version');
   const hadoopVersion = core.getInput('hadoop-version');
   const sparkChecksum = core.getInput('spark-checksum');
-  console.log(`Spark version ${sparkVersion}!`);
   console.log(process.env);
   process.chdir('/tmp');
 
+  // Most commands to install Spark are here
   var command = `sudo apt-get update &&
     cd /tmp &&
     find -type f -printf %T+\\t%p\\n | sort -n &&
@@ -27,26 +22,24 @@ try {
     rm "spark-${sparkVersion}-bin-hadoop${hadoopVersion}.tgz" &&
     sudo ln -s "/usr/local/spark-${sparkVersion}-bin-hadoop${hadoopVersion}" /usr/local/spark &&
     sudo chown -R $(id -u):$(id -g) /usr/local/spark*`
-  // Was originally: sudo tar xzf "spark-${sparkVersion}-bin-hadoop${hadoopVersion}.tgz" -C /usr/local --owner root --group root --no-same-owner &&
 
   exec(command, (err, stdout, stderr) => {
-    console.log('stdout:');
+    console.log('Spark install stdout:');
     console.log(stdout);
-    console.log('err:');
+    console.log('Spark install err:');
     console.log(err);
-    console.log('stderr:');
+    console.log('Spark install stderr:');
     console.log(stderr);
   });
   
   const sparkHome = '/usr/local/spark';
   const py4jVersion = core.getInput('py4j-version');
   const PYTHONPATH = `${sparkHome}/python:${sparkHome}/python/lib/py4j-${py4jVersion}-src.zip`;
-  // const PYSPARK_PYTHON = process.env.pythonLocation + '/bin/python';
   const PYSPARK_PYTHON = 'python';
+  // const PYSPARK_PYTHON = process.env.pythonLocation + '/bin/python';
 
-  // Set environment variable for the job
+  // Set environment variable in the workflow
   // See https://github.blog/changelog/2020-10-01-github-actions-deprecating-set-env-and-add-path-commands/
-  // echo "HADOOP_VERSION=${hadoopVersion}" >> $GITHUB_ENV
   exec(`echo "HADOOP_VERSION=${hadoopVersion}" >> $GITHUB_ENV`, (err, stdout, stderr) => { });
   exec(`echo "APACHE_SPARK_VERSION=${sparkVersion}" >> $GITHUB_ENV`, (err, stdout, stderr) => { });
   exec(`echo "SPARK_HOME=${sparkHome}" >> $GITHUB_ENV`, (err, stdout, stderr) => { });

@@ -10,7 +10,7 @@ This action sets up a Spark environment for use in GitHub Actions by:
 - installing and adding `spark-submit` and `spark-shell` to PATH
 - setting `SPARK_HOME`, `PYSPARK_PYTHON` environment variable (and others) in the job
 
-This enables to test applications using a local Spark context.
+This enables to test applications using a local Spark context in GitHub Actions.
 
 # Usage
 
