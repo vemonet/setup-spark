@@ -14,6 +14,7 @@ const process = require('process');
 try {
   const sparkVersion = core.getInput('spark-version');
   const hadoopVersion = core.getInput('hadoop-version');
+  const sparkChecksum = core.getInput('spark-checksum');
   console.log(`Spark version ${sparkVersion}!`);
   console.log(process.env);
   process.env.APACHE_SPARK_VERSION = sparkVersion;
@@ -22,13 +23,13 @@ try {
   var command = `apt-get update &&
     cd /tmp &&
     find -type f -printf %T+\\t%p\\n | sort -n &&
-    wget -q $(wget -qO- https://www.apache.org/dyn/closer.lua/spark/spark-${APACHE_SPARK_VERSION}/spark-${APACHE_SPARK_VERSION}-bin-hadoop${HADOOP_VERSION}.tgz\?as_json | \
+    wget -q $(wget -qO- https://www.apache.org/dyn/closer.lua/spark/spark-${sparkVersion}/spark-${sparkVersion}-bin-hadoop${hadoopVersion}.tgz\?as_json | \
     python -c "import sys, json; content=json.load(sys.stdin); print(content['preferred']+content['path_info'])") && \
-    echo "${spark_checksum} *spark-${APACHE_SPARK_VERSION}-bin-hadoop${HADOOP_VERSION}.tgz" | sha512sum -c - && \
-    tar xzf "spark-${APACHE_SPARK_VERSION}-bin-hadoop${HADOOP_VERSION}.tgz" -C /usr/local --owner root --group root --no-same-owner && \
-    rm "spark-${APACHE_SPARK_VERSION}-bin-hadoop${HADOOP_VERSION}.tgz" &&
+    echo "${sparkChecksum} *spark-${sparkVersion}-bin-hadoop${hadoopVersion}.tgz" | sha512sum -c - && \
+    tar xzf "spark-${sparkVersion}-bin-hadoop${hadoopVersion}.tgz" -C /usr/local --owner root --group root --no-same-owner && \
+    rm "spark-${sparkVersion}-bin-hadoop${hadoopVersion}.tgz" &&
     cd /usr/local &&
-    ln -s "spark-${APACHE_SPARK_VERSION}-bin-hadoop${HADOOP_VERSION}" spark`
+    ln -s "spark-${sparkVersion}-bin-hadoop${hadoopVersion}" spark`
 
   exec(command, (err, stdout, stderr) => {
     console.log('stdout:');
@@ -39,10 +40,12 @@ try {
     console.log(stderr);
   });
   
-  process.env['SPARK_HOME'] = '/usr/local/spark';
-  process.env['PYTHONPATH'] = `${SPARK_HOME}/python:${SPARK_HOME}/python/lib/py4j-${py4j_version}-src.zip`;
+  const sparkHome = '/usr/local/spark';
+  const py4jVersion = core.getInput('py4j-version');
+  process.env['SPARK_HOME'] = sparkHome;
+  process.env['PYTHONPATH'] = `${sparkHome}/python:${sparkHome}/python/lib/py4j-${py4jVersion}-src.zip`;
   process.env['SPARK_OPTS'] = `--driver-java-options=-Xms1024M --driver-java-options=-Xmx2048M --driver-java-options=-Dlog4j.logLevel=info`;
-  process.env['PATH'] = process.env['PATH'] + `${SPARK_HOME}/bin`;
+  process.env['PATH'] = process.env['PATH'] + `${sparkHome}/bin`;
 
   // const time = (new Date()).toTimeString();
   core.setOutput("spark-version", sparkVersion);
