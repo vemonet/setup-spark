@@ -1,5 +1,4 @@
 import * as core from '@actions/core';
-// import * as finder from './find-python';
 import { exec } from 'child_process';
 import * as process from 'process';
 // import * as os from 'os';
@@ -42,7 +41,7 @@ try {
   const sparkHome = '/usr/local/spark';
   const py4jVersion = core.getInput('py4j-version');
   const PYTHONPATH = `${sparkHome}/python:${sparkHome}/python/lib/py4j-${py4jVersion}-src.zip`;
-  const PYSPARK_PYTHON = '/usr/bin/python';
+  const PYSPARK_PYTHON = '/usr/bin/python3';
 
   // Set environment variable for the job
   // See https://github.blog/changelog/2020-10-01-github-actions-deprecating-set-env-and-add-path-commands/
