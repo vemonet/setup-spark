@@ -36,7 +36,7 @@ steps:
 
 `setup-spark` has only been tested for Apache Spark version `3.0.1` and for PySpark applications with Python `3.6`,  `3.7`,  `3.8`.
 
-The Spark installation has been built based on the [jupyter/docker-stack pyspark notebook Dockerfile](jupyter/docker-stack pyspark notebook Dockerfile)
+The Spark installation has been built based on the [jupyter/docker-stack PySpark notebook Dockerfile](jupyter/docker-stack pyspark notebook Dockerfile)
 
 > Feel free to test other Spark version and submit issues or pull requests!
 

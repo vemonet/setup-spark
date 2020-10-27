@@ -12,7 +12,7 @@ In order to avoid uploading `node_modules/` to the repository, we use [vercel/nc
 
 ### Developing
 
-If you're developing locally, you can run
+If you're developing locally, you can run:
 
 ```sh
 npm install
@@ -47,4 +47,4 @@ This repository uses a tool called [Licensed](https://github.com/github/licensed
 
 ### Releases
 
-There is a `master` branch where contributor changes are merged into. There are also release branches such as `releases/v1` that are used for tagging (for example the `v1` tag) and publishing new versions of the action. Changes from `master` are periodically merged into a releases branch. You do not need to create any PR that merges changes from master into a releases branch.
+There is a `main` branch where contributor changes are merged into. There are also release branches such as `releases/v1` that are used for tagging (for example the `v1` tag) and publishing new versions of the action. Changes from `main` are periodically merged into a releases branch. You do not need to create any PR that merges changes from main into a releases branch.

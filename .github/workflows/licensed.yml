@@ -1,9 +1,11 @@
 name: Licensed
-
+# Check if packages with incompatible licenses
 on:
   workflow_dispatch:
-  # push: {branches: main}
-  # pull_request: {branches: main}
+  push:
+    branches: [ main ]
+    paths:
+    - 'package.json'
 
 jobs:
   test:
