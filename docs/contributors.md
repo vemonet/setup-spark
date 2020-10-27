@@ -17,7 +17,7 @@ If you're developing locally, you can run
 ```sh
 npm install
 tsc
-ncc build src/setup-python.ts
+ncc build src/index.js
 ```
 
 Any files generated using `tsc` will be added to `lib/`, however those files also are not uploaded to the repository and are excluded using `.gitignore`.
