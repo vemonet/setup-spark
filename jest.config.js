@@ -1,4 +1,5 @@
 module.exports = {
+  // Put tests files in __test__/myfile.test.ts
   clearMocks: true,
   moduleFileExtensions: ['js', 'ts'],
   testEnvironment: 'node',
