@@ -7,7 +7,7 @@
 // See docs to create JS action: https://docs.github.com/en/free-pro-team@latest/actions/creating-actions/creating-a-javascript-action
 
 const core = require('@actions/core');
-const github = require('@actions/github');
+// const github = require('@actions/github');
 const { exec } = require('child_process');
 const process = require('process');
 
