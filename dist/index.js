@@ -28,8 +28,7 @@ try {
     echo "${sparkChecksum} *spark-${sparkVersion}-bin-hadoop${hadoopVersion}.tgz" | sha512sum -c - && \
     tar xzf "spark-${sparkVersion}-bin-hadoop${hadoopVersion}.tgz" -C /usr/local --owner root --group root --no-same-owner && \
     rm "spark-${sparkVersion}-bin-hadoop${hadoopVersion}.tgz" &&
-    cd /usr/local &&
-    ln -s "spark-${sparkVersion}-bin-hadoop${hadoopVersion}" spark`
+    ln -s "/usr/local/spark-${sparkVersion}-bin-hadoop${hadoopVersion}" /usr/local/spark`
 
   exec(command, (err, stdout, stderr) => {
     console.log('stdout:');
@@ -42,10 +41,10 @@ try {
   
   const sparkHome = '/usr/local/spark';
   const py4jVersion = core.getInput('py4j-version');
-  process.env['SPARK_HOME'] = sparkHome;
-  process.env['PYTHONPATH'] = `${sparkHome}/python:${sparkHome}/python/lib/py4j-${py4jVersion}-src.zip`;
-  process.env['SPARK_OPTS'] = `--driver-java-options=-Xms1024M --driver-java-options=-Xmx2048M --driver-java-options=-Dlog4j.logLevel=info`;
-  process.env['PATH'] = process.env['PATH'] + `${sparkHome}/bin`;
+  process.env.SPARK_HOME = sparkHome;
+  process.env.PYTHONPATH = `${sparkHome}/python:${sparkHome}/python/lib/py4j-${py4jVersion}-src.zip`;
+  process.env.SPARK_OPTS = `--driver-java-options=-Xms1024M --driver-java-options=-Xmx2048M --driver-java-options=-Dlog4j.logLevel=info`;
+  process.env.PATH = process.env['PATH'] + `${sparkHome}/bin`;
 
   // const time = (new Date()).toTimeString();
   core.setOutput("spark-version", sparkVersion);

@@ -36,5 +36,9 @@ jobs:
       with:
         spark-version: 3.0.1
 
-    - name: Check spark
-      run: echo $SPARK_HOME
+    - name: Check Spark
+      run: |-
+        echo $SPARK_HOME
+        spark-submit --version
+        spark-shell --version
+        ls -alh /usr/local/spark
