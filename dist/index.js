@@ -133,7 +133,6 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const core = __importStar(__webpack_require__(470));
-// import * as finder from './find-python';
 const child_process_1 = __webpack_require__(129);
 const process = __importStar(__webpack_require__(765));
 // import * as os from 'os';
@@ -170,7 +169,8 @@ try {
     const sparkHome = '/usr/local/spark';
     const py4jVersion = core.getInput('py4j-version');
     const PYTHONPATH = `${sparkHome}/python:${sparkHome}/python/lib/py4j-${py4jVersion}-src.zip`;
-    const PYSPARK_PYTHON = '/usr/bin/python';
+    // const PYSPARK_PYTHON = process.env.pythonLocation + '/bin/python';
+    const PYSPARK_PYTHON = 'python';
     // Set environment variable for the job
     // See https://github.blog/changelog/2020-10-01-github-actions-deprecating-set-env-and-add-path-commands/
     // echo "HADOOP_VERSION=${hadoopVersion}" >> $GITHUB_ENV
