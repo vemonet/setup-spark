@@ -47,12 +47,12 @@ try {
   process.env.SPARK_OPTS = `--driver-java-options=-Xms1024M --driver-java-options=-Xmx2048M --driver-java-options=-Dlog4j.logLevel=info`;
   process.env.PATH = process.env['PATH'] + `${sparkHome}/bin`;
 
-  var exportCommand = `::set-env name=HADOOP_VERSION::${hadoopVersion} &&
-    ::set-env name=APACHE_SPARK_VERSION::${sparkVersion} &&
-    ::set-env name=HADOOP_VERSION::${hadoopVersion} &&
-    ::set-env name=SPARK_HOME::${sparkHome} &&
-    ::set-env name=PYTHONPATH::${sparkHome}/python:${sparkHome}/python/lib/py4j-${py4jVersion}-src.zip &&
-    ::set-env name=SPARK_OPTS::--driver-java-options=-Xms1024M --driver-java-options=-Xmx2048M --driver-java-options=-Dlog4j.logLevel=info &&
+  var exportCommand = `::set-env name=HADOOP_VERSION::${hadoopVersion} 
+    ::set-env name=APACHE_SPARK_VERSION::${sparkVersion} 
+    ::set-env name=HADOOP_VERSION::${hadoopVersion} 
+    ::set-env name=SPARK_HOME::${sparkHome} 
+    ::set-env name=PYTHONPATH::${sparkHome}/python:${sparkHome}/python/lib/py4j-${py4jVersion}-src.zip 
+    ::set-env name=SPARK_OPTS::--driver-java-options=-Xms1024M --driver-java-options=-Xmx2048M --driver-java-options=-Dlog4j.logLevel=info 
     ::set-env name=PATH::$PATH:${sparkHome}/bin`
 
     exec(exportCommand, (err, stdout, stderr) => {
