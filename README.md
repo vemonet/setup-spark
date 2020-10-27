@@ -12,7 +12,7 @@ This enables to test applications using a local Spark context in GitHub Actions.
 
 # Usage
 
-See [action.yml](action.yml) for complete rundown of the available parameters.
+See [action.yml](action.yml) for a complete rundown of the available parameters.
 
 You will need to setup `python` and `java` in the job before setting up `spark`
 
@@ -34,7 +34,7 @@ steps:
 
 # Available versions of Apache Spark
 
-`setup-spark` has only been tested for Apache Spark version `3.0.1` and for PySpark applications with Python `3.6`,  `3.7`,  `3.8`.
+`setup-spark` has been tested for Apache Spark version `3.0.1` and for PySpark applications using Python `3.6`,  `3.7`,  `3.8`.
 
 The Spark installation has been built based on the [jupyter/docker-stack PySpark notebook Dockerfile](jupyter/docker-stack pyspark notebook Dockerfile)
 
