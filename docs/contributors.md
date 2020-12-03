@@ -2,7 +2,7 @@
 
 ### Checkin
 
-- Do check in source (`src/`)
+- Checkout the only important file: the mighty `src/setup-spark.ts` ✨
 - You can check in the `index.js` file after running `ncc`
 - Do not check in `node_modules/`
 
@@ -12,7 +12,7 @@ In order to avoid uploading `node_modules/` to the repository, we use [vercel/nc
 
 ### Developing
 
-If you're developing locally, you can run:
+If you're developing locally, you can generate the JS files running:
 
 ```sh
 npm install
@@ -21,21 +21,6 @@ ncc build src/setup-spark.ts
 ```
 
 Any files generated using `tsc` will be added to `lib/`, however those files also are not uploaded to the repository and are excluded using `.gitignore`.
-
-### Optional git hooks
-
-During the commit step, Husky can take care of formatting all files with [Prettier](https://github.com/prettier/prettier) (to run manually, use `npm run format`).
-
-Add husky hooks to `package.json`:
-
-```json
-"husky": {
-    "skipCI": true,
-    "hooks": {
-      "pre-commit": "npm run build && npm run format-check"
-    }
-  }
-```
 
 ### Testing
 
