@@ -1,10 +1,6 @@
-# Contributors
+# How to contribute
 
-### Checkin
-
-- Checkout the only important file: the mighty `src/setup-spark.ts` ✨
-- You can check in the `index.js` file after running `ncc`
-- Do not check in `node_modules/`
+Checkout the only important file! The mighty [`src/setup-spark.ts` ✨](https://github.com/vemonet/setup-spark/blob/main/src/setup-spark.ts)
 
 ### NCC
 
@@ -12,7 +8,7 @@ In order to avoid uploading `node_modules/` to the repository, we use [vercel/nc
 
 ### Developing
 
-If you're developing locally, you can generate the JS files running:
+If you're developing locally, you can generate the `js` files by running:
 
 ```sh
 npm install
@@ -21,6 +17,8 @@ ncc build src/setup-spark.ts
 ```
 
 Any files generated using `tsc` will be added to `lib/`, however those files also are not uploaded to the repository and are excluded using `.gitignore`.
+
+Then `ncc` will build the `index.js` file
 
 ### Testing
 
