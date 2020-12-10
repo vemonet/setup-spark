@@ -1,6 +1,6 @@
 # setup-spark ✨
 
-[![Run setup-spark action](https://github.com/vemonet/setup-spark/workflows/Run%20setup-spark%20action/badge.svg)](https://github.com/vemonet/setup-spark/actions?query=workflow%3A%22Run+setup-spark+action%22) [![Code scanning](https://github.com/vemonet/setup-spark/workflows/Code%20scanning/badge.svg)](https://github.com/vemonet/setup-spark/actions?query=workflow%3A%22Code+scanning%22)
+[![Run setup-spark action](https://github.com/vemonet/setup-spark/workflows/Run%20setup-spark%20action/badge.svg)](https://github.com/vemonet/setup-spark/actions?query=workflow%3A%22Run+setup-spark+action%22) [![Code scanning](https://github.com/vemonet/setup-spark/workflows/CodeQL%20analysis/badge.svg)](https://github.com/vemonet/setup-spark/actions?query=workflow%3A%22CodeQL+analysis%22)
 
 This action sets up Apache Spark in your environment for use in GitHub Actions by:
 
