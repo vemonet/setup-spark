@@ -9,7 +9,6 @@ try {
   const sparkVersion = core.getInput('spark-version');
   const hadoopVersion = core.getInput('hadoop-version');
   const sparkChecksum = core.getInput('spark-checksum');
-  console.log(process.env);
   process.chdir('/tmp');
 
   // Most commands to install Spark are here
