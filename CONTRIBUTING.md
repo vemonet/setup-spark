@@ -51,10 +51,14 @@ If you are making a substantive change try to link to a successful run that util
 2. [Send a pull request](https://github.com/vemonet/setup-spark/compare) to the `main` branch 📤
 3. Project contributors will review your change, and answer the pull request as soon as they can
 
-### Licensed
+## Check dependencies licenses 📜
 
-This repository uses a tool called [Licensed](https://github.com/github/licensed) to verify third party dependencies. You may need to locally install licensed and run `licensed cache` to update the dependency cache if you install or update a production dependency. If licensed cache is unable to determine the dependency, you may need to modify the cache file yourself to put the correct license. You should still verify the dependency, licensed is a tool to help, but is not a substitute for human review of dependencies.
+This repository uses a tool called [Licensed](https://github.com/github/licensed) to verify third party dependencies. 
 
-### Releases
+To run `licensed` locally and generate the license dependencies in `.licenses` use:
 
-There is a `main` branch where contributor changes are merged into. There are also release branches such as `releases/v1` that are used for tagging (for example the `v1` tag) and publishing new versions of the action. Changes from `main` are periodically merged into a releases branch. You do not need to create any PR that merges changes from main into a releases branch.
+```bash
+licensed cache
+```
+
+If you have not licensed installed, this is not a problem, we will do it the next time we pull the changes.
