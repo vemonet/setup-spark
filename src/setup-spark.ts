@@ -31,13 +31,10 @@ try {
 
   exec(command, (err: any, stdout: any, stderr: any) => {
     if(err || stderr){
-      console.log("Error installing Spark");
-      console.log(stderr)
+      console.log("Error downloading the Spark binary");
       throw new Error(err);
     } else {
-      core.info('Spark installed successfully');
-      core.info(stdout);
-      // console.log(stdout);
+      core.info('Spark binary installed successfully.');
     }
   });
   
@@ -63,6 +60,7 @@ try {
 
   core.setOutput("spark-version", sparkVersion);
 } catch (error) {
-  core.error(error);
+  console.log(error);
+  core.error('Issue installing Spark, check if the Spark version and Hadoop versions you are using is part of the one propose in the Spark download page at: https://spark.apache.org/downloads.html')
   core.setFailed(error.message);
 }
