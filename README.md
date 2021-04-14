@@ -35,7 +35,7 @@ steps:
 
 # Available versions of Apache Spark
 
-`setup-spark` is tested for `.github/workflows`:
+`setup-spark` is tested by a workflow in `.github/workflows` for:
 
 * Apache Spark version `3.0.2` and `3.1.1` 
 * Hadoop version `3.2` 
