@@ -34,8 +34,7 @@ try {
   exec(command, (err: any, stdout: any, stderr: any) => {
     if(err || stderr){
       console.log("Error installing Spark");
-      core.error(err);
-      core.error(stderr);
+      console.log(stderr)
       throw new Error(err);
     } else {
       core.info('Spark installed successfully:');
@@ -66,7 +65,7 @@ try {
 
   core.setOutput("spark-version", sparkVersion);
 } catch (error) {
-  core.error("Failed to install Spark");
-  core.error(error);
+  console.log(error)
+  core.error(error.message);
   core.setFailed(error.message);
 }

@@ -150,11 +150,12 @@ try {
     //     throw new Error("Could not apt update");
     //   }
     // });
+    // wget -q $(wget -qO- "https://www.apache.org/dyn/closer.lua/spark/spark-3.0.1/spark-3.0.1-bin-hadoop3.2.tgz?as_json" | python -c "import sys, json; content=json.load(sys.stdin); print(content['preferred']+content['path_info'])")
     // Most commands to install Spark, based on jupyter/spark-notebooks Dockerfile
     // find -type f -printf %T+\\t%p\\n | sort -n &&
+    // echo "${sparkChecksum} *spark-${sparkVersion}-bin-hadoop${hadoopVersion}.tgz" | sha512sum -c - && \
     var command = `cd /tmp &&
-    wget -q $(wget -qO- https://www.apache.org/dyn/closer.lua/spark/spark-${sparkVersion}/spark-${sparkVersion}-bin-hadoop${hadoopVersion}.tgz?as_json | python -c "import sys, json; content=json.load(sys.stdin); print(content['preferred']+content['path_info'])") &&
-    echo "${sparkChecksum} *spark-${sparkVersion}-bin-hadoop${hadoopVersion}.tgz" | sha512sum -c - && \
+    wget -q $(wget -qO- "https://www.apache.org/dyn/closer.lua/spark/spark-${sparkVersion}/spark-${sparkVersion}-bin-hadoop${hadoopVersion}.tgz?as_json" | python -c "import sys, json; content=json.load(sys.stdin); print(content['preferred']+content['path_info'])") &&
     sudo tar xzf "spark-${sparkVersion}-bin-hadoop${hadoopVersion}.tgz" -C /usr/local &&
     rm "spark-${sparkVersion}-bin-hadoop${hadoopVersion}.tgz" &&
     sudo ln -s "/usr/local/spark-${sparkVersion}-bin-hadoop${hadoopVersion}" /usr/local/spark &&
@@ -162,8 +163,7 @@ try {
     child_process_1.exec(command, (err, stdout, stderr) => {
         if (err || stderr) {
             console.log("Error installing Spark");
-            core.error(err);
-            core.error(stderr);
+            console.log(stderr);
             throw new Error(err);
         }
         else {
@@ -191,8 +191,8 @@ try {
     core.setOutput("spark-version", sparkVersion);
 }
 catch (error) {
-    core.error("Failed to install Spark");
-    core.error(error);
+    console.log(error);
+    core.error(error.message);
     core.setFailed(error.message);
 }
 
