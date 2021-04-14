@@ -12,14 +12,15 @@ try {
   process.chdir('/tmp');
 
   // update refs
-  exec('sudo apt-get update', (err, stdout, stderr) => {
-    if(err || stderr){
-      console.log(err);
-      console.log(stderr);
-      throw new Error("Could not apt update");
-    }
-  });
+  // exec('sudo apt-get update', (err, stdout, stderr) => {
+  //   if(err || stderr){
+  //     console.log(err);
+  //     console.log(stderr);
+  //     throw new Error("Could not apt update");
+  //   }
+  // });
   
+  // Most commands to install Spark, based on jupyter/spark-notebooks Dockerfile
   var command = `cd /tmp &&
     find -type f -printf %T+\\t%p\\n | sort -n &&
     wget -q $(wget -qO- https://www.apache.org/dyn/closer.lua/spark/spark-${sparkVersion}/spark-${sparkVersion}-bin-hadoop${hadoopVersion}.tgz?as_json | python -c "import sys, json; content=json.load(sys.stdin); print(content['preferred']+content['path_info'])") &&
@@ -29,14 +30,15 @@ try {
     sudo ln -s "/usr/local/spark-${sparkVersion}-bin-hadoop${hadoopVersion}" /usr/local/spark &&
     sudo chown -R $(id -u):$(id -g) /usr/local/spark*`
 
-  exec(command, (err, stdout, stderr) => {
+  exec(command, (err: any, stdout: any, stderr: any) => {
     if(err || stderr){
-      console.log(err);
-      console.log(stderr);
+      core.error(err);
+      core.error(stderr);
       throw new Error("Could not install Spark");
     } else {
-      console.log('Spark install stdout:');
-      console.log(stdout);
+      core.info('Spark install stdout:');
+      core.info(stdout);
+      // console.log(stdout);
     }
   });
   
@@ -62,5 +64,7 @@ try {
 
   core.setOutput("spark-version", sparkVersion);
 } catch (error) {
+  core.error("Fail to install");
+  core.error(error);
   core.setFailed(error.message);
 }
