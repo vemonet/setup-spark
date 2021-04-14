@@ -141,11 +141,17 @@ try {
     const sparkVersion = core.getInput('spark-version');
     const hadoopVersion = core.getInput('hadoop-version');
     const sparkChecksum = core.getInput('spark-checksum');
-    console.log(process.env);
     process.chdir('/tmp');
-    // Most commands to install Spark are here
-    var command = `sudo apt-get update &&
-    cd /tmp &&
+    // update refs
+    // exec('sudo apt-get update', (err, stdout, stderr) => {
+    //   if(err || stderr){
+    //     console.log(err);
+    //     console.log(stderr);
+    //     throw new Error("Could not apt update");
+    //   }
+    // });
+    // Most commands to install Spark, based on jupyter/spark-notebooks Dockerfile
+    var command = `cd /tmp &&
     find -type f -printf %T+\\t%p\\n | sort -n &&
     wget -q $(wget -qO- https://www.apache.org/dyn/closer.lua/spark/spark-${sparkVersion}/spark-${sparkVersion}-bin-hadoop${hadoopVersion}.tgz?as_json | python -c "import sys, json; content=json.load(sys.stdin); print(content['preferred']+content['path_info'])") &&
     echo "${sparkChecksum} *spark-${sparkVersion}-bin-hadoop${hadoopVersion}.tgz" | sha512sum -c - && \
@@ -154,19 +160,22 @@ try {
     sudo ln -s "/usr/local/spark-${sparkVersion}-bin-hadoop${hadoopVersion}" /usr/local/spark &&
     sudo chown -R $(id -u):$(id -g) /usr/local/spark*`;
     child_process_1.exec(command, (err, stdout, stderr) => {
-        console.log('Spark install stdout:');
-        console.log(stdout);
-        console.log('Spark install err:');
-        console.log(err);
-        console.log('Spark install stderr:');
-        console.log(stderr);
+        if (err || stderr) {
+            core.error(err);
+            core.error(stderr);
+            throw new Error("Could not install Spark");
+        }
+        else {
+            core.info('Spark install stdout:');
+            core.info(stdout);
+            // console.log(stdout);
+        }
     });
     const sparkHome = '/usr/local/spark';
     const py4jVersion = core.getInput('py4j-version');
     const SPARK_OPTS = `--driver-java-options=-Xms1024M --driver-java-options=-Xmx2048M --driver-java-options=-Dlog4j.logLevel=info`;
     const PYTHONPATH = `${sparkHome}/python:${sparkHome}/python/lib/py4j-${py4jVersion}-src.zip`;
     const PYSPARK_PYTHON = 'python';
-    // const PYSPARK_PYTHON = process.env.pythonLocation + '/bin/python';
     // Set environment variables in the workflow
     // See https://github.blog/changelog/2020-10-01-github-actions-deprecating-set-env-and-add-path-commands/
     child_process_1.exec(`echo "HADOOP_VERSION=${hadoopVersion}" >> $GITHUB_ENV`, (err, stdout, stderr) => { });
@@ -181,6 +190,8 @@ try {
     core.setOutput("spark-version", sparkVersion);
 }
 catch (error) {
+    core.error("Fail to install");
+    core.error(error);
     core.setFailed(error.message);
 }
 
