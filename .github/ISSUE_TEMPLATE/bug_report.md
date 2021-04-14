@@ -3,7 +3,7 @@ name: Bug report
 about: Create a report to help us improve
 title: ''
 labels: bug
-assignees: ''
+assignees: 'vemonet'
 
 ---
 
@@ -12,20 +12,13 @@ A clear and concise description of what the bug is.
 
 **Which version of the action are you using?**
 
-- [ ] `v1`
-- [ ] `v2`
-- [ ] Some other tag (such as `v2.0.1` or `master`)
+`v1`, `main`, other tag?
 
 **Environment**
-- [ ] self-hosted
-- [ ] Linux
-- [ ] Windows
-- [ ] Mac
-
-If applicable, please specify if you're using a container
+GitHub-hosted, Self-hosted?
 
 **Spark Versions**
-Please list all of the effected versions of Spark (`3.0.1`, etc.)
+Please list all of the effected versions of Spark (`3.0.2`, etc.)
 
 **To Reproduce**
 Steps to reproduce the behavior:
