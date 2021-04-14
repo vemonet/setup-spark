@@ -21,23 +21,29 @@ git checkout -b my-branch
 
 Checkout the only important file! The mighty [`src/setup-spark.ts` ✨](https://github.com/vemonet/setup-spark/blob/main/src/setup-spark.ts)
 
-### NCC
-
 In order to avoid uploading `node_modules/` to the repository, we use [vercel/ncc](https://github.com/vercel/ncc) to create a single `index.js` file that gets saved in `dist/`.
 
 ### Developing
 
-If you're developing locally, you can generate the `js` files by running:
+1. Install:
 
-```sh
+```bash
 npm install
+```
+
+2. Generates JS files, any files generated using `tsc` will be added to `lib/`, however those files also are not uploaded to the repository and are excluded using `.gitignore`.
+
+```bash
 tsc
+```
+
+3. Build the `index.js` file
+
+```bash
 ncc build src/setup-spark.ts
 ```
 
-Any files generated using `tsc` will be added to `lib/`, however those files also are not uploaded to the repository and are excluded using `.gitignore`.
-
-Then use `ncc` will build the `index.js` file
+4. Commit and push the generated `index.js` file with the rest of the modified files
 
 ### Testing
 

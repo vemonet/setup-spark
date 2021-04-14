@@ -35,35 +35,15 @@ steps:
 
 # Available versions of Apache Spark
 
-`setup-spark` is tested for Apache Spark version `3.0.2` and `3.1.1` with Hadoop version `3.2` using a GitHub Action workflow in `.github/workflows`
+`setup-spark` is tested for `.github/workflows`:
 
-The installation have only been tested on Ubuntu runners
+* Apache Spark version `3.0.2` and `3.1.1` 
+* Hadoop version `3.2` 
+* Ubuntu runners
 
 The Spark installation has been built based on the [jupyter/docker-stack PySpark notebook Dockerfile](https://github.com/jupyter/docker-stacks/blob/master/pyspark-notebook/Dockerfile)
 
-> Feel free to test other Spark version and submit issues or pull requests!
-
-## Developing
-
-1. Install:
-
-```bash
-npm install
-```
-
-2. Generates JS files, any files generated using `tsc` will be added to `lib/`, however those files also are not uploaded to the repository and are excluded using `.gitignore`.
-
-```bash
-tsc
-```
-
-3. Build the `index.js` file
-
-```bash
-ncc build src/setup-spark.ts
-```
-
-4. Commit and push the generated `index.js` file with the rest of the modified files
+> Feel free to test other Spark versions, and submit issues, or [pull requests](https://github.com/vemonet/setup-spark/blob/main/CONTRIBUTING.md)!
 
 # License
 
