@@ -11,9 +11,16 @@ try {
   const sparkChecksum = core.getInput('spark-checksum');
   process.chdir('/tmp');
 
-  // Most commands to install Spark are here
-  var command = `sudo apt-get update &&
-    cd /tmp &&
+  // update refs
+  exec('sudo apt-get update', (err, stdout, stderr) => {
+    if(err || stderr){
+      console.log(err);
+      console.log(stderr);
+      throw new Error("Could not apt update");
+    }
+  });
+  
+  var command = `cd /tmp &&
     find -type f -printf %T+\\t%p\\n | sort -n &&
     wget -q $(wget -qO- https://www.apache.org/dyn/closer.lua/spark/spark-${sparkVersion}/spark-${sparkVersion}-bin-hadoop${hadoopVersion}.tgz?as_json | python -c "import sys, json; content=json.load(sys.stdin); print(content['preferred']+content['path_info'])") &&
     echo "${sparkChecksum} *spark-${sparkVersion}-bin-hadoop${hadoopVersion}.tgz" | sha512sum -c - && \
@@ -23,12 +30,14 @@ try {
     sudo chown -R $(id -u):$(id -g) /usr/local/spark*`
 
   exec(command, (err, stdout, stderr) => {
-    console.log('Spark install stdout:');
-    console.log(stdout);
-    console.log('Spark install err:');
-    console.log(err);
-    console.log('Spark install stderr:');
-    console.log(stderr);
+    if(err || stderr){
+      console.log(err);
+      console.log(stderr);
+      throw new Error("Could not install Spark");
+    } else {
+      console.log('Spark install stdout:');
+      console.log(stdout);
+    }
   });
   
   const sparkHome = '/usr/local/spark';
@@ -37,7 +46,6 @@ try {
   const SPARK_OPTS = `--driver-java-options=-Xms1024M --driver-java-options=-Xmx2048M --driver-java-options=-Dlog4j.logLevel=info`
   const PYTHONPATH = `${sparkHome}/python:${sparkHome}/python/lib/py4j-${py4jVersion}-src.zip`;
   const PYSPARK_PYTHON = 'python';
-  // const PYSPARK_PYTHON = process.env.pythonLocation + '/bin/python';
 
   // Set environment variables in the workflow
   // See https://github.blog/changelog/2020-10-01-github-actions-deprecating-set-env-and-add-path-commands/
