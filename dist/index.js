@@ -151,8 +151,8 @@ try {
     //   }
     // });
     // Most commands to install Spark, based on jupyter/spark-notebooks Dockerfile
+    // find -type f -printf %T+\\t%p\\n | sort -n &&
     var command = `cd /tmp &&
-    find -type f -printf %T+\\t%p\\n | sort -n &&
     wget -q $(wget -qO- https://www.apache.org/dyn/closer.lua/spark/spark-${sparkVersion}/spark-${sparkVersion}-bin-hadoop${hadoopVersion}.tgz?as_json | python -c "import sys, json; content=json.load(sys.stdin); print(content['preferred']+content['path_info'])") &&
     echo "${sparkChecksum} *spark-${sparkVersion}-bin-hadoop${hadoopVersion}.tgz" | sha512sum -c - && \
     sudo tar xzf "spark-${sparkVersion}-bin-hadoop${hadoopVersion}.tgz" -C /usr/local &&
@@ -161,12 +161,13 @@ try {
     sudo chown -R $(id -u):$(id -g) /usr/local/spark*`;
     child_process_1.exec(command, (err, stdout, stderr) => {
         if (err || stderr) {
+            console.log("Error installing Spark");
             core.error(err);
             core.error(stderr);
-            throw new Error("Could not install Spark");
+            throw new Error(err);
         }
         else {
-            core.info('Spark install stdout:');
+            core.info('Spark installed successfully:');
             core.info(stdout);
             // console.log(stdout);
         }
@@ -190,7 +191,7 @@ try {
     core.setOutput("spark-version", sparkVersion);
 }
 catch (error) {
-    core.error("Fail to install");
+    core.error("Failed to install Spark");
     core.error(error);
     core.setFailed(error.message);
 }

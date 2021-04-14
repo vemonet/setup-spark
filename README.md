@@ -37,7 +37,31 @@ steps:
 
 The Spark installation has been built based on the [jupyter/docker-stack PySpark notebook Dockerfile](https://github.com/jupyter/docker-stacks/blob/master/pyspark-notebook/Dockerfile)
 
+The installation have only been tested on Linux (Ubuntu 18 and 20 runners)
+
 > Feel free to test other Spark version and submit issues or pull requests!
+
+## Developing
+
+1. Install:
+
+```bash
+npm install
+```
+
+2. Generates js files, any files generated using `tsc` will be added to `lib/`, however those files also are not uploaded to the repository and are excluded using `.gitignore`.
+
+```bash
+tsc
+```
+
+3. Build the `index.js` file
+
+```bash
+ncc build src/setup-spark.ts
+```
+
+4. Commit and push the generated `index.js` file
 
 # License
 
@@ -45,4 +69,4 @@ The scripts and documentation in this project are released under the [MIT Licens
 
 # Contributions
 
-Contributions are welcome! See our [Contributor's Guide](docs/contributors.md).
+Contributions are welcome! See our [Contributor's Guide](docs/CONTRIBUTING.md).
