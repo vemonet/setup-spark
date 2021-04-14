@@ -5,15 +5,11 @@ author: 'vemonet'
 inputs:
   spark-version:
     description: "Apache Spark version to use, using SemVer's version range syntax."
-    default: '3.0.1'
+    default: '3.0.2'
     required: false
   hadoop-version:
     description: "Hadoop version"
     default: '3.2'
-    required: false
-  spark-checksum:
-    description: "SPARK file checksum"
-    default: 'E8B47C5B658E0FBC1E57EEA06262649D8418AE2B2765E44DA53AAF50094877D17297CC5F0B9B35DF2CEEF830F19AA31D7E56EAD950BBE7F8830D6874F88CFC3C'
     required: false
   py4j-version:
     description: "Py4J version."

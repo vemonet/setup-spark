@@ -22,8 +22,6 @@ try {
   
   // wget -q $(wget -qO- "https://www.apache.org/dyn/closer.lua/spark/spark-3.0.1/spark-3.0.1-bin-hadoop3.2.tgz?as_json" | python -c "import sys, json; content=json.load(sys.stdin); print(content['preferred']+content['path_info'])")
   // Most commands to install Spark, based on jupyter/spark-notebooks Dockerfile
-  // find -type f -printf %T+\\t%p\\n | sort -n &&
-  // echo "${sparkChecksum} *spark-${sparkVersion}-bin-hadoop${hadoopVersion}.tgz" | sha512sum -c - && \
   var command = `cd /tmp &&
     wget -q $(wget -qO- "https://www.apache.org/dyn/closer.lua/spark/spark-${sparkVersion}/spark-${sparkVersion}-bin-hadoop${hadoopVersion}.tgz?as_json" | python -c "import sys, json; content=json.load(sys.stdin); print(content['preferred']+content['path_info'])") &&
     sudo tar xzf "spark-${sparkVersion}-bin-hadoop${hadoopVersion}.tgz" -C /usr/local &&
@@ -37,7 +35,7 @@ try {
       console.log(stderr)
       throw new Error(err);
     } else {
-      core.info('Spark installed successfully:');
+      core.info('Spark installed successfully');
       core.info(stdout);
       // console.log(stdout);
     }
@@ -65,7 +63,6 @@ try {
 
   core.setOutput("spark-version", sparkVersion);
 } catch (error) {
-  console.log(error)
-  core.error(error.message);
+  core.error(error);
   core.setFailed(error.message);
 }
