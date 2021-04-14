@@ -1,4 +1,23 @@
-# How to contribute
+When contributing to this repository, please check the [issues](https://github.com/vemonet/setup-spark/issues) first, and post a new one if relevant.
+
+## Get the source code 📥
+
+1. [Fork this repository](https://github.com/vemonet/setup-spark/fork) 🍴
+
+2. Clone the forked repository (change the URL of the `git clone` for yours)
+
+```bash
+git clone https://github.com/vemonet/setup-spark.git
+cd setup-spark
+```
+
+3. Create a new branch from the `main` branch, and go to this branch 🕊️
+
+```bash
+git checkout -b my-branch
+```
+
+## How to contribute 👩‍💻
 
 Checkout the only important file! The mighty [`src/setup-spark.ts` ✨](https://github.com/vemonet/setup-spark/blob/main/src/setup-spark.ts)
 
@@ -18,11 +37,19 @@ ncc build src/setup-spark.ts
 
 Any files generated using `tsc` will be added to `lib/`, however those files also are not uploaded to the repository and are excluded using `.gitignore`.
 
-Then `ncc` will build the `index.js` file
+Then use `ncc` will build the `index.js` file
 
 ### Testing
 
-We ask that you include a link to a successful run that utilizes the changes you are working on. For example, if your changes are in the branch `newAwesomeFeature`, then show an example run that uses `setup-python@newAwesomeFeature` or `my-fork@newAwesomeFeature`. This will help speed up testing and help us confirm that there are no breaking changes or bugs.
+We use the `run-setup-spark.yml` GitHub Actions workflow in `.github/workflows` to test setting up Spark versions
+
+If you are making a substantive change try to link to a successful run that utilizes the changes you are working on.
+
+### Pull request process
+
+1. Before sending a pull request, make sure the project still work as expected with the new changes properly integrated
+2. [Send a pull request](https://github.com/vemonet/setup-spark/compare) to the `main` branch 📤
+3. Project contributors will review your change, and answer the pull request as soon as they can
 
 ### Licensed
 
