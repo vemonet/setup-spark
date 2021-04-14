@@ -9,10 +9,9 @@ jobs:
   run:
     name: Run
     runs-on: ubuntu-latest
-    # runs-on: ${{ matrix.operating-system }}
-    # strategy:
-    #   matrix:
-    #     spark-version: [3.0.2, 3.1.1]
+    strategy:
+      matrix:
+        spark-version: [3.0.2, 3.1.1]
     steps:
     - name: Checkout
       uses: actions/checkout@v2
@@ -31,10 +30,10 @@ jobs:
     # - name: npm test
     #   run: npm test
 
-    - name: Run setup-spark 3.0.2
+    - name: Run setup-spark ${{ matrix.spark-version }}
       uses: ./
       with:
-        spark-version: 3.0.2
+        spark-version: ${{ matrix.spark-version }}
         hadoop-version: 3.2
 
     - name: Check Spark

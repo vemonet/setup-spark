@@ -1,6 +1,6 @@
 # setup-spark ✨
 
-[![Run setup-spark action](https://github.com/vemonet/setup-spark/workflows/Run%20setup-spark%20action/badge.svg)](https://github.com/vemonet/setup-spark/actions?query=workflow%3A%22Run+setup-spark+action%22) [![Code scanning](https://github.com/vemonet/setup-spark/workflows/CodeQL%20analysis/badge.svg)](https://github.com/vemonet/setup-spark/actions?query=workflow%3A%22CodeQL+analysis%22)
+[![Run setup-spark action](https://github.com/vemonet/setup-spark/actions/workflows/run-setup-spark.yml/badge.svg)](https://github.com/vemonet/setup-spark/actions/workflows/run-setup-spark.yml) [![CodeQL analysis](https://github.com/vemonet/setup-spark/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/vemonet/setup-spark/actions/workflows/codeql-analysis.yml)
 
 This action sets up Apache Spark in your environment for use in GitHub Actions by:
 
@@ -27,17 +27,19 @@ steps:
     java-version: '11'
 - uses: vemonet/setup-spark@v1
   with:
-    spark-version: '3.0.1' # Exact version
+    spark-version: '3.0.2'
 - run: spark-submit --version
 ```
 
+Check for the available Spark and Hadoop versions at https://spark.apache.org/downloads.html
+
 # Available versions of Apache Spark
 
-`setup-spark` has been tested for Apache Spark version `3.0.1` and for PySpark applications using Python `3.6`,  `3.7`,  `3.8`.
+`setup-spark` is tested for Apache Spark version `3.0.2` and `3.1.1` with Hadoop version `3.2`
 
 The Spark installation has been built based on the [jupyter/docker-stack PySpark notebook Dockerfile](https://github.com/jupyter/docker-stacks/blob/master/pyspark-notebook/Dockerfile)
 
-The installation have only been tested on Linux (Ubuntu 18 and 20 runners)
+The installation have only been tested on Ubuntu runners
 
 > Feel free to test other Spark version and submit issues or pull requests!
 
