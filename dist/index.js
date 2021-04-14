@@ -142,18 +142,7 @@ try {
     const hadoopVersion = core.getInput('hadoop-version');
     const sparkChecksum = core.getInput('spark-checksum');
     process.chdir('/tmp');
-    // update refs
-    // exec('sudo apt-get update', (err, stdout, stderr) => {
-    //   if(err || stderr){
-    //     console.log(err);
-    //     console.log(stderr);
-    //     throw new Error("Could not apt update");
-    //   }
-    // });
-    // wget -q $(wget -qO- "https://www.apache.org/dyn/closer.lua/spark/spark-3.0.1/spark-3.0.1-bin-hadoop3.2.tgz?as_json" | python -c "import sys, json; content=json.load(sys.stdin); print(content['preferred']+content['path_info'])")
-    // Most commands to install Spark, based on jupyter/spark-notebooks Dockerfile
-    // find -type f -printf %T+\\t%p\\n | sort -n &&
-    // echo "${sparkChecksum} *spark-${sparkVersion}-bin-hadoop${hadoopVersion}.tgz" | sha512sum -c - && \
+    // Download Spark using Bash commands based on jupyter/spark-notebooks Dockerfile
     var command = `cd /tmp &&
     wget -q $(wget -qO- "https://www.apache.org/dyn/closer.lua/spark/spark-${sparkVersion}/spark-${sparkVersion}-bin-hadoop${hadoopVersion}.tgz?as_json" | python -c "import sys, json; content=json.load(sys.stdin); print(content['preferred']+content['path_info'])") &&
     sudo tar xzf "spark-${sparkVersion}-bin-hadoop${hadoopVersion}.tgz" -C /usr/local &&
@@ -162,14 +151,11 @@ try {
     sudo chown -R $(id -u):$(id -g) /usr/local/spark*`;
     child_process_1.exec(command, (err, stdout, stderr) => {
         if (err || stderr) {
-            console.log("Error installing Spark");
-            console.log(stderr);
+            console.log("Error downloading the Spark binary");
             throw new Error(err);
         }
         else {
-            core.info('Spark installed successfully:');
-            core.info(stdout);
-            // console.log(stdout);
+            core.info('Spark binary installed successfully.');
         }
     });
     const sparkHome = '/usr/local/spark';
@@ -192,8 +178,9 @@ try {
 }
 catch (error) {
     console.log(error);
-    core.error(error.message);
-    core.setFailed(error.message);
+    const errorMessage = 'Issue installing Spark, check if the Spark version and Hadoop versions you are using is part of the one proposed in the Spark download page: https://spark.apache.org/downloads.html';
+    core.error(errorMessage);
+    core.setFailed(errorMessage);
 }
 
 

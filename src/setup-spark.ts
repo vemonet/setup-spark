@@ -11,17 +11,7 @@ try {
   const sparkChecksum = core.getInput('spark-checksum');
   process.chdir('/tmp');
 
-  // update refs
-  // exec('sudo apt-get update', (err, stdout, stderr) => {
-  //   if(err || stderr){
-  //     console.log(err);
-  //     console.log(stderr);
-  //     throw new Error("Could not apt update");
-  //   }
-  // });
-  
-  // wget -q $(wget -qO- "https://www.apache.org/dyn/closer.lua/spark/spark-3.0.1/spark-3.0.1-bin-hadoop3.2.tgz?as_json" | python -c "import sys, json; content=json.load(sys.stdin); print(content['preferred']+content['path_info'])")
-  // Most commands to install Spark, based on jupyter/spark-notebooks Dockerfile
+  // Download Spark using Bash commands based on jupyter/spark-notebooks Dockerfile
   var command = `cd /tmp &&
     wget -q $(wget -qO- "https://www.apache.org/dyn/closer.lua/spark/spark-${sparkVersion}/spark-${sparkVersion}-bin-hadoop${hadoopVersion}.tgz?as_json" | python -c "import sys, json; content=json.load(sys.stdin); print(content['preferred']+content['path_info'])") &&
     sudo tar xzf "spark-${sparkVersion}-bin-hadoop${hadoopVersion}.tgz" -C /usr/local &&
@@ -40,7 +30,6 @@ try {
   
   const sparkHome = '/usr/local/spark';
   const py4jVersion = core.getInput('py4j-version');
-  
   const SPARK_OPTS = `--driver-java-options=-Xms1024M --driver-java-options=-Xmx2048M --driver-java-options=-Dlog4j.logLevel=info`
   const PYTHONPATH = `${sparkHome}/python:${sparkHome}/python/lib/py4j-${py4jVersion}-src.zip`;
   const PYSPARK_PYTHON = 'python';
@@ -61,6 +50,7 @@ try {
   core.setOutput("spark-version", sparkVersion);
 } catch (error) {
   console.log(error);
-  core.error('Issue installing Spark, check if the Spark version and Hadoop versions you are using is part of the one propose in the Spark download page at: https://spark.apache.org/downloads.html')
-  core.setFailed(error.message);
+  const errorMessage = 'Issue installing Spark, check if the Spark version and Hadoop versions you are using is part of the one proposed in the Spark download page: https://spark.apache.org/downloads.html'
+  core.error(errorMessage)
+  core.setFailed(errorMessage);
 }

@@ -6,8 +6,8 @@ on:
       - main
   pull_request:
 jobs:
-  run:
-    name: Run
+  test-setup-spark:
+    name: Test Setup Spark
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -26,7 +26,6 @@ jobs:
 
     # - name: Lint
     #   run: npm run format-check
-
     # - name: npm test
     #   run: npm test
 
