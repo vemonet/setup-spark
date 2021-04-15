@@ -17,10 +17,10 @@ try {
 
   exec(command, (err: any, stdout: any, stderr: any) => {
     if(err || stderr){
-      console.log("Error downloading the Spark binary");
+      console.log('Error downloading the Spark binary');
       throw new Error(err);
     } else {
-      console.log('Spark binary installed successfully.');
+      console.log('Spark binary downloaded successfully.');
     }
   });
   
@@ -38,7 +38,7 @@ try {
   exec(`echo "PYSPARK_DRIVER_PYTHON=${PYSPARK_PYTHON}" >> $GITHUB_ENV`, (err, stdout, stderr) => { });
   exec(`echo "PYTHONPATH=${PYTHONPATH}" >> $GITHUB_ENV`, (err, stdout, stderr) => { });
   exec(`echo "SPARK_OPTS=${SPARK_OPTS}" >> $GITHUB_ENV`, (err, stdout, stderr) => { });
-      
+
   // Add Spark to path
   exec(`echo "PATH=$PATH:${sparkHome}/bin" >> $GITHUB_ENV`, (err, stdout, stderr) => { });
 

@@ -148,11 +148,11 @@ try {
     ln -s "${installFolder}/spark-${sparkVersion}-bin-hadoop${hadoopVersion}" ${installFolder}/spark`;
     child_process_1.exec(command, (err, stdout, stderr) => {
         if (err || stderr) {
-            console.log("Error downloading the Spark binary");
+            console.log('Error downloading the Spark binary');
             throw new Error(err);
         }
         else {
-            console.log('Spark binary installed successfully.');
+            console.log('Spark binary downloaded successfully.');
         }
     });
     const sparkHome = installFolder + '/spark';
