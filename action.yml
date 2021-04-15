@@ -4,7 +4,7 @@ description: 'Set up Apache Spark and add the command-line tools to the PATH.'
 author: 'vemonet'
 inputs:
   spark-version:
-    description: "Apache Spark version to use, using SemVer's version range syntax."
+    description: "Apache Spark version to install, see https://spark.apache.org/downloads.html"
     default: '3.0.2'
     required: false
   hadoop-version:
@@ -15,13 +15,9 @@ inputs:
     description: "Py4J version."
     default: '0.10.9'
     required: false
-  openjdk-version: 
-    description: "Java OpenJDK version."
-    default: '11'
-    required: false
 outputs:
   spark-version:
-    description: "The installed Apache Spark version. Useful when given a version range as input."
+    description: "The installed Apache Spark version."
 runs:
   using: 'node12'
   main: 'dist/index.js'

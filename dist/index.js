@@ -134,32 +134,28 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const core = __importStar(__webpack_require__(470));
 const child_process_1 = __webpack_require__(129);
-const process = __importStar(__webpack_require__(765));
-// import * as os from 'os';
 // See docs to create JS action: https://docs.github.com/en/free-pro-team@latest/actions/creating-actions/creating-a-javascript-action
 try {
     const sparkVersion = core.getInput('spark-version');
     const hadoopVersion = core.getInput('hadoop-version');
-    const sparkChecksum = core.getInput('spark-checksum');
-    process.chdir('/tmp');
-    // Download Spark using Bash commands based on jupyter/spark-notebooks Dockerfile
+    const py4jVersion = core.getInput('py4j-version');
+    const installFolder = '/home/runner';
+    // Download Spark using Bash commands, based on jupyter/spark-notebooks Dockerfile
     var command = `cd /tmp &&
     wget -q $(wget -qO- "https://www.apache.org/dyn/closer.lua/spark/spark-${sparkVersion}/spark-${sparkVersion}-bin-hadoop${hadoopVersion}.tgz?as_json" | python -c "import sys, json; content=json.load(sys.stdin); print(content['preferred']+content['path_info'])") &&
-    sudo tar xzf "spark-${sparkVersion}-bin-hadoop${hadoopVersion}.tgz" -C /usr/local &&
+    tar xzf "spark-${sparkVersion}-bin-hadoop${hadoopVersion}.tgz" -C ${installFolder} &&
     rm "spark-${sparkVersion}-bin-hadoop${hadoopVersion}.tgz" &&
-    sudo ln -s "/usr/local/spark-${sparkVersion}-bin-hadoop${hadoopVersion}" /usr/local/spark &&
-    sudo chown -R $(id -u):$(id -g) /usr/local/spark*`;
+    ln -s "${installFolder}/spark-${sparkVersion}-bin-hadoop${hadoopVersion}" ${installFolder}/spark`;
     child_process_1.exec(command, (err, stdout, stderr) => {
         if (err || stderr) {
             console.log("Error downloading the Spark binary");
             throw new Error(err);
         }
         else {
-            core.info('Spark binary installed successfully.');
+            console.log('Spark binary installed successfully.');
         }
     });
-    const sparkHome = '/usr/local/spark';
-    const py4jVersion = core.getInput('py4j-version');
+    const sparkHome = installFolder + '/spark';
     const SPARK_OPTS = `--driver-java-options=-Xms1024M --driver-java-options=-Xmx2048M --driver-java-options=-Dlog4j.logLevel=info`;
     const PYTHONPATH = `${sparkHome}/python:${sparkHome}/python/lib/py4j-${py4jVersion}-src.zip`;
     const PYSPARK_PYTHON = 'python';
@@ -178,9 +174,8 @@ try {
 }
 catch (error) {
     console.log(error);
-    const errorMessage = 'Issue installing Spark, check if the Spark version and Hadoop versions you are using is part of the one proposed in the Spark download page: https://spark.apache.org/downloads.html';
-    core.error(errorMessage);
-    core.setFailed(errorMessage);
+    console.log('\nIssue installing Spark: check if the Spark version and Hadoop versions you are using is part of the one proposed in the Spark download page at https://spark.apache.org/downloads.html');
+    core.setFailed(error.message);
 }
 
 
@@ -528,13 +523,6 @@ module.exports = require("path");
 /***/ (function(module) {
 
 module.exports = require("fs");
-
-/***/ }),
-
-/***/ 765:
-/***/ (function(module) {
-
-module.exports = require("process");
 
 /***/ })
 

@@ -21,6 +21,8 @@ git checkout -b my-branch
 
 Checkout the only important file! The mighty [`src/setup-spark.ts` ✨](https://github.com/vemonet/setup-spark/blob/main/src/setup-spark.ts)
 
+The Spark installation has been built based on the [jupyter/docker-stack PySpark notebook Dockerfile](https://github.com/jupyter/docker-stacks/blob/master/pyspark-notebook/Dockerfile)
+
 In order to avoid uploading `node_modules/` to the repository, we use [vercel/ncc](https://github.com/vercel/ncc) to create a single `index.js` file that gets saved in `dist/`.
 
 ### Developing
@@ -47,7 +49,7 @@ ncc build src/setup-spark.ts
 
 ### Testing
 
-We use the `run-setup-spark.yml` GitHub Actions workflow in `.github/workflows` to test setting up Spark versions
+We use the `test-setup-spark.yml` GitHub Actions workflow in `.github/workflows` to test setting up Spark versions
 
 If you are making a substantive change try to link to a successful run that utilizes the changes you are working on.
 

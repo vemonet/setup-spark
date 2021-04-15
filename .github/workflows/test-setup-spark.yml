@@ -1,4 +1,4 @@
-name: Run setup-spark action
+name: Test setup-spark action
 on:
   workflow_dispatch:
   push:
@@ -7,7 +7,7 @@ on:
   pull_request:
 jobs:
   test-setup-spark:
-    name: Test Setup Spark
+    name: Test setup Spark
     runs-on: ubuntu-latest
     strategy:
       matrix:
