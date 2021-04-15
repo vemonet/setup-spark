@@ -43,7 +43,7 @@ The `setup-spark` action is tested in `.github/workflows/test-setup-spark.yml` f
 * Hadoop version `3.2` 
 * Ubuntu runners
 
-This action has only been for python PySpark jobs, feel free to submit [issues](/issues) to help improving the setup for other uses (e.g. R, scala)
+This action has only been used with python PySpark jobs, feel free to submit [issues](/issues) to help improving the setup for other uses (e.g. R, Scala)
 
 # License
 
