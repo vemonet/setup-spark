@@ -44,7 +44,7 @@ try {
 
   core.setOutput("spark-version", sparkVersion);
 } catch (error) {
-  console.log(error);
   console.log('\nIssue installing Spark: check if the Spark version and Hadoop versions you are using is part of the one proposed in the Spark download page at https://spark.apache.org/downloads.html')
+  console.log(error);
   core.setFailed(error.message);
 }
