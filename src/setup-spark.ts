@@ -1,12 +1,19 @@
 import * as core from '@actions/core';
 import { exec } from 'child_process';
+import * as fs from 'fs';
+// const fs = require('fs');
 // See docs to create JS action: https://docs.github.com/en/free-pro-team@latest/actions/creating-actions/creating-a-javascript-action
 
 try {
   const sparkVersion = core.getInput('spark-version');
   const hadoopVersion = core.getInput('hadoop-version');
   const py4jVersion = core.getInput('py4j-version');
-  const installFolder = '/home/runner'
+  // Install in the parent of the workspace (to avoid mixing with checked code)
+  let installFolder: any = process.env.GITHUB_WORKSPACE + '/../'
+  fs.access(installFolder, fs.constants.W_OK, (err) => {
+    // Use the workspace if parent is not writable
+    installFolder = process.env.GITHUB_WORKSPACE
+  });
 
   // Download Spark using Bash commands, based on jupyter/spark-notebooks Dockerfile
   var command = `cd /tmp &&
