@@ -11,7 +11,7 @@ try {
   // Install in the parent of the workspace (to avoid mixing with checked code)
   let installFolder: any = process.env.GITHUB_WORKSPACE + '/../'
   fs.access(installFolder, fs.constants.W_OK, (err) => {
-    // Use the workspace if parent is not writable
+    console.log('$GITHUB_WORKSPACE parent not writable. Using $GITHUB_WORKSPACE to store Spark');
     installFolder = process.env.GITHUB_WORKSPACE
   });
 
@@ -26,8 +26,6 @@ try {
     if(err || stderr){
       console.log('Error downloading the Spark binary');
       throw new Error(err);
-    } else {
-      console.log('Spark binary downloaded successfully.');
     }
   });
   
