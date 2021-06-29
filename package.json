@@ -4,10 +4,9 @@
   "description": "Setup Spark action",
   "main": "dist/index.js",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && ncc build src/setup-spark.ts && git add -f dist/",
     "format": "prettier --write **/*.ts",
     "format-check": "prettier --check **/*.ts",
-    "release": "ncc build src/setup-spark.ts && git add -f dist/",
     "test": "jest"
   },
   "repository": {

@@ -134,25 +134,39 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const core = __importStar(__webpack_require__(470));
 const child_process_1 = __webpack_require__(129);
+const fs = __importStar(__webpack_require__(747));
+// const fs = require('fs');
 // See docs to create JS action: https://docs.github.com/en/free-pro-team@latest/actions/creating-actions/creating-a-javascript-action
 try {
     const sparkVersion = core.getInput('spark-version');
+    var sparkUrl = core.getInput('spark-url');
     const hadoopVersion = core.getInput('hadoop-version');
     const py4jVersion = core.getInput('py4j-version');
-    const installFolder = '/home/runner';
-    // Download Spark using Bash commands, based on jupyter/spark-notebooks Dockerfile
+    // Install in the parent of the workspace (to avoid mixing with checked code)
+    let installFolder = process.env.GITHUB_WORKSPACE + '/../';
+    fs.access(installFolder, fs.constants.W_OK, (err) => {
+        console.log('$GITHUB_WORKSPACE parent not writable. Using $GITHUB_WORKSPACE to store Spark');
+        installFolder = process.env.GITHUB_WORKSPACE;
+    });
+    // Download Spark from the official Apache mirrors using the Spark and Hadoop versions 
+    // Based on jupyter/spark-notebooks Dockerfile
+    if (!sparkUrl) {
+        sparkUrl = `https://archive.apache.org/dist/spark/spark-${sparkVersion}/spark-${sparkVersion}-bin-hadoop${hadoopVersion}.tgz`;
+    }
     var command = `cd /tmp &&
-    wget -q $(wget -qO- "https://www.apache.org/dyn/closer.lua/spark/spark-${sparkVersion}/spark-${sparkVersion}-bin-hadoop${hadoopVersion}.tgz?as_json" | python -c "import sys, json; content=json.load(sys.stdin); print(content['preferred']+content['path_info'])") &&
-    tar xzf "spark-${sparkVersion}-bin-hadoop${hadoopVersion}.tgz" -C ${installFolder} &&
-    rm "spark-${sparkVersion}-bin-hadoop${hadoopVersion}.tgz" &&
-    ln -s "${installFolder}/spark-${sparkVersion}-bin-hadoop${hadoopVersion}" ${installFolder}/spark`;
+  wget -q -N spark.tgz ${sparkUrl} &&
+  tar xzf spark.tgz -C ${installFolder} &&
+  rm "spark.tgz"
+  `;
+    // var command = `cd /tmp &&
+    // wget -q $(wget -qO- "https://www.apache.org/dyn/closer.lua/spark/spark-${sparkVersion}/spark-${sparkVersion}-bin-hadoop${hadoopVersion}.tgz?as_json" | python -c "import sys, json; content=json.load(sys.stdin); print(content['preferred']+content['path_info'])") &&
+    // tar xzf "spark-${sparkVersion}-bin-hadoop${hadoopVersion}.tgz" -C ${installFolder} &&
+    // rm "spark-${sparkVersion}-bin-hadoop${hadoopVersion}.tgz" &&
+    // ln -s "${installFolder}/spark-${sparkVersion}-bin-hadoop${hadoopVersion}" ${installFolder}/spark`
     child_process_1.exec(command, (err, stdout, stderr) => {
         if (err || stderr) {
             console.log('Error downloading the Spark binary');
             throw new Error(err);
-        }
-        else {
-            console.log('Spark binary downloaded successfully.');
         }
     });
     const sparkHome = installFolder + '/spark';
@@ -173,8 +187,8 @@ try {
     core.setOutput("spark-version", sparkVersion);
 }
 catch (error) {
-    console.log(error);
     console.log('\nIssue installing Spark: check if the Spark version and Hadoop versions you are using is part of the one proposed in the Spark download page at https://spark.apache.org/downloads.html');
+    console.log(error);
     core.setFailed(error.message);
 }
 

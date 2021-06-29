@@ -33,19 +33,15 @@ In order to avoid uploading `node_modules/` to the repository, we use [vercel/nc
 npm install
 ```
 
-2. Generates JS files, any files generated using `tsc` will be added to `lib/`, however those files also are not uploaded to the repository and are excluded using `.gitignore`.
+2. Build the `index.js` file
 
 ```bash
-tsc
+npm run build
 ```
 
-3. Build the `index.js` file
+It also generates JS files from TypeScript files. Any files generated using `tsc` will be added to `lib/`, however those files also are not uploaded to the repository and are excluded using `.gitignore`.
 
-```bash
-ncc build src/setup-spark.ts
-```
-
-4. Commit and push the generated `index.js` file with the rest of the modified files
+3. Commit and push the generated `index.js` file with the rest of the modified files
 
 ### Testing
 
