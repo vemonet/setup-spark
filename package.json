@@ -5,8 +5,8 @@
   "main": "dist/index.js",
   "scripts": {
     "tsc": "tsc",
-    "ncc": "ncc build lib/index.js",
-    "build": "tsc && ncc build lib/index.js && git add -f dist/",
+    "ncc": "ncc build lib/setup-spark.js",
+    "build": "tsc && ncc build lib/setup-spark.js && git add -f dist/",
     "format": "prettier --write **/*.ts",
     "format-check": "prettier --check **/*.ts",
     "test": "jest"

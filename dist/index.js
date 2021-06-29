@@ -2,71 +2,87 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 822:
+/***/ 559:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
 var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
-    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
-    result["default"] = mod;
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(186));
-// import * as finder from './find-python';
 const child_process_1 = __nccwpck_require__(129);
-const process = __importStar(__nccwpck_require__(765));
-// import * as os from 'os';
-// const core = require('@actions/core');
-// const { exec } = require('child_process');
-// const process = require('process');
-// const github = require('@actions/github');
+const fs = __importStar(__nccwpck_require__(747));
+// const fs = require('fs');
 // See docs to create JS action: https://docs.github.com/en/free-pro-team@latest/actions/creating-actions/creating-a-javascript-action
 try {
     const sparkVersion = core.getInput('spark-version');
+    var sparkUrl = core.getInput('spark-url');
     const hadoopVersion = core.getInput('hadoop-version');
-    const sparkChecksum = core.getInput('spark-checksum');
-    console.log(`Spark version ${sparkVersion}!`);
-    console.log(process.env);
-    process.chdir('/tmp');
-    var command = `sudo apt-get update &&
-    cd /tmp &&
-    find -type f -printf %T+\\t%p\\n | sort -n &&
-    wget -q $(wget -qO- https://www.apache.org/dyn/closer.lua/spark/spark-${sparkVersion}/spark-${sparkVersion}-bin-hadoop${hadoopVersion}.tgz?as_json | python -c "import sys, json; content=json.load(sys.stdin); print(content['preferred']+content['path_info'])") &&
-    echo "${sparkChecksum} *spark-${sparkVersion}-bin-hadoop${hadoopVersion}.tgz" | sha512sum -c - && \
-    sudo tar xzf "spark-${sparkVersion}-bin-hadoop${hadoopVersion}.tgz" -C /usr/local &&
-    rm "spark-${sparkVersion}-bin-hadoop${hadoopVersion}.tgz" &&
-    sudo ln -s "/usr/local/spark-${sparkVersion}-bin-hadoop${hadoopVersion}" /usr/local/spark &&
-    sudo chown -R $(id -u):$(id -g) /usr/local/spark*`;
-    // Was originally: sudo tar xzf "spark-${sparkVersion}-bin-hadoop${hadoopVersion}.tgz" -C /usr/local --owner root --group root --no-same-owner &&
-    child_process_1.exec(command, (err, stdout, stderr) => {
-        console.log('stdout:');
-        console.log(stdout);
-        console.log('err:');
-        console.log(err);
-        console.log('stderr:');
-        console.log(stderr);
-    });
-    const sparkHome = '/usr/local/spark';
     const py4jVersion = core.getInput('py4j-version');
+    // Install in the parent of the workspace (to avoid mixing with checked code)
+    let installFolder = process.env.GITHUB_WORKSPACE + '/../';
+    fs.access(installFolder, fs.constants.W_OK, (err) => {
+        console.log('$GITHUB_WORKSPACE parent not writable. Using $GITHUB_WORKSPACE to store Spark');
+        installFolder = process.env.GITHUB_WORKSPACE;
+    });
+    // Download Spark from the official Apache mirrors using the Spark and Hadoop versions 
+    // Based on jupyter/spark-notebooks Dockerfile
+    if (!sparkUrl) {
+        sparkUrl = `https://archive.apache.org/dist/spark/spark-${sparkVersion}/spark-${sparkVersion}-bin-hadoop${hadoopVersion}.tgz`;
+    }
+    var command = `cd /tmp &&
+  wget -q -O spark.tgz ${sparkUrl} &&
+  tar xzf spark.tgz -C ${installFolder} &&
+  rm "spark.tgz"
+  ln -s "${installFolder}/spark-${sparkVersion}-bin-hadoop${hadoopVersion}" ${installFolder}/spark`;
+    // var command = `cd /tmp &&
+    // wget -q $(wget -qO- "https://www.apache.org/dyn/closer.lua/spark/spark-${sparkVersion}/spark-${sparkVersion}-bin-hadoop${hadoopVersion}.tgz?as_json" | python -c "import sys, json; content=json.load(sys.stdin); print(content['preferred']+content['path_info'])") &&
+    // tar xzf "spark-${sparkVersion}-bin-hadoop${hadoopVersion}.tgz" -C ${installFolder} &&
+    // rm "spark-${sparkVersion}-bin-hadoop${hadoopVersion}.tgz" &&
+    // ln -s "${installFolder}/spark-${sparkVersion}-bin-hadoop${hadoopVersion}" ${installFolder}/spark`
+    child_process_1.exec(command, (err, stdout, stderr) => {
+        if (err || stderr) {
+            console.log('Error downloading the Spark binary');
+            throw new Error(err);
+        }
+    });
+    const sparkHome = installFolder + '/spark';
+    const SPARK_OPTS = `--driver-java-options=-Xms1024M --driver-java-options=-Xmx2048M --driver-java-options=-Dlog4j.logLevel=info`;
     const PYTHONPATH = `${sparkHome}/python:${sparkHome}/python/lib/py4j-${py4jVersion}-src.zip`;
-    // const PYSPARK_PYTHON = '/opt/conda/bin/python3';
-    // Set environment variable for the job
+    const PYSPARK_PYTHON = 'python';
+    // Set environment variables in the workflow
     // See https://github.blog/changelog/2020-10-01-github-actions-deprecating-set-env-and-add-path-commands/
-    // echo "HADOOP_VERSION=${hadoopVersion}" >> $GITHUB_ENV
     child_process_1.exec(`echo "HADOOP_VERSION=${hadoopVersion}" >> $GITHUB_ENV`, (err, stdout, stderr) => { });
     child_process_1.exec(`echo "APACHE_SPARK_VERSION=${sparkVersion}" >> $GITHUB_ENV`, (err, stdout, stderr) => { });
     child_process_1.exec(`echo "SPARK_HOME=${sparkHome}" >> $GITHUB_ENV`, (err, stdout, stderr) => { });
+    child_process_1.exec(`echo "PYSPARK_PYTHON=${PYSPARK_PYTHON}" >> $GITHUB_ENV`, (err, stdout, stderr) => { });
+    child_process_1.exec(`echo "PYSPARK_DRIVER_PYTHON=${PYSPARK_PYTHON}" >> $GITHUB_ENV`, (err, stdout, stderr) => { });
     child_process_1.exec(`echo "PYTHONPATH=${PYTHONPATH}" >> $GITHUB_ENV`, (err, stdout, stderr) => { });
-    child_process_1.exec(`echo "SPARK_OPTS=--driver-java-options=-Xms1024M --driver-java-options=-Xmx2048M --driver-java-options=-Dlog4j.logLevel=info" >> $GITHUB_ENV`, (err, stdout, stderr) => { });
+    child_process_1.exec(`echo "SPARK_OPTS=${SPARK_OPTS}" >> $GITHUB_ENV`, (err, stdout, stderr) => { });
+    // Add Spark to path
     child_process_1.exec(`echo "PATH=$PATH:${sparkHome}/bin" >> $GITHUB_ENV`, (err, stdout, stderr) => { });
-    child_process_1.exec(`echo "PYSPARK_PYTHON=${PYTHONPATH}" >> $GITHUB_ENV`, (err, stdout, stderr) => { });
-    child_process_1.exec(`echo "PYSPARK_DRIVER_PYTHON=${PYTHONPATH}" >> $GITHUB_ENV`, (err, stdout, stderr) => { });
     core.setOutput("spark-version", sparkVersion);
 }
 catch (error) {
+    console.log('\nIssue installing Spark: check if the Spark version and Hadoop versions you are using is part of the one proposed in the Spark download page at https://spark.apache.org/downloads.html');
+    console.log(error);
     core.setFailed(error.message);
 }
 
@@ -571,13 +587,6 @@ module.exports = require("os");;
 
 module.exports = require("path");;
 
-/***/ }),
-
-/***/ 765:
-/***/ ((module) => {
-
-module.exports = require("process");;
-
 /***/ })
 
 /******/ 	});
@@ -620,7 +629,7 @@ module.exports = require("process");;
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module is referenced by other modules so it can't be inlined
-/******/ 	var __webpack_exports__ = __nccwpck_require__(822);
+/******/ 	var __webpack_exports__ = __nccwpck_require__(559);
 /******/ 	module.exports = __webpack_exports__;
 /******/ 	
 /******/ })()
