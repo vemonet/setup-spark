@@ -38,21 +38,11 @@ See the [action.yml](action.yml) file for a complete rundown of the available pa
 You can also provide a specific URL to download the Spark `.tgz`:
 
 ```yaml
-steps:
-- uses: actions/setup-python@v2
-  with:
-    python-version: '3.8'
-- uses: actions/setup-java@v1
-  with:
-    java-version: '11'
-
 - uses: vemonet/setup-spark@v1
   with:
     spark-version: '3.1.1'
     hadoop-version: '3.2'
     spark-url: 'https://archive.apache.org/dist/spark/spark-3.1.1/spark-3.1.1-bin-hadoop3.2.tgz'
-
-- run: spark-submit --version
 ```
 
 # Available versions
