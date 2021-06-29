@@ -4,7 +4,9 @@
   "description": "Setup Spark action",
   "main": "dist/index.js",
   "scripts": {
-    "build": "tsc && ncc build src/setup-spark.ts && git add -f dist/",
+    "tsc": "tsc",
+    "ncc": "ncc build lib/index.js",
+    "build": "tsc && ncc build lib/index.js && git add -f dist/",
     "format": "prettier --write **/*.ts",
     "format-check": "prettier --check **/*.ts",
     "test": "jest"
@@ -22,21 +24,21 @@
   "author": "vemonet",
   "license": "MIT",
   "dependencies": {
-    "@actions/core": "^1.2.3",
-    "@actions/io": "^1.0.2",
-    "@actions/tool-cache": "^1.5.5",
-    "semver": "^7.1.3"
+    "@actions/core": "^1.4.0",
+    "@actions/io": "^1.1.1",
+    "@actions/tool-cache": "^1.7.1",
+    "@vercel/ncc": "^0.28.6",
+    "semver": "^7.3.5"
   },
   "devDependencies": {
-    "@types/jest": "^25.1.4",
-    "@types/node": "^12.12.31",
-    "@types/semver": "^7.1.0",
-    "@zeit/ncc": "^0.22.0",
-    "husky": "^4.2.3",
-    "jest": "^25.1.0",
-    "jest-circus": "^25.1.0",
-    "prettier": "^2.0.2",
-    "ts-jest": "^25.2.1",
-    "typescript": "^3.8.3"
+    "@types/jest": "^25.2.3",
+    "@types/node": "^12.20.15",
+    "@types/semver": "^7.3.6",
+    "husky": "^4.3.8",
+    "jest": "^25.5.4",
+    "jest-circus": "^25.5.4",
+    "prettier": "^2.3.2",
+    "ts-jest": "^25.5.1",
+    "typescript": "^3.9.10"
   }
 }

@@ -33,13 +33,13 @@ In order to avoid uploading `node_modules/` to the repository, we use [vercel/nc
 npm install
 ```
 
-2. Build the `index.js` file
+2. Build the `index.js` file:
 
 ```bash
 npm run build
 ```
 
-It also generates JS files from TypeScript files. Any files generated using `tsc` will be added to `lib/`, however those files also are not uploaded to the repository and are excluded using `.gitignore`.
+This also generates the javascript files from TypeScript files. Any files generated using `tsc` will be added to `lib/`, however those files also are not uploaded to the repository and are excluded using `.gitignore`.
 
 3. Commit and push the generated `index.js` file with the rest of the modified files
 
