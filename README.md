@@ -13,7 +13,7 @@ This enables to test applications using a local Spark context in GitHub Actions.
 
 You will need to setup **Python** and **Java** in the job before setting up **Spark**
 
-The Spark versions available from the official download website are regularly updated, check for the latest available versions at https://spark.apache.org/downloads.html
+Check for the latest Spark versions at https://spark.apache.org/downloads.html
 
 Basic workflow:
 ```yaml
@@ -35,7 +35,7 @@ steps:
 
 See the [action.yml](action.yml) file for a complete rundown of the available parameters.
 
-You can also provide a specific URL to download the Spark binary:
+You can also provide a specific URL to download the Spark `.tgz`:
 
 ```yaml
 steps:
@@ -59,13 +59,13 @@ steps:
 
 The Hadoop versions stay quite stable (latest is 3.2)
 
+Check for the latest Spark versions at https://spark.apache.org/downloads.html
+
 The `setup-spark` action is tested in `.github/workflows/test-setup-spark.yml` for:
 
 * Apache Spark versions `3.0.2`, `3.0.3`, `3.1.1`, `3.1.2`
 * Hadoop version `3.2` 
 * Ubuntu runner
-
-This action has only been used with python PySpark jobs, feel free to submit [issues](/issues) to help improving the setup for other uses (e.g. R, Scala)
 
 # License
 
