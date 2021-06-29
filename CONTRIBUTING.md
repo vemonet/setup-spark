@@ -59,10 +59,17 @@ If you are making a substantive change try to link to a successful run that util
 
 This repository uses a tool called [Licensed](https://github.com/github/licensed) to verify third party dependencies. 
 
-To run `licensed` locally and generate the license dependencies in `.licenses` use:
+Download licensed on Linux:
 
 ```bash
-licensed cache
+wget -O licensed.tar.gz https://github.com/github/licensed/releases/download/3.1.0/licensed-3.1.0-linux-x64.tar.gz
+tar -xzf licensed.tar.gz && rm -f licensed.tar.gz
+```
+
+Run `licensed` locally and generate the license dependencies in `.licenses` use:
+
+```bash
+./licensed cache
 ```
 
 If you have not licensed installed, this is not a problem, we will do it the next time we pull the changes.
