@@ -13,6 +13,8 @@ This enables to test applications using a local Spark context in GitHub Actions.
 
 You will need to setup **Python** and **Java** in the job before setting up **Spark**
 
+The Spark versions available from the official download website are regularly updated, check for the latest available versions at https://spark.apache.org/downloads.html
+
 Basic workflow:
 ```yaml
 steps:
@@ -25,7 +27,7 @@ steps:
 
 - uses: vemonet/setup-spark@v1
   with:
-    spark-version: '3.0.2'
+    spark-version: '3.1.2'
     hadoop-version: '3.2'
 
 - run: spark-submit --version
@@ -33,15 +35,35 @@ steps:
 
 See the [action.yml](action.yml) file for a complete rundown of the available parameters.
 
+You can also provide a specific URL to download the Spark binary:
+
+```yaml
+steps:
+- uses: actions/setup-python@v2
+  with:
+    python-version: '3.8'
+- uses: actions/setup-java@v1
+  with:
+    java-version: '11'
+
+- uses: vemonet/setup-spark@v1
+  with:
+    spark-version: '3.1.1'
+    hadoop-version: '3.2'
+    spark-url: 'https://archive.apache.org/dist/spark/spark-3.1.1/spark-3.1.1-bin-hadoop3.2.tgz'
+
+- run: spark-submit --version
+```
+
 # Available versions
 
-Check for the available Spark and Hadoop versions at https://spark.apache.org/downloads.html
+The Hadoop versions stay quite stable (latest is 3.2)
 
 The `setup-spark` action is tested in `.github/workflows/test-setup-spark.yml` for:
 
-* Apache Spark version `3.0.2` and `3.1.1` 
+* Apache Spark versions `3.0.2`, `3.0.3`, `3.1.1`, `3.1.2`
 * Hadoop version `3.2` 
-* Ubuntu runners
+* Ubuntu runner
 
 This action has only been used with python PySpark jobs, feel free to submit [issues](/issues) to help improving the setup for other uses (e.g. R, Scala)
 

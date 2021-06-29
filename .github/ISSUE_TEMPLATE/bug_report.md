@@ -18,7 +18,7 @@ A clear and concise description of what the bug is.
 GitHub-hosted, Self-hosted?
 
 **Spark Versions**
-Please list all of the effected versions of Spark (`3.0.2`, etc.)
+Please list all of the effected versions of Spark (`3.1.2`, etc.)
 
 **To Reproduce**
 Steps to reproduce the behavior:

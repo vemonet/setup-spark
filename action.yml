@@ -5,11 +5,13 @@ author: 'vemonet'
 inputs:
   spark-version:
     description: "Apache Spark version to install, see https://spark.apache.org/downloads.html"
-    default: '3.0.2'
-    required: false
+    required: true
   hadoop-version:
     description: "Hadoop version"
     default: '3.2'
+    required: false
+  spark-url:
+    description: "Directly provide the URL to download the Spark binary compressed as .tgz"
     required: false
   py4j-version:
     description: "Py4J version."

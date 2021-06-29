@@ -6,6 +6,7 @@ import * as fs from 'fs';
 
 try {
   const sparkVersion = core.getInput('spark-version');
+  var sparkUrl = core.getInput('spark-url');
   const hadoopVersion = core.getInput('hadoop-version');
   const py4jVersion = core.getInput('py4j-version');
   // Install in the parent of the workspace (to avoid mixing with checked code)
@@ -15,12 +16,22 @@ try {
     installFolder = process.env.GITHUB_WORKSPACE
   });
 
-  // Download Spark using Bash commands, based on jupyter/spark-notebooks Dockerfile
+  // Download Spark from the official Apache mirrors using the Spark and Hadoop versions 
+  // Based on jupyter/spark-notebooks Dockerfile
+  if (!sparkUrl){
+    sparkUrl = `https://archive.apache.org/dist/spark/spark-${sparkVersion}/spark-${sparkVersion}-bin-hadoop${hadoopVersion}.tgz`
+  }
   var command = `cd /tmp &&
-    wget -q $(wget -qO- "https://www.apache.org/dyn/closer.lua/spark/spark-${sparkVersion}/spark-${sparkVersion}-bin-hadoop${hadoopVersion}.tgz?as_json" | python -c "import sys, json; content=json.load(sys.stdin); print(content['preferred']+content['path_info'])") &&
-    tar xzf "spark-${sparkVersion}-bin-hadoop${hadoopVersion}.tgz" -C ${installFolder} &&
-    rm "spark-${sparkVersion}-bin-hadoop${hadoopVersion}.tgz" &&
-    ln -s "${installFolder}/spark-${sparkVersion}-bin-hadoop${hadoopVersion}" ${installFolder}/spark`
+  wget -q -N spark.tgz ${sparkUrl} &&
+  tar xzf spark.tgz -C ${installFolder} &&
+  rm "spark.tgz"
+  `
+
+  // var command = `cd /tmp &&
+  // wget -q $(wget -qO- "https://www.apache.org/dyn/closer.lua/spark/spark-${sparkVersion}/spark-${sparkVersion}-bin-hadoop${hadoopVersion}.tgz?as_json" | python -c "import sys, json; content=json.load(sys.stdin); print(content['preferred']+content['path_info'])") &&
+  // tar xzf "spark-${sparkVersion}-bin-hadoop${hadoopVersion}.tgz" -C ${installFolder} &&
+  // rm "spark-${sparkVersion}-bin-hadoop${hadoopVersion}.tgz" &&
+  // ln -s "${installFolder}/spark-${sparkVersion}-bin-hadoop${hadoopVersion}" ${installFolder}/spark`
 
   exec(command, (err: any, stdout: any, stderr: any) => {
     if(err || stderr){
