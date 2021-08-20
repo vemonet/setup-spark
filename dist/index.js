@@ -39,7 +39,7 @@ try {
     // Install in the parent of the workspace (to avoid mixing with checked code)
     let installFolder = process.env.GITHUB_WORKSPACE + '/../';
     fs.access(installFolder, fs.constants.W_OK, (err) => {
-        console.log(new Date().toLocaleTimeString() + ' - $GITHUB_WORKSPACE parent not writable. Using $GITHUB_WORKSPACE to store Spark');
+        console.log(new Date().toLocaleTimeString('fr-FR') + ' - $GITHUB_WORKSPACE parent not writable. Using $GITHUB_WORKSPACE to store Spark');
         installFolder = process.env.GITHUB_WORKSPACE;
     });
     // Download Spark from the official Apache mirrors using the Spark and Hadoop versions 
@@ -57,14 +57,14 @@ try {
     // tar xzf "spark-${sparkVersion}-bin-hadoop${hadoopVersion}.tgz" -C ${installFolder} &&
     // rm "spark-${sparkVersion}-bin-hadoop${hadoopVersion}.tgz" &&
     // ln -s "${installFolder}/spark-${sparkVersion}-bin-hadoop${hadoopVersion}" ${installFolder}/spark`
-    console.log(new Date().toLocaleTimeString() + ' - Downloading the binary from ' + sparkUrl);
+    console.log(new Date().toLocaleTimeString('fr-FR') + ' - Downloading the binary from ' + sparkUrl);
     child_process_1.exec(command, (err, stdout, stderr) => {
         if (err || stderr) {
             console.log('Error downloading the Spark binary');
             throw new Error(err);
         }
     });
-    console.log(new Date().toLocaleTimeString() + ' - Binary downloaded, setting up environment variables');
+    console.log(new Date().toLocaleTimeString('fr-FR') + ' - Binary downloaded, setting up environment variables');
     const sparkHome = installFolder + '/spark';
     const SPARK_OPTS = `--driver-java-options=-Xms1024M --driver-java-options=-Xmx2048M --driver-java-options=-Dlog4j.logLevel=info`;
     const PYTHONPATH = `${sparkHome}/python:${sparkHome}/python/lib/py4j-${py4jVersion}-src.zip`;
