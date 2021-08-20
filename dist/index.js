@@ -36,10 +36,10 @@ try {
     var sparkUrl = core.getInput('spark-url');
     const hadoopVersion = core.getInput('hadoop-version');
     const py4jVersion = core.getInput('py4j-version');
-    // Install in the parent of the workspace (to avoid mixing with checked code)
+    // Try to install in the parent of the workspace (to avoid mixing with checked code)
     let installFolder = process.env.GITHUB_WORKSPACE + '/../';
     fs.access(installFolder, fs.constants.W_OK, (err) => {
-        console.log(new Date().toLocaleTimeString('fr-FR') + ' - $GITHUB_WORKSPACE parent not writable. Using $GITHUB_WORKSPACE to store Spark');
+        // console.log(new Date().toLocaleTimeString('fr-FR') + ' - $GITHUB_WORKSPACE parent not writable. Using $GITHUB_WORKSPACE to store Spark');
         installFolder = process.env.GITHUB_WORKSPACE;
     });
     // Download Spark from the official Apache mirrors using the Spark and Hadoop versions 
