@@ -12,7 +12,7 @@ try {
   // Install in the parent of the workspace (to avoid mixing with checked code)
   let installFolder: any = process.env.GITHUB_WORKSPACE + '/../'
   fs.access(installFolder, fs.constants.W_OK, (err) => {
-    console.log(new Date().toString() + ' $GITHUB_WORKSPACE parent not writable. Using $GITHUB_WORKSPACE to store Spark');
+    console.log(new Date().getTime().toString() + ' $GITHUB_WORKSPACE parent not writable. Using $GITHUB_WORKSPACE to store Spark');
     installFolder = process.env.GITHUB_WORKSPACE
   });
 
@@ -32,14 +32,14 @@ try {
   // tar xzf "spark-${sparkVersion}-bin-hadoop${hadoopVersion}.tgz" -C ${installFolder} &&
   // rm "spark-${sparkVersion}-bin-hadoop${hadoopVersion}.tgz" &&
   // ln -s "${installFolder}/spark-${sparkVersion}-bin-hadoop${hadoopVersion}" ${installFolder}/spark`
-  console.log(new Date().toString() + ' Downloading the binary from ' + sparkUrl);
+  console.log(new Date().getTime().toString() + ' Downloading the binary from ' + sparkUrl);
   exec(command, (err: any, stdout: any, stderr: any) => {
     if(err || stderr){
       console.log('Error downloading the Spark binary');
       throw new Error(err);
     }
   });
-  console.log(new Date().toString() + ' Binary downloaded, setting up environment variables');
+  console.log(new Date().getTime().toString() + ' Binary downloaded, setting up environment variables');
   
   const sparkHome = installFolder + '/spark';
   const SPARK_OPTS = `--driver-java-options=-Xms1024M --driver-java-options=-Xmx2048M --driver-java-options=-Dlog4j.logLevel=info`
