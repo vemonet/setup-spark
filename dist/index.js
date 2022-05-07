@@ -69,12 +69,14 @@ try {
             throw new Error(err);
         }
     });
-    if (fs.existsSync(`${installFolder}/spark/bin/spark-submit`)) {
-        console.log(new Date().toLocaleTimeString('fr-FR') + ' - Binary downloaded, setting up environment variables');
-    }
-    else {
-        throw new Error(`The Spark binary was not properly downloaded from ${sparkUrl}`);
-    }
+    fs.stat(`${installFolder}/spark/bin/spark-submit`, function (err, stat) {
+        if (err == null) {
+            console.log(new Date().toLocaleTimeString('fr-FR') + ' - Binary downloaded, setting up environment variables');
+        }
+        else {
+            throw new Error(`The Spark binary was not properly downloaded from ${sparkUrl}`);
+        }
+    });
     const sparkHome = installFolder + '/spark';
     const SPARK_OPTS = `--driver-java-options=-Xms1024M --driver-java-options=-Xmx2048M --driver-java-options=-Dlog4j.logLevel=info`;
     const PYTHONPATH = `${sparkHome}/python:${sparkHome}/python/lib/py4j-${py4jVersion}-src.zip`;
