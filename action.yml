@@ -10,6 +10,9 @@ inputs:
     description: "Hadoop version"
     default: '3.2'
     required: false
+  scala-version:
+    description: "Scala version"
+    required: false
   spark-url:
     description: "Directly provide the URL to download the Spark binary compressed as .tgz"
     required: false

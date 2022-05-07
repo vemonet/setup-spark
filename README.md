@@ -29,6 +29,7 @@ steps:
   with:
     spark-version: '3.2.3'
     hadoop-version: '3.3'
+    scala-version: '2.13'
 
 - run: spark-submit --version
 ```

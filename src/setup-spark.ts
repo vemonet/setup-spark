@@ -9,6 +9,7 @@ try {
   const sparkVersion = core.getInput('spark-version');
   var sparkUrl = core.getInput('spark-url');
   const hadoopVersion = core.getInput('hadoop-version');
+  const scalaVersion = core.getInput('scala-version');
   const py4jVersion = core.getInput('py4j-version');
   // Try to install in the parent of the workspace (to avoid mixing with checked code)
   let installFolder: any = process.env.GITHUB_WORKSPACE + '/../'
@@ -19,8 +20,12 @@ try {
 
   // Download Spark from the official Apache mirrors using the Spark and Hadoop versions 
   // Based on jupyter/spark-notebooks Dockerfile
+  let scalaBit = "";
+  if (scalaVersion) {
+    scalaBit = `-scala${scalaVersion}`
+  }
   if (!sparkUrl) {
-    sparkUrl = `https://archive.apache.org/dist/spark/spark-${sparkVersion}/spark-${sparkVersion}-bin-hadoop${hadoopVersion}.tgz`
+    sparkUrl = `https://archive.apache.org/dist/spark/spark-${sparkVersion}/spark-${sparkVersion}-bin-hadoop${hadoopVersion}${scalaBit}.tgz`
   }
   var command = `cd /tmp &&
   wget -q -O spark.tgz ${sparkUrl} &&

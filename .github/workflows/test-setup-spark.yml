@@ -20,7 +20,7 @@ jobs:
             hadoop: 3.2
           - spark: 3.1.2
             hadoop: 3.2
-          - spark: 3.2.3
+          - spark: 3.2.1
             hadoop: 3.2
 
     steps:
@@ -45,6 +45,45 @@ jobs:
       with:
         spark-version: ${{ matrix.versions.spark }}
         hadoop-version: ${{ matrix.versions.hadoop }}
+        # spark-url: 'https://archive.apache.org/dist/spark/spark-${{ matrix.spark-version }}/spark-${{ matrix.spark-version }}-bin-hadoop3.2.tgz'
+
+    - name: Check Spark
+      run: spark-submit --version
+
+
+  test-setup-scala-version:
+    name: Test setup Spark with specific Scala version
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        versions:
+          - spark: 3.2.1
+            hadoop: 3.2
+            scala: 2.13
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Set Node.js 12.x
+      uses: actions/setup-node@v1
+      with:
+        node-version: 12.x
+
+    - name: npm install
+      run: npm install
+
+    # - name: Lint
+    #   run: npm run format-check
+    # - name: npm test
+    #   run: npm test
+
+    - name: Run setup-spark ${{ matrix.versions.spark }}
+      uses: ./
+      with:
+        spark-version: ${{ matrix.versions.spark }}
+        hadoop-version: ${{ matrix.versions.hadoop }}
+        scala-version: ${{ matrix.versions.scala }}
         # spark-url: 'https://archive.apache.org/dist/spark/spark-${{ matrix.spark-version }}/spark-${{ matrix.spark-version }}-bin-hadoop3.2.tgz'
 
     - name: Check Spark
