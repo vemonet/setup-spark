@@ -27,8 +27,8 @@ steps:
 
 - uses: vemonet/setup-spark@v1
   with:
-    spark-version: '3.1.2'
-    hadoop-version: '3.2'
+    spark-version: '3.2.3'
+    hadoop-version: '3.3'
 
 - run: spark-submit --version
 ```
@@ -47,15 +47,11 @@ You can also provide a specific URL to download the Spark `.tgz`:
 
 # Available versions
 
-The Hadoop versions stay quite stable (latest is 3.2)
+The Hadoop versions stay quite stable (latest is 3.3)
 
 Check for the latest Spark versions at https://spark.apache.org/downloads.html
 
-The `setup-spark` action is tested in `.github/workflows/test-setup-spark.yml` for:
-
-* Apache Spark versions `3.0.2`, `3.0.3`, `3.1.1`, `3.1.2`
-* Hadoop version `3.2` 
-* Ubuntu runner
+The `setup-spark` action is tested in `.github/workflows/test-setup-spark.yml`
 
 # License
 

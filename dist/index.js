@@ -29,7 +29,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(186));
 const child_process_1 = __nccwpck_require__(129);
 const fs = __importStar(__nccwpck_require__(747));
-// const fs = require('fs');
+// import fs from 'fs';
 // See docs to create JS action: https://docs.github.com/en/free-pro-team@latest/actions/creating-actions/creating-a-javascript-action
 try {
     const sparkVersion = core.getInput('spark-version');
@@ -60,11 +60,16 @@ try {
     console.log(new Date().toLocaleTimeString('fr-FR') + ' - Downloading the binary from ' + sparkUrl);
     child_process_1.exec(command, (err, stdout, stderr) => {
         if (err || stderr) {
-            console.log('Error downloading the Spark binary');
+            console.log('Error running the command to download the Spark binary');
             throw new Error(err);
         }
     });
-    console.log(new Date().toLocaleTimeString('fr-FR') + ' - Binary downloaded, setting up environment variables');
+    if (fs.existsSync(`${installFolder}/spark/bin/spark-submit`)) {
+        console.log(new Date().toLocaleTimeString('fr-FR') + ' - Binary downloaded, setting up environment variables');
+    }
+    else {
+        throw new Error(`The Spark binary was not properly downloaded from ${sparkUrl}`);
+    }
     const sparkHome = installFolder + '/spark';
     const SPARK_OPTS = `--driver-java-options=-Xms1024M --driver-java-options=-Xmx2048M --driver-java-options=-Dlog4j.logLevel=info`;
     const PYTHONPATH = `${sparkHome}/python:${sparkHome}/python/lib/py4j-${py4jVersion}-src.zip`;
@@ -85,6 +90,7 @@ try {
 catch (error) {
     console.log('\nIssue installing Spark: check if the Spark version and Hadoop versions you are using is part of the one proposed in the Spark download page at https://spark.apache.org/downloads.html');
     console.log(error);
+    // @ts-ignore
     core.setFailed(error.message);
 }
 

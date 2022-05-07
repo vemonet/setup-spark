@@ -1,7 +1,8 @@
 import * as core from '@actions/core';
 import { exec } from 'child_process';
 import * as fs from 'fs';
-// const fs = require('fs');
+// import fs from 'fs';
+
 // See docs to create JS action: https://docs.github.com/en/free-pro-team@latest/actions/creating-actions/creating-a-javascript-action
 
 try {
@@ -18,7 +19,7 @@ try {
 
   // Download Spark from the official Apache mirrors using the Spark and Hadoop versions 
   // Based on jupyter/spark-notebooks Dockerfile
-  if (!sparkUrl){
+  if (!sparkUrl) {
     sparkUrl = `https://archive.apache.org/dist/spark/spark-${sparkVersion}/spark-${sparkVersion}-bin-hadoop${hadoopVersion}.tgz`
   }
   var command = `cd /tmp &&
@@ -34,13 +35,17 @@ try {
   // ln -s "${installFolder}/spark-${sparkVersion}-bin-hadoop${hadoopVersion}" ${installFolder}/spark`
   console.log(new Date().toLocaleTimeString('fr-FR') + ' - Downloading the binary from ' + sparkUrl);
   exec(command, (err: any, stdout: any, stderr: any) => {
-    if(err || stderr){
-      console.log('Error downloading the Spark binary');
+    if (err || stderr) {
+      console.log('Error running the command to download the Spark binary');
       throw new Error(err);
     }
   });
-  console.log(new Date().toLocaleTimeString('fr-FR') + ' - Binary downloaded, setting up environment variables');
-  
+  if (fs.existsSync(`${installFolder}/spark/bin/spark-submit`)) {
+    console.log(new Date().toLocaleTimeString('fr-FR') + ' - Binary downloaded, setting up environment variables');
+  } else {
+    throw new Error(`The Spark binary was not properly downloaded from ${sparkUrl}`);
+  }
+
   const sparkHome = installFolder + '/spark';
   const SPARK_OPTS = `--driver-java-options=-Xms1024M --driver-java-options=-Xmx2048M --driver-java-options=-Dlog4j.logLevel=info`
   const PYTHONPATH = `${sparkHome}/python:${sparkHome}/python/lib/py4j-${py4jVersion}-src.zip`;
@@ -63,5 +68,6 @@ try {
 } catch (error) {
   console.log('\nIssue installing Spark: check if the Spark version and Hadoop versions you are using is part of the one proposed in the Spark download page at https://spark.apache.org/downloads.html')
   console.log(error);
+  // @ts-ignore
   core.setFailed(error.message);
 }
