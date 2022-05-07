@@ -25,11 +25,14 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(186));
 const child_process_1 = __nccwpck_require__(129);
-const fs = __importStar(__nccwpck_require__(747));
-// import fs from 'fs';
+// import * as fs from 'fs';
+const fs_1 = __importDefault(__nccwpck_require__(747));
 // See docs to create JS action: https://docs.github.com/en/free-pro-team@latest/actions/creating-actions/creating-a-javascript-action
 try {
     const sparkVersion = core.getInput('spark-version');
@@ -39,7 +42,7 @@ try {
     const py4jVersion = core.getInput('py4j-version');
     // Try to install in the parent of the workspace (to avoid mixing with checked code)
     let installFolder = process.env.GITHUB_WORKSPACE + '/../';
-    fs.access(installFolder, fs.constants.W_OK, (err) => {
+    fs_1.default.access(installFolder, fs_1.default.constants.W_OK, (err) => {
         console.log(new Date().toLocaleTimeString('fr-FR') + ' - Using $GITHUB_WORKSPACE to store Spark (parent not writable)');
         installFolder = process.env.GITHUB_WORKSPACE;
     });
@@ -69,7 +72,7 @@ try {
             throw new Error(err);
         }
     });
-    fs.access(`${installFolder}/spark/bin/spark-submit`, fs.constants.R_OK, (err) => {
+    fs_1.default.access(`${installFolder}/spark/bin/spark-submit`, fs_1.default.constants.R_OK, (err) => {
         throw new Error(`The Spark binary was not properly downloaded from ${sparkUrl}`);
     });
     console.log(new Date().toLocaleTimeString('fr-FR') + ' - Binary downloaded, setting up environment variables');

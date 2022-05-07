@@ -1,7 +1,7 @@
 import * as core from '@actions/core';
 import { exec } from 'child_process';
-import * as fs from 'fs';
-// import fs from 'fs';
+// import * as fs from 'fs';
+import fs from 'fs';
 
 // See docs to create JS action: https://docs.github.com/en/free-pro-team@latest/actions/creating-actions/creating-a-javascript-action
 
