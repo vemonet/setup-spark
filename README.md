@@ -47,7 +47,7 @@ You can also provide a specific URL to download the Spark `.tgz`:
 
 # Available versions
 
-The Hadoop versions stay quite stable (latest is 3.3)
+The Hadoop versions stay quite stable (latest is 3.2)
 
 Check for the latest Spark versions at https://spark.apache.org/downloads.html
 

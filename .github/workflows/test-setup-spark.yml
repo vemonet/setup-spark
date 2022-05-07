@@ -21,7 +21,7 @@ jobs:
           - spark: 3.1.2
             hadoop: 3.2
           - spark: 3.2.3
-            hadoop: 3.3
+            hadoop: 3.2
 
     steps:
     - name: Checkout
