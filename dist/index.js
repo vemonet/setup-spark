@@ -30,6 +30,9 @@ const core = __importStar(__nccwpck_require__(186));
 const child_process_1 = __nccwpck_require__(129);
 const fs = __importStar(__nccwpck_require__(747));
 // See docs to create JS action: https://docs.github.com/en/actions/creating-actions/creating-a-javascript-action
+const getTimestamp = () => {
+    return new Date().toLocaleTimeString('fr-FR');
+};
 try {
     const sparkVersion = core.getInput('spark-version');
     var sparkUrl = core.getInput('spark-url');
@@ -37,11 +40,19 @@ try {
     const scalaVersion = core.getInput('scala-version');
     const py4jVersion = core.getInput('py4j-version');
     // Try to install in the parent of the workspace (to avoid mixing with checked code)
-    let installFolder = process.env.GITHUB_WORKSPACE + '/../';
-    fs.access(installFolder, fs.constants.W_OK, (err) => {
-        console.log(new Date().toLocaleTimeString('fr-FR') + ' - Using $GITHUB_WORKSPACE to store Spark (parent not writable)');
+    // let installFolder: any = process.env.GITHUB_WORKSPACE + '/../'
+    let installFolder = '/home/runner/work';
+    try {
+        fs.accessSync(installFolder, fs.constants.R_OK);
+    }
+    catch (err) {
+        console.log(getTimestamp + ' - Using $GITHUB_WORKSPACE to store Spark (parent not writable)');
         installFolder = process.env.GITHUB_WORKSPACE;
-    });
+    }
+    // fs.access(installFolder, fs.constants.W_OK, (err) => {
+    //   console.log(new Date().toLocaleTimeString('fr-FR') + ' - Using $GITHUB_WORKSPACE to store Spark (parent not writable)');
+    //   installFolder = process.env.GITHUB_WORKSPACE
+    // });
     // Download Spark from the official Apache mirrors using the Spark and Hadoop versions 
     // Based on jupyter/spark-notebooks Dockerfile
     let scalaBit = "";
@@ -61,7 +72,7 @@ try {
     // tar xzf "spark-${sparkVersion}-bin-hadoop${hadoopVersion}.tgz" -C ${installFolder} &&
     // rm "spark-${sparkVersion}-bin-hadoop${hadoopVersion}.tgz" &&
     // ln -s "${installFolder}/spark-${sparkVersion}-bin-hadoop${hadoopVersion}" ${installFolder}/spark`
-    console.log(new Date().toLocaleTimeString('fr-FR') + ' - Downloading the binary from ' + sparkUrl);
+    console.log(getTimestamp + ' - Downloading the binary from ' + sparkUrl);
     child_process_1.exec(command, (err, stdout, stderr) => {
         if (err || stderr) {
             console.log('Error running the command to download the Spark binary');
@@ -76,12 +87,12 @@ try {
     // });
     // fs.stat(`${installFolder}/spark/bin/spark-submit`, (err, stat) => {
     //   if(err == null) {
-    //     console.log(new Date().toLocaleTimeString('fr-FR') + ' - Binary downloaded, setting up environment variables');
+    //     console.log(getTimestamp + ' - Binary downloaded, setting up environment variables');
     //   } else {
     //     throw new Error(`The Spark binary was not properly downloaded from ${sparkUrl}`);
     //   }
     // });
-    console.log(new Date().toLocaleTimeString('fr-FR') + ' - Binary downloaded, setting up environment variables');
+    console.log(getTimestamp + ' - Binary downloaded, setting up environment variables');
     const sparkHome = installFolder + '/spark';
     const SPARK_OPTS = `--driver-java-options=-Xms1024M --driver-java-options=-Xmx2048M --driver-java-options=-Dlog4j.logLevel=info`;
     const PYTHONPATH = `${sparkHome}/python:${sparkHome}/python/lib/py4j-${py4jVersion}-src.zip`;
