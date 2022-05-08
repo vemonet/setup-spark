@@ -58,7 +58,7 @@ try {
   rm "spark.tgz" &&
   ln -s "${installFolder}/spark-${sparkVersion}-bin-hadoop${hadoopVersion}${scalaBit}" ${installFolder}/spark`;
     // TODO: improve the symlink generation
-    console.log(new Date().toLocaleTimeString('fr-FR') + ' - Downloading the binary from ' + sparkUrl);
+    console.log(`${new Date().toLocaleTimeString('fr-FR')} - Downloading the binary from ${sparkUrl}`);
     try {
         child_process_1.execSync(command);
     }
@@ -70,23 +70,20 @@ try {
     if (!fs.existsSync(`${installFolder}/spark/bin/spark-submit`)) {
         throw new Error(`The Spark binary was not properly downloaded from ${sparkUrl}`);
     }
-    console.log(new Date().toLocaleTimeString('fr-FR') + ' - Binary downloaded, setting up environment variables');
+    console.log(`${new Date().toLocaleTimeString('fr-FR')} - Binary downloaded, setting up environment variables`);
     const sparkHome = installFolder + '/spark';
     const SPARK_OPTS = `--driver-java-options=-Xms1024M --driver-java-options=-Xmx2048M --driver-java-options=-Dlog4j.logLevel=info`;
     const PYTHONPATH = `${sparkHome}/python:${sparkHome}/python/lib/py4j-${py4jVersion}-src.zip`;
     const PYSPARK_PYTHON = 'python';
     // Set environment variables in the workflow
-    // See https://github.blog/changelog/2020-10-01-github-actions-deprecating-set-env-and-add-path-commands/
-    child_process_1.exec(`echo "HADOOP_VERSION=${hadoopVersion}" >> $GITHUB_ENV`, (err, stdout, stderr) => { });
-    child_process_1.exec(`echo "APACHE_SPARK_VERSION=${sparkVersion}" >> $GITHUB_ENV`, (err, stdout, stderr) => { });
-    // exec(`echo "SPARK_HOME=${sparkHome}" >> $GITHUB_ENV`, (err, stdout, stderr) => { });
-    child_process_1.exec(`echo "PYSPARK_PYTHON=${PYSPARK_PYTHON}" >> $GITHUB_ENV`, (err, stdout, stderr) => { });
-    child_process_1.exec(`echo "PYSPARK_DRIVER_PYTHON=${PYSPARK_PYTHON}" >> $GITHUB_ENV`, (err, stdout, stderr) => { });
-    child_process_1.exec(`echo "PYTHONPATH=${PYTHONPATH}" >> $GITHUB_ENV`, (err, stdout, stderr) => { });
-    child_process_1.exec(`echo "SPARK_OPTS=${SPARK_OPTS}" >> $GITHUB_ENV`, (err, stdout, stderr) => { });
     core.exportVariable('SPARK_HOME', sparkHome);
+    core.exportVariable('HADOOP_VERSION', hadoopVersion);
+    core.exportVariable('APACHE_SPARK_VERSION', sparkVersion);
+    core.exportVariable('PYSPARK_PYTHON', PYSPARK_PYTHON);
+    core.exportVariable('PYSPARK_DRIVER_PYTHON', PYSPARK_PYTHON);
+    core.exportVariable('PYTHONPATH', PYTHONPATH);
+    core.exportVariable('SPARK_OPTS', SPARK_OPTS);
     // Add Spark to path
-    // exec(`echo "PATH=$PATH:${sparkHome}/bin" >> $GITHUB_ENV`, (err, stdout, stderr) => { });
     core.addPath(`${sparkHome}/bin`);
     core.setOutput("spark-version", sparkVersion);
 }
