@@ -90,5 +90,5 @@ jobs:
 
     - name: Check Spark
       run: |
-        spark-submit --version
         ls $SPARK_HOME
+        spark-submit --version

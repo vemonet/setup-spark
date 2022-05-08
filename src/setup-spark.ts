@@ -1,11 +1,11 @@
 import * as core from '@actions/core';
-import { exec } from 'child_process';
+import { exec, execSync } from 'child_process';
 import * as fs from 'fs'
 
 // See docs to create JS action: https://docs.github.com/en/actions/creating-actions/creating-a-javascript-action
 
 const getTimestamp = () => {
-  return new Date().toLocaleTimeString('fr-FR')
+  return new Date().toLocaleTimeString('fr-FR').toString()
 }
 
 try {
@@ -14,13 +14,12 @@ try {
   const hadoopVersion = core.getInput('hadoop-version');
   const scalaVersion = core.getInput('scala-version');
   const py4jVersion = core.getInput('py4j-version');
-  // Try to install in the parent of the workspace (to avoid mixing with checked code)
-  // let installFolder: any = process.env.GITHUB_WORKSPACE + '/../'
+
   let installFolder: any = '/home/runner/work'
   try {
     fs.accessSync(installFolder, fs.constants.R_OK);
   } catch (err) {
-    console.log(getTimestamp + ' - Using $GITHUB_WORKSPACE to store Spark (parent not writable)');
+    console.log(`${getTimestamp} - Using $GITHUB_WORKSPACE to store Spark (${installFolder} not writable)`);
     installFolder = process.env.GITHUB_WORKSPACE
   }
 
@@ -50,15 +49,23 @@ try {
   // rm "spark-${sparkVersion}-bin-hadoop${hadoopVersion}.tgz" &&
   // ln -s "${installFolder}/spark-${sparkVersion}-bin-hadoop${hadoopVersion}" ${installFolder}/spark`
   console.log(getTimestamp + ' - Downloading the binary from ' + sparkUrl);
-  exec(command, (err: any, stdout: any, stderr: any) => {
-    if (err || stderr) {
-      console.log('Error running the command to download the Spark binary');
-      throw new Error(err);
-    }
-  });
+  // exec(command, (err: any, stdout: any, stderr: any) => {
+  //   if (err || stderr) {
+  //     console.log('Error running the command to download the Spark binary');
+  //     throw new Error(err);
+  //   }
+  // });
+  try {
+    execSync(command);
+  } catch (error) {
+    console.log('Error running the command to download the Spark binary');
+    // @ts-ignore
+    throw new Error(error.message);
+  }
 
   if (!fs.existsSync(`${installFolder}/spark/bin/spark-submit`)) {
-    throw new Error(`The Spark binary was not properly downloaded from ${sparkUrl}`);
+    // throw new Error(`The Spark binary was not properly downloaded from ${sparkUrl}`);
+    console.log('Could not find spark-submit file with fs')
   }
 
   // fs.access(`${installFolder}/spark/bin/spark-submit`, fs.constants.R_OK, (err) => {
