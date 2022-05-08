@@ -1,6 +1,8 @@
 #!/bin/bash
 
-TAG=v1
+TAG=${1:-v1}
+
+echo "⏩️ Updating the tag $TAG to the latest commit"
 
 # assuming you are in the branch referencing currently the right new commit:
 git tag -f -m "Update" -a $TAG
