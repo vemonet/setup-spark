@@ -7,24 +7,24 @@ inputs:
     description: "Apache Spark version to install, see https://spark.apache.org/downloads.html"
     required: true
   hadoop-version:
-    description: "Hadoop version"
+    description: "Hadoop version for the Spark binaries"
     default: '3.2'
     required: false
   scala-version:
-    description: "Scala version"
+    description: "Scala version for the Spark binaries (optional)."
     required: false
   spark-url:
-    description: "Directly provide the URL to download the Spark binary compressed as .tgz"
+    description: "Directly provide the URL to download the Spark binaries compressed as .tgz"
     required: false
   py4j-version:
-    description: "Py4J version."
+    description: "Py4J version used for the PYTHONPATH."
     default: '0.10.9'
     required: false
 outputs:
   spark-version:
     description: "The installed Apache Spark version."
 runs:
-  using: 'node12'
+  using: 'node16'
   main: 'dist/index.js'
 branding:
   icon: 'star'
