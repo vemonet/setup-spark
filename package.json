@@ -6,7 +6,7 @@
   "scripts": {
     "tsc": "tsc",
     "ncc": "ncc build lib/setup-spark.js",
-    "build": "tsc && ncc build lib/setup-spark.js && git add -f dist/",
+    "build": "tsc && ncc build lib/setup-spark.js",
     "format": "prettier --write **/*.ts",
     "format-check": "prettier --check **/*.ts",
     "test": "jest"

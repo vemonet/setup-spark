@@ -40,14 +40,17 @@ try {
     const hadoopVersion = core.getInput('hadoop-version');
     const scalaVersion = core.getInput('scala-version');
     const py4jVersion = core.getInput('py4j-version');
-    let installFolder = '/home/runner/work';
+    // Try to write to the parent folder of the workflow workspace
+    const workspaceFolder = process.env.GITHUB_WORKSPACE || '/home/runner/work';
+    let installFolder = workspaceFolder.split("/").slice(0, -1).join('/');
     try {
         fs.accessSync(installFolder, fs.constants.R_OK);
     }
     catch (err) {
         console.log(`${new Date().toLocaleTimeString('fr-FR')} - Using $GITHUB_WORKSPACE to store Spark (${installFolder} not writable)`);
-        installFolder = process.env.GITHUB_WORKSPACE;
+        installFolder = workspaceFolder;
     }
+    console.log(`${new Date().toLocaleTimeString('fr-FR')} - Spark will be installed to ${installFolder}`);
     // Download Spark from the official Apache mirrors
     let scalaBit = "";
     if (scalaVersion) {
