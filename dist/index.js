@@ -30,9 +30,6 @@ const core = __importStar(__nccwpck_require__(186));
 const child_process_1 = __nccwpck_require__(129);
 const fs = __importStar(__nccwpck_require__(747));
 // See docs to create JS action: https://docs.github.com/en/actions/creating-actions/creating-a-javascript-action
-const getTimestamp = () => {
-    return new Date().toLocaleTimeString('fr-FR').toString();
-};
 try {
     const sparkVersion = core.getInput('spark-version');
     var sparkUrl = core.getInput('spark-url');
@@ -44,13 +41,9 @@ try {
         fs.accessSync(installFolder, fs.constants.R_OK);
     }
     catch (err) {
-        console.log(`${getTimestamp} - Using $GITHUB_WORKSPACE to store Spark (${installFolder} not writable)`);
+        console.log(`${new Date().toLocaleTimeString('fr-FR')} - Using $GITHUB_WORKSPACE to store Spark (${installFolder} not writable)`);
         installFolder = process.env.GITHUB_WORKSPACE;
     }
-    // fs.access(installFolder, fs.constants.W_OK, (err) => {
-    //   console.log(new Date().toLocaleTimeString('fr-FR') + ' - Using $GITHUB_WORKSPACE to store Spark (parent not writable)');
-    //   installFolder = process.env.GITHUB_WORKSPACE
-    // });
     // Download Spark from the official Apache mirrors using the Spark and Hadoop versions 
     // Based on jupyter/spark-notebooks Dockerfile
     let scalaBit = "";
@@ -64,19 +57,9 @@ try {
   wget -q -O spark.tgz ${sparkUrl} &&
   tar xzf spark.tgz -C ${installFolder} &&
   rm "spark.tgz" &&
-  ln -s "${installFolder}/spark-${sparkVersion}-bin-hadoop${hadoopVersion}" ${installFolder}/spark`;
-    // var command = `cd /tmp &&
-    // wget -q $(wget -qO- "https://www.apache.org/dyn/closer.lua/spark/spark-${sparkVersion}/spark-${sparkVersion}-bin-hadoop${hadoopVersion}.tgz?as_json" | python -c "import sys, json; content=json.load(sys.stdin); print(content['preferred']+content['path_info'])") &&
-    // tar xzf "spark-${sparkVersion}-bin-hadoop${hadoopVersion}.tgz" -C ${installFolder} &&
-    // rm "spark-${sparkVersion}-bin-hadoop${hadoopVersion}.tgz" &&
-    // ln -s "${installFolder}/spark-${sparkVersion}-bin-hadoop${hadoopVersion}" ${installFolder}/spark`
-    console.log(getTimestamp + ' - Downloading the binary from ' + sparkUrl);
-    // exec(command, (err: any, stdout: any, stderr: any) => {
-    //   if (err || stderr) {
-    //     console.log('Error running the command to download the Spark binary');
-    //     throw new Error(err);
-    //   }
-    // });
+  ln -s "${installFolder}/spark-${sparkVersion}-bin-hadoop${hadoopVersion}${scalaBit}" ${installFolder}/spark`;
+    // TODO: improve the symlink generation
+    console.log(new Date().toLocaleTimeString('fr-FR') + ' - Downloading the binary from ' + sparkUrl);
     try {
         child_process_1.execSync(command);
     }
@@ -86,20 +69,9 @@ try {
         throw new Error(error.message);
     }
     if (!fs.existsSync(`${installFolder}/spark/bin/spark-submit`)) {
-        // throw new Error(`The Spark binary was not properly downloaded from ${sparkUrl}`);
-        console.log('Could not find spark-submit file with fs');
+        throw new Error(`The Spark binary was not properly downloaded from ${sparkUrl}`);
     }
-    // fs.access(`${installFolder}/spark/bin/spark-submit`, fs.constants.R_OK, (err) => {
-    //   throw new Error(`The Spark binary was not properly downloaded from ${sparkUrl}`);
-    // });
-    // fs.stat(`${installFolder}/spark/bin/spark-submit`, (err, stat) => {
-    //   if(err == null) {
-    //     console.log(getTimestamp + ' - Binary downloaded, setting up environment variables');
-    //   } else {
-    //     throw new Error(`The Spark binary was not properly downloaded from ${sparkUrl}`);
-    //   }
-    // });
-    console.log(getTimestamp + ' - Binary downloaded, setting up environment variables');
+    console.log(new Date().toLocaleTimeString('fr-FR') + ' - Binary downloaded, setting up environment variables');
     const sparkHome = installFolder + '/spark';
     const SPARK_OPTS = `--driver-java-options=-Xms1024M --driver-java-options=-Xmx2048M --driver-java-options=-Dlog4j.logLevel=info`;
     const PYTHONPATH = `${sparkHome}/python:${sparkHome}/python/lib/py4j-${py4jVersion}-src.zip`;
