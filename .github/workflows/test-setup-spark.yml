@@ -27,10 +27,10 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
 
-    - name: Set Node.js 12.x
-      uses: actions/setup-node@v1
+    - name: Set Node.js 16
+      uses: actions/setup-node@v3
       with:
-        node-version: 12.x
+        node-version: 16
 
     - name: npm install
       run: npm install
@@ -67,10 +67,10 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
 
-    - name: Set Node.js 12.x
-      uses: actions/setup-node@v1
+    - name: Set Node.js 16
+      uses: actions/setup-node@v3
       with:
-        node-version: 12.x
+        node-version: 16
 
     - name: npm install
       run: npm install
