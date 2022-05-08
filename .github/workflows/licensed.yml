@@ -1,4 +1,4 @@
-name: Licensed check
+name: Check licenses
 # Check if packages with incompatible licenses
 on:
   workflow_dispatch:

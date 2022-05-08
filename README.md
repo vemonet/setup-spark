@@ -4,8 +4,8 @@
 
 This action sets up Apache Spark in your environment for use in GitHub Actions by:
 
-- installing and adding `spark-submit` and `spark-shell` to `PATH`
-- setting `SPARK_HOME`, `PYSPARK_PYTHON` environment variable (and others) in the workflow
+- installing and adding `spark-submit` and `spark-shell` to the `PATH`
+- setting required environment variables such as `SPARK_HOME`, `PYSPARK_PYTHON` in the workflow
 
 This enables to test applications using a local Spark context in GitHub Actions.
 
@@ -27,32 +27,32 @@ steps:
 
 - uses: vemonet/setup-spark@v1
   with:
-    spark-version: '3.2.3'
-    hadoop-version: '3.3'
-    scala-version: '2.13'
+    spark-version: '3.2.1'
+    hadoop-version: '3.2'
 
 - run: spark-submit --version
 ```
 
 See the [action.yml](action.yml) file for a complete rundown of the available parameters.
 
-You can also provide a specific URL to download the Spark `.tgz`:
+You can also provide a specific URL to download the Spark `.tgz` and/or a use specific scala version:
 
 ```yaml
 - uses: vemonet/setup-spark@v1
   with:
-    spark-version: '3.1.1'
+    spark-version: '3.2.1'
     hadoop-version: '3.2'
-    spark-url: 'https://archive.apache.org/dist/spark/spark-3.1.1/spark-3.1.1-bin-hadoop3.2.tgz'
+    scala-version: '2.13'
+    spark-url: 'https://archive.apache.org/dist/spark/spark-3.2.1/spark-3.2.1-bin-hadoop3.2-scala2.13.tgz'
 ```
 
 # Available versions
 
-The Hadoop versions stay quite stable (latest is 3.2)
-
 Check for the latest Spark versions at https://spark.apache.org/downloads.html
 
-The `setup-spark` action is tested in `.github/workflows/test-setup-spark.yml`
+The Hadoop version stays quite stable.
+
+The `setup-spark` action is tested for various versions of Spark and Hadoop in `.github/workflows/test-setup-spark.yml`
 
 # License
 
