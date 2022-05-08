@@ -44,8 +44,7 @@ try {
         console.log(`${new Date().toLocaleTimeString('fr-FR')} - Using $GITHUB_WORKSPACE to store Spark (${installFolder} not writable)`);
         installFolder = process.env.GITHUB_WORKSPACE;
     }
-    // Download Spark from the official Apache mirrors using the Spark and Hadoop versions 
-    // Based on jupyter/spark-notebooks Dockerfile
+    // Download Spark from the official Apache mirrors
     let scalaBit = "";
     if (scalaVersion) {
         scalaBit = `-scala${scalaVersion}`;
@@ -80,15 +79,15 @@ try {
     // See https://github.blog/changelog/2020-10-01-github-actions-deprecating-set-env-and-add-path-commands/
     child_process_1.exec(`echo "HADOOP_VERSION=${hadoopVersion}" >> $GITHUB_ENV`, (err, stdout, stderr) => { });
     child_process_1.exec(`echo "APACHE_SPARK_VERSION=${sparkVersion}" >> $GITHUB_ENV`, (err, stdout, stderr) => { });
-    child_process_1.exec(`echo "SPARK_HOME=${sparkHome}" >> $GITHUB_ENV`, (err, stdout, stderr) => { });
+    // exec(`echo "SPARK_HOME=${sparkHome}" >> $GITHUB_ENV`, (err, stdout, stderr) => { });
     child_process_1.exec(`echo "PYSPARK_PYTHON=${PYSPARK_PYTHON}" >> $GITHUB_ENV`, (err, stdout, stderr) => { });
     child_process_1.exec(`echo "PYSPARK_DRIVER_PYTHON=${PYSPARK_PYTHON}" >> $GITHUB_ENV`, (err, stdout, stderr) => { });
     child_process_1.exec(`echo "PYTHONPATH=${PYTHONPATH}" >> $GITHUB_ENV`, (err, stdout, stderr) => { });
     child_process_1.exec(`echo "SPARK_OPTS=${SPARK_OPTS}" >> $GITHUB_ENV`, (err, stdout, stderr) => { });
-    // core.exportVariable('envVar', 'Val');
+    core.exportVariable('SPARK_HOME', sparkHome);
     // Add Spark to path
-    child_process_1.exec(`echo "PATH=$PATH:${sparkHome}/bin" >> $GITHUB_ENV`, (err, stdout, stderr) => { });
-    // core.addPath('/path/to/mytool');
+    // exec(`echo "PATH=$PATH:${sparkHome}/bin" >> $GITHUB_ENV`, (err, stdout, stderr) => { });
+    core.addPath(`${sparkHome}/bin`);
     core.setOutput("spark-version", sparkVersion);
 }
 catch (error) {
