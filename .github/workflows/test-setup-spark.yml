@@ -87,4 +87,7 @@ jobs:
         # spark-url: 'https://archive.apache.org/dist/spark/spark-${{ matrix.spark-version }}/spark-${{ matrix.spark-version }}-bin-hadoop3.2.tgz'
 
     - name: Check Spark
-      run: spark-submit --version
+      run: |
+        spark-submit --version
+        echo $SPARK_HOME
+        ls $SPARK_HOME

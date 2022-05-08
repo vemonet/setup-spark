@@ -45,9 +45,9 @@ try {
     }
   });
 
-  if (!fs.existsSync(`${installFolder}/spark/bin/spark-submit`)) {
-    throw new Error(`The Spark binary was not properly downloaded from ${sparkUrl}`);
-  }
+  // if (!fs.existsSync(`${installFolder}/spark/bin/spark-submit`)) {
+  //   throw new Error(`The Spark binary was not properly downloaded from ${sparkUrl}`);
+  // }
 
   // fs.access(`${installFolder}/spark/bin/spark-submit`, fs.constants.R_OK, (err) => {
   //   throw new Error(`The Spark binary was not properly downloaded from ${sparkUrl}`);
