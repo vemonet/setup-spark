@@ -1,6 +1,6 @@
 When contributing to this repository, please check the [issues](https://github.com/vemonet/setup-spark/issues) first, and post a new one if relevant.
 
-## Get the source code 📥
+## 📥 Get the source code
 
 1. [Fork this repository](https://github.com/vemonet/setup-spark/fork) 🍴
 
@@ -17,7 +17,7 @@ cd setup-spark
 git checkout -b my-branch
 ```
 
-## How to contribute 👩‍💻
+## 👩‍💻 How to contribute
 
 Checkout the only important file! The mighty [`src/setup-spark.ts` ✨](https://github.com/vemonet/setup-spark/blob/main/src/setup-spark.ts)
 
@@ -55,7 +55,7 @@ If you are making a substantive change try to link to a successful run that util
 2. [Send a pull request](https://github.com/vemonet/setup-spark/compare) to the `main` branch 📤
 3. Project contributors will review your change, and answer the pull request as soon as they can
 
-## Check dependencies licenses 📜
+## 📜 Check dependencies licenses
 
 This repository uses a tool called [Licensed](https://github.com/github/licensed) to verify third party dependencies. 
 
@@ -73,3 +73,25 @@ Run `licensed` locally and generate the license dependencies in `.licenses` use:
 ```
 
 If you have not licensed installed, this is not a problem, we will do it the next time we pull the changes.
+
+## 🔼 Updating dependencies
+
+Update dependencies to latest version:
+
+```bash
+npm update
+```
+
+Check for vulnerabilities:
+
+```bash
+npm audit
+```
+
+Fix dependencies with vulnerabilities:
+
+```bash
+npm audit fix --force
+```
+
+Commit, push and check if the GitHub action tests are passing.
