@@ -1,9 +1,8 @@
 import * as core from '@actions/core';
 import { exec } from 'child_process';
-// import * as fs from 'fs';
-import fs from 'fs';
+import * as fs from 'fs'
 
-// See docs to create JS action: https://docs.github.com/en/free-pro-team@latest/actions/creating-actions/creating-a-javascript-action
+// See docs to create JS action: https://docs.github.com/en/actions/creating-actions/creating-a-javascript-action
 
 try {
   const sparkVersion = core.getInput('spark-version');
@@ -30,7 +29,7 @@ try {
   var command = `cd /tmp &&
   wget -q -O spark.tgz ${sparkUrl} &&
   tar xzf spark.tgz -C ${installFolder} &&
-  rm "spark.tgz"
+  rm "spark.tgz" &&
   ln -s "${installFolder}/spark-${sparkVersion}-bin-hadoop${hadoopVersion}" ${installFolder}/spark`
 
   // var command = `cd /tmp &&
@@ -46,10 +45,13 @@ try {
     }
   });
 
-  fs.access(`${installFolder}/spark/bin/spark-submit`, fs.constants.R_OK, (err) => {
+  if (!fs.existsSync(`${installFolder}/spark/bin/spark-submit`)) {
     throw new Error(`The Spark binary was not properly downloaded from ${sparkUrl}`);
-  });
-  console.log(new Date().toLocaleTimeString('fr-FR') + ' - Binary downloaded, setting up environment variables');
+  }
+
+  // fs.access(`${installFolder}/spark/bin/spark-submit`, fs.constants.R_OK, (err) => {
+  //   throw new Error(`The Spark binary was not properly downloaded from ${sparkUrl}`);
+  // });
 
   // fs.stat(`${installFolder}/spark/bin/spark-submit`, (err, stat) => {
   //   if(err == null) {
@@ -58,6 +60,8 @@ try {
   //     throw new Error(`The Spark binary was not properly downloaded from ${sparkUrl}`);
   //   }
   // });
+
+  console.log(new Date().toLocaleTimeString('fr-FR') + ' - Binary downloaded, setting up environment variables');
 
   const sparkHome = installFolder + '/spark';
   const SPARK_OPTS = `--driver-java-options=-Xms1024M --driver-java-options=-Xmx2048M --driver-java-options=-Dlog4j.logLevel=info`
@@ -73,9 +77,11 @@ try {
   exec(`echo "PYSPARK_DRIVER_PYTHON=${PYSPARK_PYTHON}" >> $GITHUB_ENV`, (err, stdout, stderr) => { });
   exec(`echo "PYTHONPATH=${PYTHONPATH}" >> $GITHUB_ENV`, (err, stdout, stderr) => { });
   exec(`echo "SPARK_OPTS=${SPARK_OPTS}" >> $GITHUB_ENV`, (err, stdout, stderr) => { });
+  // core.exportVariable('envVar', 'Val');
 
   // Add Spark to path
   exec(`echo "PATH=$PATH:${sparkHome}/bin" >> $GITHUB_ENV`, (err, stdout, stderr) => { });
+  // core.addPath('/path/to/mytool');
 
   core.setOutput("spark-version", sparkVersion);
 } catch (error) {
