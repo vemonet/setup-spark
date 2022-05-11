@@ -59,8 +59,9 @@ try {
     if (!sparkUrl) {
         sparkUrl = `https://archive.apache.org/dist/spark/spark-${sparkVersion}/spark-${sparkVersion}-bin-hadoop${hadoopVersion}${scalaBit}.tgz`;
     }
+    // curl -fsSL -o spark.tgz ${sparkUrl} &&
     var command = `cd /tmp &&
-  curl -fsSL -o spark.tgz ${sparkUrl} &&
+  wget -q -O spark.tgz ${sparkUrl} &&
   tar xzf spark.tgz -C ${installFolder} &&
   rm "spark.tgz" &&
   ln -s "${installFolder}/spark-${sparkVersion}-bin-hadoop${hadoopVersion}${scalaBit}" ${installFolder}/spark`;
