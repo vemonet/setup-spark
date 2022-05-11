@@ -71,7 +71,7 @@ try {
         (0, child_process_1.execSync)(command);
     }
     catch (error) {
-        console.log('Error running the command to download the Spark binary');
+        console.log(`${new Date().toLocaleTimeString('fr-FR')} - Error running the command to download the Spark binary`);
         // @ts-ignore
         throw new Error(error.message);
     }
@@ -96,7 +96,7 @@ try {
     core.setOutput("spark-version", sparkVersion);
 }
 catch (error) {
-    console.log('\nIssue installing Spark: check if the Spark version and Hadoop versions you are using is part of the one proposed in the Spark download page at https://spark.apache.org/downloads.html');
+    console.log(`\n${new Date().toLocaleTimeString('fr-FR')} - Issue installing Spark: check if the Spark version and Hadoop versions you are using is part of the one proposed in the Spark download page at https://spark.apache.org/downloads.html`);
     console.log(error);
     // @ts-ignore
     core.setFailed(error.message);

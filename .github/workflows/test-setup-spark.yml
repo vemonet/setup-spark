@@ -8,22 +8,33 @@ on:
 jobs:
   test-setup-spark:
     name: Test setup Spark
-    runs-on: ${{ matrix.os }} 
+    runs-on: ${{ matrix.versions.os }} 
     strategy:
       matrix:
         os: 
           - 'ubuntu-latest'
           - 'macos-latest'
         versions:
-          - spark: 3.0.2
+          - os: 'ubuntu-latest'
+            spark: 3.0.2
             hadoop: 3.2
-          - spark: 3.0.3
+          - os: 'macos-latest'
+            spark: 3.0.2
             hadoop: 3.2
-          - spark: 3.1.1
+          - os: 'ubuntu-latest'
+            spark: 3.0.3
             hadoop: 3.2
-          - spark: 3.1.2
+          - os: 'ubuntu-latest'
+            spark: 3.1.1
             hadoop: 3.2
-          - spark: 3.2.1
+          - os: 'ubuntu-latest'
+            spark: 3.1.2
+            hadoop: 3.2
+          - os: 'ubuntu-latest'
+            spark: 3.2.1
+            hadoop: 3.2
+          - os: 'macos-latest'
+            spark: 3.2.1
             hadoop: 3.2
 
     steps:
