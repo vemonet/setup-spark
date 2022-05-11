@@ -11,9 +11,6 @@ jobs:
     runs-on: ${{ matrix.versions.os }} 
     strategy:
       matrix:
-        os: 
-          - 'ubuntu-latest'
-          - 'macos-latest'
         versions:
           - os: 'ubuntu-latest'
             spark: 3.0.2
@@ -63,6 +60,7 @@ jobs:
 
     - name: Check Spark
       run: spark-submit --version
+
 
 
   test-setup-scala-version:
