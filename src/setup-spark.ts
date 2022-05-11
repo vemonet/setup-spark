@@ -31,7 +31,7 @@ try {
     sparkUrl = `https://archive.apache.org/dist/spark/spark-${sparkVersion}/spark-${sparkVersion}-bin-hadoop${hadoopVersion}${scalaBit}.tgz`
   }
   var command = `cd /tmp &&
-  wget -q -O spark.tgz ${sparkUrl} &&
+  curl -fsSL -o spark.tgz ${sparkUrl} &&
   tar xzf spark.tgz -C ${installFolder} &&
   rm "spark.tgz" &&
   ln -s "${installFolder}/spark-${sparkVersion}-bin-hadoop${hadoopVersion}${scalaBit}" ${installFolder}/spark`

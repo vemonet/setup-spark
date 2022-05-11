@@ -8,9 +8,12 @@ on:
 jobs:
   test-setup-spark:
     name: Test setup Spark
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }} 
     strategy:
       matrix:
+        os: 
+          - 'ubuntu-latest'
+          - 'macos-latest'
         versions:
           - spark: 3.0.2
             hadoop: 3.2
