@@ -33,12 +33,13 @@ try {
   }
   
   var downloadCommand = `cd /tmp &&
-    wget -q -O ${path} ${sparkUrl}
+    wget -q -O ${path} ${sparkUrl} && ls /tmp
   `
 
   try {
     if (!fs.existsSync(path)) {
       try {
+        console.log(`${new Date().toLocaleTimeString('fr-FR')} - Downloading the binary from ${sparkUrl}`);
         execSync(downloadCommand);
       } catch (error) {
         console.log(`${new Date().toLocaleTimeString('fr-FR')} - Error running the command to download the Spark binary`);
@@ -55,7 +56,7 @@ try {
   tar xzf ${path} -C ${installFolder} &&
   ln -sf "${installFolder}/spark-${sparkVersion}-bin-hadoop${hadoopVersion}${scalaBit}" ${installFolder}/spark`
 
-  console.log(`${new Date().toLocaleTimeString('fr-FR')} - Downloading the binary from ${sparkUrl}`);
+  console.log(`${new Date().toLocaleTimeString('fr-FR')} - Unpacking the binary from ${path}`);
 
   try {
     execSync(command);
