@@ -10,6 +10,7 @@ try {
   const hadoopVersion = core.getInput('hadoop-version');
   const scalaVersion = core.getInput('scala-version');
   const py4jVersion = core.getInput('py4j-version');
+  const path = './spark.tgz'
 
   // Try to write to the parent folder of the workflow workspace
   const workspaceFolder: string = process.env.GITHUB_WORKSPACE || '/home/runner/work'
@@ -30,14 +31,29 @@ try {
   if (!sparkUrl) {
     sparkUrl = `https://archive.apache.org/dist/spark/spark-${sparkVersion}/spark-${sparkVersion}-bin-hadoop${hadoopVersion}${scalaBit}.tgz`
   }
+  
+  var downloadCommand = `cd /tmp &&
+    wget -q -O ${path} ${sparkUrl}
+  `
+
+  try {
+    if (!fs.existsSync(path)) {
+      try {
+        execSync(downloadCommand);
+      } catch (error) {
+        console.log(`${new Date().toLocaleTimeString('fr-FR')} - Error running the command to download the Spark binary`);
+        // @ts-ignore
+        throw new Error(error.message);
+      }
+    }
+  } catch(err) {
+    console.error(err)
+  }
 
   // curl -fsSL -o spark.tgz ${sparkUrl} &&
-  var command = `cd /tmp &&
-  wget -q -O spark.tgz ${sparkUrl} &&
-  tar xzf spark.tgz -C ${installFolder} &&
-  rm "spark.tgz" &&
+  var untarCommand = `cd /tmp &&
+  tar xzf ${path} -C ${installFolder} &&
   ln -sf "${installFolder}/spark-${sparkVersion}-bin-hadoop${hadoopVersion}${scalaBit}" ${installFolder}/spark`
-  // TODO: improve the symlink generation
 
   console.log(`${new Date().toLocaleTimeString('fr-FR')} - Downloading the binary from ${sparkUrl}`);
 
