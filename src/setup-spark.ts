@@ -10,7 +10,7 @@ try {
   const hadoopVersion = core.getInput('hadoop-version');
   const scalaVersion = core.getInput('scala-version');
   const py4jVersion = core.getInput('py4j-version');
-  const path = './spark.tgz'
+  const path = 'spark.tgz'
 
   // Try to write to the parent folder of the workflow workspace
   const workspaceFolder: string = process.env.GITHUB_WORKSPACE || '/home/runner/work'
@@ -32,14 +32,12 @@ try {
     sparkUrl = `https://archive.apache.org/dist/spark/spark-${sparkVersion}/spark-${sparkVersion}-bin-hadoop${hadoopVersion}${scalaBit}.tgz`
   }
   
-  var downloadCommand = `cd /tmp &&
-    wget -q -O ${path} ${sparkUrl} && ls /tmp
-  `
+  var downloadCommand = `cd /tmp && wget -q -O ${path} ${sparkUrl} && ls /tmp`
 
   try {
-    if (!fs.existsSync(path)) {
+    if (!fs.existsSync(`/tmp/${path}`)) {
       try {
-        console.log(`${new Date().toLocaleTimeString('fr-FR')} - Downloading the binary from ${sparkUrl}`);
+        console.log(`${new Date().toLocaleTimeString('fr-FR')} - Downloading the binary from ${sparkUrl} to /tmp/${path}`);
         execSync(downloadCommand);
       } catch (error) {
         console.log(`${new Date().toLocaleTimeString('fr-FR')} - Error running the command to download the Spark binary`);
@@ -56,12 +54,12 @@ try {
   tar xzf ${path} -C ${installFolder} &&
   ln -sf "${installFolder}/spark-${sparkVersion}-bin-hadoop${hadoopVersion}${scalaBit}" ${installFolder}/spark`
 
-  console.log(`${new Date().toLocaleTimeString('fr-FR')} - Unpacking the binary from ${path}`);
+  console.log(`${new Date().toLocaleTimeString('fr-FR')} - Unpacking the binary from /tmp/${path}`);
 
   try {
-    execSync(command);
+    execSync(untarCommand);
   } catch (error) {
-    console.log(`${new Date().toLocaleTimeString('fr-FR')} - Error running the command to download the Spark binary`);
+    console.log(`${new Date().toLocaleTimeString('fr-FR')} - Error running the command to unpack the Spark binary`);
     // @ts-ignore
     throw new Error(error.message);
   }
