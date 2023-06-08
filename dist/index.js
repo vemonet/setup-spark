@@ -40,6 +40,7 @@ try {
     const hadoopVersion = core.getInput('hadoop-version');
     const scalaVersion = core.getInput('scala-version');
     const py4jVersion = core.getInput('py4j-version');
+    const path = 'spark.tgz';
     // Try to write to the parent folder of the workflow workspace
     const workspaceFolder = process.env.GITHUB_WORKSPACE || '/home/runner/work';
     let installFolder = workspaceFolder.split("/").slice(0, -1).join('/');
@@ -59,19 +60,33 @@ try {
     if (!sparkUrl) {
         sparkUrl = `https://archive.apache.org/dist/spark/spark-${sparkVersion}/spark-${sparkVersion}-bin-hadoop${hadoopVersion}${scalaBit}.tgz`;
     }
-    // curl -fsSL -o spark.tgz ${sparkUrl} &&
-    var command = `cd /tmp &&
-  wget -q -O spark.tgz ${sparkUrl} &&
-  tar xzf spark.tgz -C ${installFolder} &&
-  rm "spark.tgz" &&
-  ln -sf "${installFolder}/spark-${sparkVersion}-bin-hadoop${hadoopVersion}${scalaBit}" ${installFolder}/spark`;
-    // TODO: improve the symlink generation
-    console.log(`${new Date().toLocaleTimeString('fr-FR')} - Downloading the binary from ${sparkUrl}`);
+    var downloadCommand = `cd /tmp && wget -q -O ${path} ${sparkUrl} && ls /tmp`;
     try {
-        (0, child_process_1.execSync)(command);
+        if (!fs.existsSync(`/tmp/${path}`)) {
+            try {
+                console.log(`${new Date().toLocaleTimeString('fr-FR')} - Downloading the binary from ${sparkUrl} to /tmp/${path}`);
+                (0, child_process_1.execSync)(downloadCommand);
+            }
+            catch (error) {
+                console.log(`${new Date().toLocaleTimeString('fr-FR')} - Error running the command to download the Spark binary`);
+                // @ts-ignore
+                throw new Error(error.message);
+            }
+        }
+    }
+    catch (err) {
+        console.error(err);
+    }
+    // curl -fsSL -o spark.tgz ${sparkUrl} &&
+    var untarCommand = `cd /tmp &&
+  tar xzf ${path} -C ${installFolder} &&
+  ln -sf "${installFolder}/spark-${sparkVersion}-bin-hadoop${hadoopVersion}${scalaBit}" ${installFolder}/spark`;
+    console.log(`${new Date().toLocaleTimeString('fr-FR')} - Unpacking the binary from /tmp/${path}`);
+    try {
+        (0, child_process_1.execSync)(untarCommand);
     }
     catch (error) {
-        console.log(`${new Date().toLocaleTimeString('fr-FR')} - Error running the command to download the Spark binary`);
+        console.log(`${new Date().toLocaleTimeString('fr-FR')} - Error running the command to unpack the Spark binary`);
         // @ts-ignore
         throw new Error(error.message);
     }
