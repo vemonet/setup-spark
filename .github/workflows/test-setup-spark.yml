@@ -8,7 +8,7 @@ on:
 jobs:
   test-setup-spark:
     name: Test setup Spark
-    runs-on: ${{ matrix.versions.os }} 
+    runs-on: ${{ matrix.versions.os }}
     strategy:
       matrix:
         versions:
@@ -33,6 +33,9 @@ jobs:
           - os: 'macos-latest'
             spark: 3.2.1
             hadoop: 3.2
+          - os: 'ubuntu-latest'
+            spark: 3.4.1
+            hadoop: 3
 
     steps:
     - name: Checkout
@@ -72,6 +75,9 @@ jobs:
           - spark: 3.2.1
             hadoop: 3.2
             scala: 2.13
+          - spark: 3.4.1
+            hadoop: 3
+            scala: 2.12
 
     steps:
     - name: Checkout

@@ -20,16 +20,17 @@ Basic workflow:
 steps:
 - uses: actions/setup-python@v3
   with:
-    python-version: '3.8'
+    python-version: '3.10'
 
 - uses: actions/setup-java@v3
   with:
-    java-version: '11'
+    java-version: '17'
+    distribution: temurin
 
 - uses: vemonet/setup-spark@v1
   with:
-    spark-version: '3.2.1'
-    hadoop-version: '3.2'
+    spark-version: '3.4.1'
+    hadoop-version: '3'
 
 - run: spark-submit --version
 ```
@@ -41,10 +42,10 @@ You can also provide a specific URL to download the Spark `.tgz` and/or a use sp
 ```yaml
 - uses: vemonet/setup-spark@v1
   with:
-    spark-version: '3.2.1'
-    hadoop-version: '3.2'
+    spark-version: '3.4.1'
+    hadoop-version: '3'
     scala-version: '2.13'
-    spark-url: 'https://archive.apache.org/dist/spark/spark-3.2.1/spark-3.2.1-bin-hadoop3.2-scala2.13.tgz'
+    spark-url: 'https://archive.apache.org/dist/spark/spark-3.4.1/spark-3.4.1-bin-hadoop3-scala2.13.tgz'
 ```
 
 # Available versions

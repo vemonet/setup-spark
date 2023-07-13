@@ -31,7 +31,7 @@ try {
   if (!sparkUrl) {
     sparkUrl = `https://archive.apache.org/dist/spark/spark-${sparkVersion}/spark-${sparkVersion}-bin-hadoop${hadoopVersion}${scalaBit}.tgz`
   }
-  
+
   var downloadCommand = `cd /tmp && wget -q -O ${path} ${sparkUrl} && ls /tmp`
 
   try {
@@ -58,9 +58,8 @@ try {
 
   try {
     execSync(untarCommand);
-  } catch (error) {
+  } catch (error: any) {
     console.log(`${new Date().toLocaleTimeString('fr-FR')} - Error running the command to unpack the Spark binary`);
-    // @ts-ignore
     throw new Error(error.message);
   }
 
@@ -83,6 +82,7 @@ try {
   core.exportVariable('PYSPARK_DRIVER_PYTHON', PYSPARK_PYTHON);
   core.exportVariable('PYTHONPATH', PYTHONPATH);
   core.exportVariable('SPARK_OPTS', SPARK_OPTS);
+  // @ts-ignore
   core.exportVariable('GITHUB_OUTPUT', GITHUB_OUTPUT);
 
   // Add Spark to path
