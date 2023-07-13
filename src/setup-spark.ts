@@ -82,8 +82,6 @@ try {
   core.exportVariable('PYSPARK_DRIVER_PYTHON', PYSPARK_PYTHON);
   core.exportVariable('PYTHONPATH', PYTHONPATH);
   core.exportVariable('SPARK_OPTS', SPARK_OPTS);
-  // @ts-ignore
-  core.exportVariable('GITHUB_OUTPUT', GITHUB_OUTPUT);
 
   // Add Spark to path
   core.addPath(`${sparkHome}/bin`);
