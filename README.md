@@ -18,10 +18,11 @@ Check for the latest Spark versions at https://spark.apache.org/downloads.html
 Basic workflow:
 ```yaml
 steps:
-- uses: actions/setup-python@v2
+- uses: actions/setup-python@v3
   with:
     python-version: '3.8'
-- uses: actions/setup-java@v1
+
+- uses: actions/setup-java@v3
   with:
     java-version: '11'
 
