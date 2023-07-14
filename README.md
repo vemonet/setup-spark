@@ -27,7 +27,7 @@ steps:
     java-version: '17'
     distribution: temurin
 
-- uses: vemonet/setup-spark@v1.1.0
+- uses: vemonet/setup-spark@v1
   with:
     spark-version: '3.4.1'
     hadoop-version: '3'
