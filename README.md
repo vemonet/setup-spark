@@ -1,6 +1,6 @@
 # setup-spark ✨
 
-[![Run setup-spark action](https://github.com/vemonet/setup-spark/actions/workflows/test-setup-spark.yml/badge.svg)](https://github.com/vemonet/setup-spark/actions/workflows/test-setup-spark.yml) [![CodeQL analysis](https://github.com/vemonet/setup-spark/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/vemonet/setup-spark/actions/workflows/codeql-analysis.yml)
+[![Run setup-spark action](https://github.com/vemonet/setup-spark/actions/workflows/test-setup-spark.yml/badge.svg)](https://github.com/vemonet/setup-spark/actions/workflows/test-setup-spark.yml) [![CodeQL analysis](https://github.com/vemonet/setup-spark/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/vemonet/setup-spark/actions/workflows/codeql-analysis.yml) [![Check licenses](https://github.com/vemonet/setup-spark/actions/workflows/licensed.yml/badge.svg)](https://github.com/vemonet/setup-spark/actions/workflows/licensed.yml)
 
 This action sets up Apache Spark in your environment for use in GitHub Actions by:
 
