@@ -28,10 +28,11 @@ try {
     sparkUrl = `https://www.apache.org/dyn/closer.lua/spark/spark-${sparkVersion}/spark-${sparkVersion}-bin-hadoop3.tgz`;
   }
 
+  let scalaBit = "";
   const officialUrlExists = checkUrlExists(sparkUrl);
   if (!officialUrlExists) {
     console.log(`${new Date().toLocaleTimeString('fr-FR')} - Official download URL not found. Falling back to Apache Archives.`);
-    const scalaBit = scalaVersion ? `-scala${scalaVersion}` : '';
+    scalaBit = scalaVersion ? `-scala${scalaVersion}` : '';
     sparkUrl = `https://archive.apache.org/dist/spark/spark-${sparkVersion}/spark-${sparkVersion}-bin-hadoop${hadoopVersion}${scalaBit}.tgz`;
   }
 
@@ -95,7 +96,7 @@ try {
 }
 
 // Helper function to check if a URL exists
-function checkUrlExists(url: string): boolean {
+function checkUrlExists(url: string): Promise<boolean> {
   const http = require('http');
   const https = require('https');
 
