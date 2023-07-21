@@ -36,6 +36,8 @@ try {
     sparkUrl = `https://archive.apache.org/dist/spark/spark-${sparkVersion}/spark-${sparkVersion}-bin-hadoop${hadoopVersion}${scalaBit}.tgz`;
   }
 
+  // https://archive.apache.org/dist/spark/spark-3.0.2/spark-3.0.2-bin-hadoop3.tgz
+
   const downloadCommand = `cd /tmp && wget -q -O ${path} ${sparkUrl} && ls /tmp`;
 
   try {
