@@ -8,7 +8,7 @@ inputs:
     required: true
   hadoop-version:
     description: "Hadoop version for the Spark binaries"
-    default: '3.3'
+    default: '3'
     required: false
   scala-version:
     description: "Scala version for the Spark binaries (optional)."

@@ -13,16 +13,13 @@ jobs:
       matrix:
         versions:
           - os: 'ubuntu-latest'
-            spark: 3.0.2
-            hadoop: 3.2
-          - os: 'macos-latest'
-            spark: 3.0.2
-            hadoop: 3.2
+            spark: 3.4.1
+            hadoop: 3
           - os: 'ubuntu-latest'
-            spark: 3.0.3
-            hadoop: 3.2
+            spark: 3.3.2
+            hadoop: 3
           - os: 'ubuntu-latest'
-            spark: 3.1.1
+            spark: 3.0.2
             hadoop: 3.2
           - os: 'ubuntu-latest'
             spark: 3.1.2
@@ -31,9 +28,6 @@ jobs:
             spark: 3.2.1
             hadoop: 3.2
           - os: 'macos-latest'
-            spark: 3.2.1
-            hadoop: 3.2
-          - os: 'ubuntu-latest'
             spark: 3.4.1
             hadoop: 3
 

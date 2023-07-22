@@ -7,6 +7,7 @@
     "tsc": "tsc",
     "ncc": "ncc build lib/setup-spark.js",
     "build": "tsc && ncc build lib/setup-spark.js",
+    "dev": "npm run build && act -j test-setup-spark",
     "format": "prettier --write **/*.ts",
     "format-check": "prettier --check **/*.ts",
     "test": "jest"

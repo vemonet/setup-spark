@@ -25,7 +25,7 @@ The Spark installation has been built based on the [jupyter/docker-stack PySpark
 
 In order to avoid uploading `node_modules/` to the repository, we use [vercel/ncc](https://github.com/vercel/ncc) to create a single `index.js` file that gets saved in `dist/`.
 
-### Developing
+### Development
 
 1. Install:
 
@@ -48,6 +48,14 @@ This also generates the javascript files from TypeScript files. Any files genera
 We use the `test-setup-spark.yml` GitHub Actions workflow in `.github/workflows` to test setting up Spark versions
 
 If you are making a substantive change try to link to a successful run that utilizes the changes you are working on.
+
+You can use [`act`](https://github.com/nektos/act) to test running the action locally:
+
+```bash
+act -j test-setup-spark
+# Build and run act:
+npm run dev
+```
 
 ### Pull request process
 
