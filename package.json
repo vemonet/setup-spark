@@ -3,6 +3,7 @@
   "version": "1.1.2",
   "description": "Setup Spark in GitHub Actions workflows",
   "main": "dist/index.js",
+  "private": true,
   "scripts": {
     "postinstall": "curl -Lfs -o licensed.tar.gz https://github.com/github/licensed/releases/download/3.1.0/licensed-3.1.0-linux-x64.tar.gz && tar -xzf licensed.tar.gz",
     "fmt": "prettier --write **/*.ts",
@@ -28,7 +29,11 @@
     "ts-node": "^10.9.1",
     "typescript": "^5.0.3"
   },
-  "author": "vemonet",
+  "author": {
+    "name": "Vincent Emonet",
+    "email": "vincent.emonet@gmail.com",
+    "url": "https://vemonet.github.io"
+  },
   "license": "MIT",
   "homepage": "https://github.com/vemonet/setup-spark",
   "repository": {

@@ -9,7 +9,7 @@ This action sets up Apache Spark in your environment for use in GitHub Actions b
 
 This enables to test applications using a local Spark context in GitHub Actions.
 
-# Usage
+## 🪄 Usage
 
 You will need to setup **Python** and **Java** in the job before setting up **Spark**
 
@@ -48,7 +48,7 @@ You can also provide a specific URL to download the Spark `.tgz` and/or a use sp
     spark-url: 'https://archive.apache.org/dist/spark/spark-3.4.1/spark-3.4.1-bin-hadoop3-scala2.13.tgz'
 ```
 
-# Available versions
+## ️🏷️ Available versions
 
 Check for the latest Spark versions at https://spark.apache.org/downloads.html
 
@@ -56,11 +56,11 @@ The Hadoop version stays quite stable.
 
 The `setup-spark` action is tested for various versions of Spark and Hadoop in `.github/workflows/test-setup-spark.yml`
 
-# License
+## 📜 License
 
 The scripts and documentation in this project are released under the [MIT License](LICENSE).
 
-# Contributions
+## 📝 Contributions
 
 Contributions are welcome! Feel free to test other Spark versions, and submit [issues](/issues), or [pull requests](https://github.com/vemonet/setup-spark/blob/main/CONTRIBUTING.md).
 
