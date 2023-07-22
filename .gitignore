@@ -2,6 +2,9 @@
 node_modules/
 __tests__/runner/*
 
+# Licensed
+meta/
+
 # Ignore js files that are transpiled from ts files in src/
 lib/
 

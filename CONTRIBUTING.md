@@ -17,7 +17,7 @@ cd setup-spark
 git checkout -b my-branch
 ```
 
-## 👩‍💻 How to contribute
+## 👩‍💻 Development
 
 Checkout the only important file! The mighty [`src/setup-spark.ts` ✨](https://github.com/vemonet/setup-spark/blob/main/src/setup-spark.ts)
 
@@ -25,14 +25,10 @@ The Spark installation has been built based on the [jupyter/docker-stack PySpark
 
 In order to avoid uploading `node_modules/` to the repository, we use [vercel/ncc](https://github.com/vercel/ncc) to create a single `index.js` file that gets saved in `dist/`.
 
-### Development
-
-1. Install with [Licensed](https://github.com/github/licensed) to check dependencies:
+1. Install:
 
 ```bash
 npm install
-wget -O licensed.tar.gz https://github.com/github/licensed/releases/download/3.1.0/licensed-3.1.0-linux-x64.tar.gz
-tar -xzf licensed.tar.gz && rm -f licensed.tar.gz
 ```
 
 2. Build the `index.js` file:
@@ -45,13 +41,11 @@ This also generates the javascript files from TypeScript files. Any files genera
 
 3. Commit and push the generated `index.js` file with the rest of the modified files
 
-### Testing
+## ☑️ Test
 
-We use the `test-setup-spark.yml` GitHub Actions workflow in `.github/workflows` to test setting up Spark versions
+We use the `test.yml` GitHub Actions workflow in `.github/workflows` to test setting up Spark versions. If you are making a substantive change try to link to a successful run that utilizes the changes you are working on.
 
-If you are making a substantive change try to link to a successful run that utilizes the changes you are working on.
-
-You can use [`act`](https://github.com/nektos/act) to test running the action locally:
+Install [`act`](https://github.com/nektos/act) to test running the action locally:
 
 ```bash
 act -j test-setup-spark
@@ -59,33 +53,27 @@ act -j test-setup-spark
 npm run dev
 ```
 
-Format:
+Format the code with prettier:
 
 ```bash
 npm run fmt
 ```
 
-### Pull request process
-
-1. Before sending a pull request, make sure the project still work as expected with the new changes properly integrated
-2. [Send a pull request](https://github.com/vemonet/setup-spark/compare) to the `main` branch 📤
-3. Project contributors will review your change, and answer the pull request as soon as they can
-
 ## 📜 Check dependencies licenses
 
 This repository uses a tool called [Licensed](https://github.com/github/licensed) to verify third party dependencies. 
 
-Download licensed on Linux:
+[Download licensed](https://github.com/github/licensed/releases/download/3.1.0/licensed-3.1.0-linux-x64.tar.gz):
 
 ```bash
-wget -O licensed.tar.gz https://github.com/github/licensed/releases/download/3.1.0/licensed-3.1.0-linux-x64.tar.gz
+curl -Lfs -o licensed.tar.gz https://github.com/github/licensed/releases/download/3.1.0/licensed-3.1.0-linux-x64.tar.gz
 tar -xzf licensed.tar.gz && rm -f licensed.tar.gz
 ```
 
 Run `licensed` locally and generate the license dependencies in `.licenses` use:
 
 ```bash
-./licensed cache
+npm run licensed
 ```
 
 If you have not licensed installed, this is not a problem, we will do it the next time we pull the changes.
@@ -111,6 +99,12 @@ npm audit fix --force
 ```
 
 Commit, push and check if the GitHub action tests are passing.
+
+## 🕊️ Pull request process
+
+1. Before sending a pull request, make sure the project still work as expected with the new changes properly integrated
+2. [Send a pull request](https://github.com/vemonet/setup-spark/compare) to the `main` branch 📤
+3. Project contributors will review your change, and answer the pull request as soon as they can
 
 ## 🏷️ Publish new version
 

@@ -42,7 +42,7 @@ jobs:
       run: npm install
 
     # - name: Lint
-    #   run: npm run fmt-check
+    #   run: npm run lint
 
     - name: Run setup-spark ${{ matrix.versions.spark }}
       uses: ./
@@ -98,44 +98,22 @@ jobs:
 
   CodeQL-analysis:
     name: 🔎 CodeQL analysis
+    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
         language: ['javascript']
-
-    # CodeQL runs on ubuntu-latest and windows-latest
-    runs-on: ubuntu-latest
-
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3
-
-    # Initializes the CodeQL tools for scanning.
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v2
       with:
         languages: ${{ matrix.language }}
-      #   languages: go, javascript, csharp, python, cpp, java
-
-    # Autobuild attempts to build any compiled languages  (C/C++, C#, or Java).
-    # If this step fails, then you should remove it and run the build manually (see below)
     - name: Autobuild
       uses: github/codeql-action/autobuild@v2
-
-    # ℹ️ Command-line programs to run using the OS shell.
-    # 📚 https://git.io/JvXDl
-
-    # ✏️ If the Autobuild fails above, remove it and uncomment the following three lines
-    #    and modify them (or add more) to build your code if your project
-    #    uses a compiled language
-
-    #- run: |
-    #   make bootstrap
-    #   make release
-
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v2
-
 
 
   check-license:
@@ -146,8 +124,6 @@ jobs:
       - run: npm ci
       - name: Install licensed
         run: |
-          cd $RUNNER_TEMP
           curl -Lfs -o licensed.tar.gz https://github.com/github/licensed/releases/download/3.1.0/licensed-3.1.0-linux-x64.tar.gz
-          sudo tar -xzf licensed.tar.gz
-          sudo mv licensed /usr/local/bin/licensed
-      - run: licensed status
+          tar -xzf licensed.tar.gz
+      - run: ./licensed status

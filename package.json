@@ -6,10 +6,11 @@
   "scripts": {
     "tsc": "tsc",
     "ncc": "ncc build lib/setup-spark.js",
-    "build": "npm run fmt && tsc && ncc build lib/setup-spark.js && ./licensed cache",
+    "build": "npm run fmt && tsc && ncc build lib/setup-spark.js",
     "dev": "npm run build && act -j test-setup-spark",
+    "licensed": "./licensed cache",
     "fmt": "prettier --write **/*.ts",
-    "fmt-check": "prettier --check **/*.ts",
+    "lint": "prettier --check **/*.ts && ./licensed status",
     "test": "jest"
   },
   "repository": {
