@@ -27,10 +27,12 @@ In order to avoid uploading `node_modules/` to the repository, we use [vercel/nc
 
 ### Development
 
-1. Install:
+1. Install with [Licensed](https://github.com/github/licensed) to check dependencies:
 
 ```bash
 npm install
+wget -O licensed.tar.gz https://github.com/github/licensed/releases/download/3.1.0/licensed-3.1.0-linux-x64.tar.gz
+tar -xzf licensed.tar.gz && rm -f licensed.tar.gz
 ```
 
 2. Build the `index.js` file:
@@ -55,6 +57,12 @@ You can use [`act`](https://github.com/nektos/act) to test running the action lo
 act -j test-setup-spark
 # Build and run act:
 npm run dev
+```
+
+Format:
+
+```bash
+npm run fmt
 ```
 
 ### Pull request process

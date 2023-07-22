@@ -1,11 +1,11 @@
 import * as core from '@actions/core';
-import { execSync } from 'child_process';
+import {execSync} from 'child_process';
 import * as fs from 'fs';
 
 // See docs to create JS action: https://docs.github.com/en/actions/creating-actions/creating-a-javascript-action
 const log = (msg: string) => {
   console.log(`${new Date().toLocaleTimeString('fr-FR')} - ${msg}`);
-}
+};
 
 try {
   const sparkVersion = core.getInput('spark-version');
@@ -27,11 +27,9 @@ try {
 
   const scalaBit = scalaVersion ? `-scala${scalaVersion}` : '';
 
-  // Check if the official download URL exists, otherwise fall back to Apache Archives (slower)
-  // https://spark.apache.org/downloads.html
   if (!sparkUrl) {
-    // If URL not provided directly, we try to download from official
-    sparkUrl = `https://dlcdn.apache.org/spark/spark-${sparkVersion}/spark-${sparkVersion}-bin-hadoop${hadoopVersion}${scalaBit}.tgz`
+    // If URL not provided directly, we try to download from official recommended https://spark.apache.org/downloads.html
+    sparkUrl = `https://dlcdn.apache.org/spark/spark-${sparkVersion}/spark-${sparkVersion}-bin-hadoop${hadoopVersion}${scalaBit}.tgz`;
     try {
       download(sparkUrl, installFolder);
     } catch (error: any) {
@@ -76,20 +74,22 @@ try {
 
   core.setOutput('spark-version', sparkVersion);
 } catch (error: any) {
-  log(`Issue installing Spark: check if the Spark version and Hadoop versions you are using are part of the ones proposed on the Spark download page at https://spark.apache.org/downloads.html`);
+  log(
+    `Issue installing Spark: check if the Spark version and Hadoop versions you are using are part of the ones proposed on the Spark download page at https://spark.apache.org/downloads.html`
+  );
   console.log(error);
   core.setFailed(error.message);
 }
 
 // Helper function to download and unzip spark binary
 function download(url: string, installFolder: string) {
-  log(`Downloading Spark binary from ${url} to ${installFolder}`)
+  log(`Downloading Spark binary from ${url} to ${installFolder}`);
   const zipFile = 'spark.tgz';
   const downloadCommand = `cd /tmp && wget -q -O ${zipFile} ${url}`;
   const untarCommand = `cd /tmp && tar xzf ${zipFile} -C ${installFolder}`;
   try {
     execSync(downloadCommand);
-    log(`Unpacking the binary from /tmp/${zipFile}`);
+    log(`Unpacking the binary from /tmp/${zipFile} to ${installFolder}`);
     execSync(untarCommand);
   } catch (error: any) {
     log(`Error running the command to download the Spark binary`);

@@ -1,4 +1,4 @@
-# setup-spark ✨
+# ✨ setup-spark
 
 [![Test setup-spark action](https://github.com/vemonet/setup-spark/actions/workflows/test.yml/badge.svg)](https://github.com/vemonet/setup-spark/actions/workflows/test.yml)
 

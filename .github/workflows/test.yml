@@ -42,9 +42,7 @@ jobs:
       run: npm install
 
     # - name: Lint
-    #   run: npm run format-check
-    # - name: npm test
-    #   run: npm test
+    #   run: npm run fmt-check
 
     - name: Run setup-spark ${{ matrix.versions.spark }}
       uses: ./

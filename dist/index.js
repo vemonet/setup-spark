@@ -55,10 +55,8 @@ try {
     }
     log(`Spark will be installed to ${installFolder}`);
     const scalaBit = scalaVersion ? `-scala${scalaVersion}` : '';
-    // Check if the official download URL exists, otherwise fall back to Apache Archives (slower)
-    // https://spark.apache.org/downloads.html
     if (!sparkUrl) {
-        // If URL not provided directly, we try to download from official
+        // If URL not provided directly, we try to download from official recommended https://spark.apache.org/downloads.html
         sparkUrl = `https://dlcdn.apache.org/spark/spark-${sparkVersion}/spark-${sparkVersion}-bin-hadoop${hadoopVersion}${scalaBit}.tgz`;
         try {
             download(sparkUrl, installFolder);
@@ -114,7 +112,7 @@ function download(url, installFolder) {
     const untarCommand = `cd /tmp && tar xzf ${zipFile} -C ${installFolder}`;
     try {
         (0, child_process_1.execSync)(downloadCommand);
-        log(`Unpacking the binary from /tmp/${zipFile}`);
+        log(`Unpacking the binary from /tmp/${zipFile} to ${installFolder}`);
         (0, child_process_1.execSync)(untarCommand);
     }
     catch (error) {
