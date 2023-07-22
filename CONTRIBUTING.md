@@ -59,6 +59,12 @@ Format the code with prettier:
 npm run fmt
 ```
 
+Run licensed and eslint checks:
+
+```bash
+npm run test
+```
+
 ## 📜 Check dependencies licenses
 
 This repository uses a tool called [Licensed](https://github.com/github/licensed) to verify third party dependencies. 

@@ -4,7 +4,7 @@ import * as fs from 'fs';
 
 // See docs to create JS action: https://docs.github.com/en/actions/creating-actions/creating-a-javascript-action
 const log = (msg: string) => {
-  console.log(`${new Date().toLocaleTimeString('fr-FR')} - ${msg}`);
+  core.info(`${new Date().toLocaleTimeString('fr-FR')} - ${msg}`);
 };
 
 try {
@@ -55,7 +55,7 @@ try {
   }
 
   log(`Binary downloaded, setting up environment variables`);
-  const sparkHome = installFolder + '/spark';
+  const sparkHome = `${installFolder}/spark`;
   const SPARK_OPTS = `--driver-java-options=-Xms1024M --driver-java-options=-Xmx2048M --driver-java-options=-Dlog4j.logLevel=info`;
   const PYTHONPATH = `${sparkHome}/python:${sparkHome}/python/lib/py4j-${py4jVersion}-src.zip`;
   const PYSPARK_PYTHON = 'python';
@@ -77,7 +77,7 @@ try {
   log(
     `Issue installing Spark: check if the Spark version and Hadoop versions you are using are part of the ones proposed on the Spark download page at https://spark.apache.org/downloads.html`
   );
-  console.log(error);
+  core.error(error);
   core.setFailed(error.message);
 }
 
@@ -92,7 +92,7 @@ function download(url: string, installFolder: string) {
     log(`Unpacking the binary from /tmp/${zipFile} to ${installFolder}`);
     execSync(untarCommand);
   } catch (error: any) {
-    log(`Error running the command to download the Spark binary`);
+    log(`Error running the command to download the Spark binary from ${url}`);
     throw new Error(error.message);
   }
 }

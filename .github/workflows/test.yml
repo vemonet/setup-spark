@@ -8,7 +8,7 @@ on:
 jobs:
 
   test-setup-spark:
-    name: ✅ Test setup Spark
+    name: ✅ Run setup Spark
     runs-on: ${{ matrix.versions.os }}
     strategy:
       matrix:
@@ -39,10 +39,7 @@ jobs:
         node-version: 16
 
     - name: npm install
-      run: npm install
-
-    # - name: Lint
-    #   run: npm run lint
+      run: npm ci
 
     - name: Run setup-spark ${{ matrix.versions.spark }}
       uses: ./
@@ -58,7 +55,7 @@ jobs:
 
 
 
-  test-setup-scala-version:
+  test-setup-spark-scala:
     name: 🛢️ Test setup with specific Scala version
     runs-on: ubuntu-latest
     strategy:
@@ -81,7 +78,7 @@ jobs:
         node-version: 16
 
     - name: npm install
-      run: npm install
+      run: npm ci
 
     - name: Run setup-spark ${{ matrix.versions.spark }}
       uses: ./
@@ -117,13 +114,15 @@ jobs:
 
 
   check-license:
-    name: 📜 Check licenses
+    name: 📜 Check licenses and eslint
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - run: npm ci
-      - name: Install licensed
-        run: |
-          curl -Lfs -o licensed.tar.gz https://github.com/github/licensed/releases/download/3.1.0/licensed-3.1.0-linux-x64.tar.gz
-          tar -xzf licensed.tar.gz
-      - run: ./licensed status
+      - run: npm run test
+
+      # - name: Install licensed
+      #   run: |
+      #     curl -Lfs -o licensed.tar.gz https://github.com/github/licensed/releases/download/3.1.0/licensed-3.1.0-linux-x64.tar.gz
+      #     tar -xzf licensed.tar.gz
+      # - run: ./licensed status

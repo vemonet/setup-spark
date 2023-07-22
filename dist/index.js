@@ -35,7 +35,7 @@ const child_process_1 = __nccwpck_require__(81);
 const fs = __importStar(__nccwpck_require__(147));
 // See docs to create JS action: https://docs.github.com/en/actions/creating-actions/creating-a-javascript-action
 const log = (msg) => {
-    console.log(`${new Date().toLocaleTimeString('fr-FR')} - ${msg}`);
+    core.info(`${new Date().toLocaleTimeString('fr-FR')} - ${msg}`);
 };
 try {
     const sparkVersion = core.getInput('spark-version');
@@ -83,7 +83,7 @@ try {
         throw new Error(`The Spark binary was not properly downloaded from ${sparkUrl}`);
     }
     log(`Binary downloaded, setting up environment variables`);
-    const sparkHome = installFolder + '/spark';
+    const sparkHome = `${installFolder}/spark`;
     const SPARK_OPTS = `--driver-java-options=-Xms1024M --driver-java-options=-Xmx2048M --driver-java-options=-Dlog4j.logLevel=info`;
     const PYTHONPATH = `${sparkHome}/python:${sparkHome}/python/lib/py4j-${py4jVersion}-src.zip`;
     const PYSPARK_PYTHON = 'python';
@@ -101,7 +101,7 @@ try {
 }
 catch (error) {
     log(`Issue installing Spark: check if the Spark version and Hadoop versions you are using are part of the ones proposed on the Spark download page at https://spark.apache.org/downloads.html`);
-    console.log(error);
+    core.error(error);
     core.setFailed(error.message);
 }
 // Helper function to download and unzip spark binary
@@ -116,7 +116,7 @@ function download(url, installFolder) {
         (0, child_process_1.execSync)(untarCommand);
     }
     catch (error) {
-        log(`Error running the command to download the Spark binary`);
+        log(`Error running the command to download the Spark binary from ${url}`);
         throw new Error(error.message);
     }
 }
