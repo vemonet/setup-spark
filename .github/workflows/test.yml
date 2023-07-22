@@ -33,11 +33,6 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3
 
-    - name: Set Node.js 16
-      uses: actions/setup-node@v3
-      with:
-        node-version: 16
-
     - name: npm install
       run: npm ci
 
@@ -46,7 +41,6 @@ jobs:
       with:
         spark-version: ${{ matrix.versions.spark }}
         hadoop-version: ${{ matrix.versions.hadoop }}
-        # spark-url: 'https://archive.apache.org/dist/spark/spark-${{ matrix.spark-version }}/spark-${{ matrix.spark-version }}-bin-hadoop3.2.tgz'
 
     - name: Check Spark
       run: |
@@ -61,21 +55,16 @@ jobs:
     strategy:
       matrix:
         versions:
+          - spark: 3.4.1
+            hadoop: 3
+            scala: 2.13
           - spark: 3.2.1
             hadoop: 3.2
             scala: 2.13
-          # - spark: 3.4.1
-          #   hadoop: 3
-          #   scala: 2.12
 
     steps:
     - name: Checkout
       uses: actions/checkout@v3
-
-    - name: Set Node.js 16
-      uses: actions/setup-node@v3
-      with:
-        node-version: 16
 
     - name: npm install
       run: npm ci
@@ -86,11 +75,38 @@ jobs:
         spark-version: ${{ matrix.versions.spark }}
         hadoop-version: ${{ matrix.versions.hadoop }}
         scala-version: ${{ matrix.versions.scala }}
-        # spark-url: 'https://archive.apache.org/dist/spark/spark-${{ matrix.spark-version }}/spark-${{ matrix.spark-version }}-bin-hadoop3.2.tgz'
+        # spark-url: 'https://archive.apache.org/dist/spark/spark-${{ matrix.spark-version }}/spark-${{ matrix.spark-version }}-bin-hadoop${{ matrix.hadoop-version }}.tgz'
 
     - name: Check Spark
       run: spark-submit --version
 
+
+  test-setup-spark-url:
+    name: 🔗 Test setup with given URL
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        versions:
+          - spark: 3.4.1
+            hadoop: 3
+          - spark: 3.2.1
+            hadoop: 3.2
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+    - name: npm install
+      run: npm ci
+
+    - name: Run setup-spark ${{ matrix.versions.spark }}
+      uses: ./
+      with:
+        spark-version: ${{ matrix.versions.spark }}
+        hadoop-version: ${{ matrix.versions.hadoop }}
+        spark-url: 'https://archive.apache.org/dist/spark/spark-${{ matrix.versions.spark }}/spark-${{ matrix.versions.spark }}-bin-hadoop${{ matrix.versions.hadoop }}.tgz'
+
+    - name: Check Spark
+      run: spark-submit --version
 
 
   CodeQL-analysis:
@@ -120,9 +136,3 @@ jobs:
       - uses: actions/checkout@v3
       - run: npm ci
       - run: npm run test
-
-      # - name: Install licensed
-      #   run: |
-      #     curl -Lfs -o licensed.tar.gz https://github.com/github/licensed/releases/download/3.1.0/licensed-3.1.0-linux-x64.tar.gz
-      #     tar -xzf licensed.tar.gz
-      # - run: ./licensed status
