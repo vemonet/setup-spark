@@ -73,7 +73,7 @@ tar -xzf licensed.tar.gz && rm -f licensed.tar.gz
 Run `licensed` locally and generate the license dependencies in `.licenses` use:
 
 ```bash
-npm run licensed
+./licensed cache
 ```
 
 If you have not licensed installed, this is not a problem, we will do it the next time we pull the changes.

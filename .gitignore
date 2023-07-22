@@ -4,6 +4,7 @@ __tests__/runner/*
 
 # Licensed
 meta/
+*.tar.gz
 
 # Ignore js files that are transpiled from ts files in src/
 lib/
