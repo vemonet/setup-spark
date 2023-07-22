@@ -119,7 +119,6 @@ Create a new release on GitHub following semantic versioning, e.g. `v1.2.0`
 Then update the `v1` tag to the latest commit (`v1` should always be sync to the latest version)
 
 ```bash
-git tag -fa v1
-git push -f origin --tags
+npm run release
 ```
 

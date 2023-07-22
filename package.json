@@ -9,7 +9,8 @@
     "fmt": "prettier --write **/*.ts",
     "build": "npm run fmt && tsc && ncc build lib/setup-spark.js && ./licensed cache",
     "dev": "npm run build && act -j test-setup-spark-scala",
-    "test": "prettier --check **/*.ts && eslint ./src/**.ts --ignore-path .gitignore && ./licensed status"
+    "test": "prettier --check **/*.ts && eslint ./src/**.ts --ignore-path .gitignore && ./licensed status",
+    "release": "git tag -fa v1 -m 'v1' && git push -f origin v1"
   },
   "repository": {
     "type": "git",
