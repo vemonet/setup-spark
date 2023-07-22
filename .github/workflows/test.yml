@@ -6,8 +6,9 @@ on:
       - main
   pull_request:
 jobs:
+
   test-setup-spark:
-    name: Test setup Spark
+    name: ✅ Test setup Spark
     runs-on: ${{ matrix.versions.os }}
     strategy:
       matrix:
@@ -24,9 +25,6 @@ jobs:
           - os: 'ubuntu-latest'
             spark: 3.1.2
             hadoop: 3.2
-          - os: 'ubuntu-latest'
-            spark: 3.2.1
-            hadoop: 3.2
           - os: 'macos-latest'
             spark: 3.4.1
             hadoop: 3
@@ -35,10 +33,10 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3
 
-    - name: Set Node.js 16
+    - name: Set Node.js 18
       uses: actions/setup-node@v3
       with:
-        node-version: 16
+        node-version: 18
 
     - name: npm install
       run: npm install
@@ -63,7 +61,7 @@ jobs:
 
 
   test-setup-scala-version:
-    name: Test setup with specific Scala version
+    name: 🛢️ Test setup with specific Scala version
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -79,18 +77,13 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3
 
-    - name: Set Node.js 16
+    - name: Set Node.js 18
       uses: actions/setup-node@v3
       with:
-        node-version: 16
+        node-version: 18
 
     - name: npm install
       run: npm install
-
-    # - name: Lint
-    #   run: npm run format-check
-    # - name: npm test
-    #   run: npm test
 
     - name: Run setup-spark ${{ matrix.versions.spark }}
       uses: ./
@@ -102,3 +95,61 @@ jobs:
 
     - name: Check Spark
       run: spark-submit --version
+
+
+
+  CodeQL-analysis:
+    name: 🔎 CodeQL analysis
+    strategy:
+      fail-fast: false
+      matrix:
+        language: ['javascript']
+
+    # CodeQL runs on ubuntu-latest and windows-latest
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    # Initializes the CodeQL tools for scanning.
+    - name: Initialize CodeQL
+      uses: github/codeql-action/init@v2
+      with:
+        languages: ${{ matrix.language }}
+      #   languages: go, javascript, csharp, python, cpp, java
+
+    # Autobuild attempts to build any compiled languages  (C/C++, C#, or Java).
+    # If this step fails, then you should remove it and run the build manually (see below)
+    - name: Autobuild
+      uses: github/codeql-action/autobuild@v2
+
+    # ℹ️ Command-line programs to run using the OS shell.
+    # 📚 https://git.io/JvXDl
+
+    # ✏️ If the Autobuild fails above, remove it and uncomment the following three lines
+    #    and modify them (or add more) to build your code if your project
+    #    uses a compiled language
+
+    #- run: |
+    #   make bootstrap
+    #   make release
+
+    - name: Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@v2
+
+
+
+  check-license:
+    name: 📜 Check licenses
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: npm ci
+      - name: Install licensed
+        run: |
+          cd $RUNNER_TEMP
+          curl -Lfs -o licensed.tar.gz https://github.com/github/licensed/releases/download/3.1.0/licensed-3.1.0-linux-x64.tar.gz
+          sudo tar -xzf licensed.tar.gz
+          sudo mv licensed /usr/local/bin/licensed
+      - run: licensed status
