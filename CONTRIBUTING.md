@@ -19,11 +19,7 @@ git checkout -b my-branch
 
 ## 👩‍💻 Development
 
-Checkout the only important file! The mighty [`src/setup-spark.ts` ✨](https://github.com/vemonet/setup-spark/blob/main/src/setup-spark.ts)
-
-The Spark installation has been built based on the [jupyter/docker-stack PySpark notebook Dockerfile](https://github.com/jupyter/docker-stacks/blob/master/pyspark-notebook/Dockerfile)
-
-In order to avoid uploading `node_modules/` to the repository, we use [vercel/ncc](https://github.com/vercel/ncc) to create a single `index.js` file that gets saved in `dist/`.
+Checkout the only important file! The mighty [`src/setup-spark.ts` ✨](https://github.com/vemonet/setup-spark/blob/main/src/setup-spark.ts). The Spark installation has been inspired by the [jupyter/docker-stack pyspark Dockerfile](https://github.com/jupyter/docker-stacks/blob/master/pyspark-notebook/Dockerfile)
 
 1. Install:
 
@@ -31,13 +27,11 @@ In order to avoid uploading `node_modules/` to the repository, we use [vercel/nc
 npm install
 ```
 
-2. Build the `index.js` file:
+2. Build the `dist/index.js` file with [vercel/ncc](https://github.com/vercel/ncc):
 
 ```bash
 npm run build
 ```
-
-This also generates the javascript files from TypeScript files. Any files generated using `tsc` will be added to `lib/`, however those files also are not uploaded to the repository and are excluded using `.gitignore`.
 
 3. Commit and push the generated `index.js` file with the rest of the modified files
 
@@ -59,7 +53,7 @@ Format the code with prettier:
 npm run fmt
 ```
 
-Run licensed and eslint checks:
+Run linting checks:
 
 ```bash
 npm run test
@@ -67,22 +61,7 @@ npm run test
 
 ## 📜 Check dependencies licenses
 
-This repository uses a tool called [Licensed](https://github.com/github/licensed) to verify third party dependencies. 
-
-[Download licensed](https://github.com/github/licensed/releases/download/3.1.0/licensed-3.1.0-linux-x64.tar.gz):
-
-```bash
-curl -Lfs -o licensed.tar.gz https://github.com/github/licensed/releases/download/3.1.0/licensed-3.1.0-linux-x64.tar.gz
-tar -xzf licensed.tar.gz && rm -f licensed.tar.gz
-```
-
-Run `licensed` locally and generate the license dependencies in `.licenses` use:
-
-```bash
-./licensed cache
-```
-
-If you have not licensed installed, this is not a problem, we will do it the next time we pull the changes.
+Third party dependencies licenses are checked automatically by a GitHub Action workflow using [Licensed](https://github.com/github/licensed).
 
 ## 🔼 Updating dependencies
 

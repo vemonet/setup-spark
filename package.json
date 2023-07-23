@@ -5,12 +5,13 @@
   "main": "dist/index.js",
   "private": true,
   "scripts": {
-    "postinstall": "curl -Lfs -o licensed.tar.gz https://github.com/github/licensed/releases/download/3.1.0/licensed-3.1.0-linux-x64.tar.gz && tar -xzf licensed.tar.gz",
     "fmt": "prettier --write **/*.ts",
-    "build": "npm run fmt && tsc && ncc build lib/setup-spark.js && ./licensed cache",
+    "build": "npm run fmt && tsc && ncc build lib/setup-spark.js",
     "dev": "npm run build && act -j test-setup-spark-scala",
-    "test": "prettier --check **/*.ts && eslint ./src/**.ts --ignore-path .gitignore && ./licensed status",
-    "release": "git tag -fa v1 -m 'v1' && git push -f origin v1"
+    "test": "prettier --check **/*.ts && eslint ./src/**.ts --ignore-path .gitignore",
+    "release": "git tag -fa v1 -m 'v1' && git push -f origin v1",
+    "install-licensed": "curl -Lfs -o licensed.tar.gz https://github.com/github/licensed/releases/download/3.1.0/licensed-3.1.0-linux-x64.tar.gz && tar -xzf licensed.tar.gz",
+    "licensed": "./licensed cache"
   },
   "dependencies": {
     "@actions/core": "^1.10.0",

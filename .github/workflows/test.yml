@@ -5,10 +5,13 @@ on:
     branches:
       - main
   pull_request:
+
 jobs:
 
+  # git diff --exit-code dist
+
   test-setup-spark:
-    name: ✅ Run setup Spark
+    name: ☑️ Run setup-spark
     runs-on: ${{ matrix.versions.os }}
     strategy:
       matrix:
@@ -50,7 +53,7 @@ jobs:
 
 
   test-setup-spark-scala:
-    name: 🛢️ Test setup with specific Scala version
+    name: 🛢️ Run setup-spark with given Scala version
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -82,7 +85,7 @@ jobs:
 
 
   test-setup-spark-url:
-    name: 🔗 Test setup with given URL
+    name: 🔗 Run setup-spark with given URL
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -129,10 +132,34 @@ jobs:
       uses: github/codeql-action/analyze@v2
 
 
-  check-license:
-    name: 📜 Check licenses and eslint
+  lint:
+    name: ✅ Check with ESlint
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - run: npm ci
       - run: npm run test
+
+  check-license:
+    name: 📜 Check licenses
+    if: ${{ github.event_name == 'push' }}
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      contents: write
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ruby
+      - uses: github/setup-licensed@v1
+        with:
+          version: 4.x
+
+      - run: npm ci
+
+      - uses: github/licensed-ci@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          commit_message: 📜 Auto-update license files
+          workflow: push
