@@ -1,135 +1,6 @@
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 9559:
-/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
-
-// test
-
-"use strict";
-
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-const core = __importStar(__nccwpck_require__(2186));
-const tc = __importStar(__nccwpck_require__(7784));
-const fs = __importStar(__nccwpck_require__(7147));
-// See docs to create JS action: https://docs.github.com/en/actions/creating-actions/creating-a-javascript-action
-const log = (msg) => {
-    core.info(`${new Date().toLocaleTimeString('fr-FR')} - ${msg}`);
-};
-function run() {
-    return __awaiter(this, void 0, void 0, function* () {
-        try {
-            const sparkVersion = core.getInput('spark-version');
-            const hadoopVersion = core.getInput('hadoop-version');
-            const scalaVersion = core.getInput('scala-version');
-            const py4jVersion = core.getInput('py4j-version');
-            let sparkUrl = core.getInput('spark-url');
-            // Try to write to the parent folder of the workflow workspace
-            const workspaceFolder = process.env.GITHUB_WORKSPACE || '/home/runner/work';
-            let installFolder = workspaceFolder.split('/').slice(0, -1).join('/');
-            try {
-                fs.accessSync(installFolder, fs.constants.R_OK);
-            }
-            catch (err) {
-                log(`Using $GITHUB_WORKSPACE to store Spark (${installFolder} not writable)`);
-                installFolder = workspaceFolder;
-            }
-            log(`Spark will be installed to ${installFolder}`);
-            const scalaBit = scalaVersion ? `-scala${scalaVersion}` : '';
-            let sparkHome = `${installFolder}/spark-${sparkVersion}-bin-hadoop${hadoopVersion}${scalaBit}`;
-            const cachedSpark = tc.find('spark', sparkVersion);
-            if (cachedSpark) {
-                log(`Using Spark from cache ${cachedSpark}`);
-                sparkHome = cachedSpark;
-            }
-            else if (!sparkUrl) {
-                // If URL not provided directly, we try to download from official recommended https://spark.apache.org/downloads.html
-                sparkUrl = `https://dlcdn.apache.org/spark/spark-${sparkVersion}/spark-${sparkVersion}-bin-hadoop${hadoopVersion}${scalaBit}.tgz`;
-                try {
-                    yield download(sparkUrl, installFolder);
-                }
-                catch (error) {
-                    log(`Faster recommended download URL not available, downloading from Apache Archives.`);
-                    sparkUrl = `https://archive.apache.org/dist/spark/spark-${sparkVersion}/spark-${sparkVersion}-bin-hadoop${hadoopVersion}${scalaBit}.tgz`;
-                    yield download(sparkUrl, installFolder);
-                }
-            }
-            else {
-                // URL provided directly by user
-                yield download(sparkUrl, installFolder);
-            }
-            if (!fs.existsSync(`${sparkHome}/bin/spark-submit`)) {
-                throw new Error(`The Spark binary was not properly downloaded from ${sparkUrl}`);
-            }
-            log(`Binary downloaded, setting up environment variables`);
-            const SPARK_OPTS = `--driver-java-options=-Xms1024M --driver-java-options=-Xmx2048M --driver-java-options=-Dlog4j.logLevel=info`;
-            const PYTHONPATH = `${sparkHome}/python:${sparkHome}/python/lib/py4j-${py4jVersion}-src.zip`;
-            const PYSPARK_PYTHON = 'python';
-            // Set environment variables in the workflow
-            core.exportVariable('SPARK_HOME', sparkHome);
-            core.exportVariable('HADOOP_VERSION', hadoopVersion);
-            core.exportVariable('APACHE_SPARK_VERSION', sparkVersion);
-            core.exportVariable('PYSPARK_PYTHON', PYSPARK_PYTHON);
-            core.exportVariable('PYSPARK_DRIVER_PYTHON', PYSPARK_PYTHON);
-            core.exportVariable('PYTHONPATH', PYTHONPATH);
-            core.exportVariable('SPARK_OPTS', SPARK_OPTS);
-            // Add Spark to path
-            core.addPath(`${sparkHome}/bin`);
-            yield tc.cacheDir(sparkHome, 'spark', sparkVersion);
-            core.setOutput('spark-version', sparkVersion);
-        }
-        catch (error) {
-            log(`Issue installing Spark: check if the Spark version and Hadoop versions you are using are part of the ones proposed on the Spark download page at https://spark.apache.org/downloads.html`);
-            core.error(error);
-            core.setFailed(error.message);
-        }
-    });
-}
-// Helper function to download and unzip spark binary
-function download(url, installFolder) {
-    return __awaiter(this, void 0, void 0, function* () {
-        log(`Downloading Spark binary from ${url} to ${installFolder}`);
-        const zipPath = yield tc.downloadTool(url);
-        yield tc.extractTar(zipPath, installFolder);
-    });
-}
-run();
-
-
-/***/ }),
-
 /***/ 7351:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
@@ -685,8 +556,8 @@ class OidcClient {
             const res = yield httpclient
                 .getJson(id_token_url)
                 .catch(error => {
-                throw new Error(`Failed to get ID Token. \n
-        Error Code : ${error.statusCode}\n
+                throw new Error(`Failed to get ID Token. \n 
+        Error Code : ${error.statusCode}\n 
         Error Message: ${error.result.message}`);
             });
             const id_token = (_a = res.result) === null || _a === void 0 ? void 0 : _a.value;
@@ -6694,6 +6565,133 @@ exports["default"] = _default;
 
 /***/ }),
 
+/***/ 8737:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const core = __importStar(__nccwpck_require__(2186));
+const tc = __importStar(__nccwpck_require__(7784));
+const fs = __importStar(__nccwpck_require__(7147));
+// See docs to create JS action: https://docs.github.com/en/actions/creating-actions/creating-a-javascript-action
+const log = (msg) => {
+    core.info(`${new Date().toLocaleTimeString('fr-FR')} - ${msg}`);
+};
+function run() {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const sparkVersion = core.getInput('spark-version');
+            const hadoopVersion = core.getInput('hadoop-version');
+            const scalaVersion = core.getInput('scala-version');
+            const py4jVersion = core.getInput('py4j-version');
+            let sparkUrl = core.getInput('spark-url');
+            // Try to write to the parent folder of the workflow workspace
+            const workspaceFolder = process.env.GITHUB_WORKSPACE || '/home/runner/work';
+            let installFolder = workspaceFolder.split('/').slice(0, -1).join('/');
+            try {
+                fs.accessSync(installFolder, fs.constants.R_OK);
+            }
+            catch (err) {
+                log(`Using $GITHUB_WORKSPACE to store Spark (${installFolder} not writable)`);
+                installFolder = workspaceFolder;
+            }
+            log(`Spark will be installed to ${installFolder}`);
+            const scalaBit = scalaVersion ? `-scala${scalaVersion}` : '';
+            let sparkHome = `${installFolder}/spark-${sparkVersion}-bin-hadoop${hadoopVersion}${scalaBit}`;
+            const cachedSpark = tc.find('spark', sparkVersion);
+            if (cachedSpark) {
+                log(`Using Spark from cache ${cachedSpark}`);
+                sparkHome = cachedSpark;
+            }
+            else if (!sparkUrl) {
+                // If URL not provided directly, we try to download from official recommended https://spark.apache.org/downloads.html
+                sparkUrl = `https://dlcdn.apache.org/spark/spark-${sparkVersion}/spark-${sparkVersion}-bin-hadoop${hadoopVersion}${scalaBit}.tgz`;
+                try {
+                    yield download(sparkUrl, installFolder);
+                }
+                catch (error) {
+                    log(`Faster recommended download URL not available, downloading from Apache Archives.`);
+                    sparkUrl = `https://archive.apache.org/dist/spark/spark-${sparkVersion}/spark-${sparkVersion}-bin-hadoop${hadoopVersion}${scalaBit}.tgz`;
+                    yield download(sparkUrl, installFolder);
+                }
+            }
+            else {
+                // URL provided directly by user
+                yield download(sparkUrl, installFolder);
+            }
+            if (!fs.existsSync(`${sparkHome}/bin/spark-submit`)) {
+                throw new Error(`The Spark binary was not properly downloaded from ${sparkUrl}`);
+            }
+            log(`Binary downloaded, setting up environment variables`);
+            const SPARK_OPTS = `--driver-java-options=-Xms1024M --driver-java-options=-Xmx2048M --driver-java-options=-Dlog4j.logLevel=info`;
+            const PYTHONPATH = `${sparkHome}/python:${sparkHome}/python/lib/py4j-${py4jVersion}-src.zip`;
+            const PYSPARK_PYTHON = 'python';
+            // Set environment variables in the workflow
+            core.exportVariable('SPARK_HOME', sparkHome);
+            core.exportVariable('HADOOP_VERSION', hadoopVersion);
+            core.exportVariable('APACHE_SPARK_VERSION', sparkVersion);
+            core.exportVariable('PYSPARK_PYTHON', PYSPARK_PYTHON);
+            core.exportVariable('PYSPARK_DRIVER_PYTHON', PYSPARK_PYTHON);
+            core.exportVariable('PYTHONPATH', PYTHONPATH);
+            core.exportVariable('SPARK_OPTS', SPARK_OPTS);
+            // Add Spark to path
+            core.addPath(`${sparkHome}/bin`);
+            yield tc.cacheDir(sparkHome, 'spark', sparkVersion);
+            core.setOutput('spark-version', sparkVersion);
+        }
+        catch (error) {
+            log(`Issue installing Spark: check if the Spark version and Hadoop versions you are using are part of the ones proposed on the Spark download page at https://spark.apache.org/downloads.html`);
+            core.error(error);
+            core.setFailed(error.message);
+        }
+    });
+}
+// Helper function to download and unzip spark binary
+function download(url, installFolder) {
+    return __awaiter(this, void 0, void 0, function* () {
+        log(`Downloading Spark binary from ${url} to ${installFolder}`);
+        const zipPath = yield tc.downloadTool(url);
+        yield tc.extractTar(zipPath, installFolder);
+    });
+}
+run();
+
+
+/***/ }),
+
 /***/ 9491:
 /***/ ((module) => {
 
@@ -6818,7 +6816,7 @@ module.exports = require("util");
 /************************************************************************/
 /******/ 	// The module cache
 /******/ 	var __webpack_module_cache__ = {};
-/******/
+/******/ 	
 /******/ 	// The require function
 /******/ 	function __nccwpck_require__(moduleId) {
 /******/ 		// Check if module is in cache
@@ -6832,7 +6830,7 @@ module.exports = require("util");
 /******/ 			// no module.loaded needed
 /******/ 			exports: {}
 /******/ 		};
-/******/
+/******/ 	
 /******/ 		// Execute the module function
 /******/ 		var threw = true;
 /******/ 		try {
@@ -6841,23 +6839,23 @@ module.exports = require("util");
 /******/ 		} finally {
 /******/ 			if(threw) delete __webpack_module_cache__[moduleId];
 /******/ 		}
-/******/
+/******/ 	
 /******/ 		// Return the exports of the module
 /******/ 		return module.exports;
 /******/ 	}
-/******/
+/******/ 	
 /************************************************************************/
 /******/ 	/* webpack/runtime/compat */
-/******/
+/******/ 	
 /******/ 	if (typeof __nccwpck_require__ !== 'undefined') __nccwpck_require__.ab = __dirname + "/";
-/******/
+/******/ 	
 /************************************************************************/
-/******/
+/******/ 	
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module is referenced by other modules so it can't be inlined
-/******/ 	var __webpack_exports__ = __nccwpck_require__(9559);
+/******/ 	var __webpack_exports__ = __nccwpck_require__(8737);
 /******/ 	module.exports = __webpack_exports__;
-/******/
+/******/ 	
 /******/ })()
 ;

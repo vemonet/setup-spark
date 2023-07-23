@@ -21,7 +21,7 @@ git checkout -b my-branch
 
 Checkout the only important file! The mighty [`src/setup-spark.ts` ✨](https://github.com/vemonet/setup-spark/blob/main/src/setup-spark.ts). The Spark installation has been inspired by the [jupyter/docker-stack pyspark Dockerfile](https://github.com/jupyter/docker-stacks/blob/master/pyspark-notebook/Dockerfile)
 
-1. Install:
+1. Install dependencies:
 
 ```bash
 npm install
@@ -33,7 +33,7 @@ npm install
 npm run build
 ```
 
-3. Commit and push the generated `index.js` file with the rest of the modified files
+3. Commit and push the generated `dist/index.js` file with the rest of the modified files
 
 ## ☑️ Test
 
@@ -53,13 +53,11 @@ Format the code with prettier:
 npm run fmt
 ```
 
-Run linting checks:
+Run eslint checks:
 
 ```bash
 npm run test
 ```
-
-## 📜 Check dependencies licenses
 
 Third party dependencies licenses are checked automatically by a GitHub Action workflow using [Licensed](https://github.com/github/licensed).
 
@@ -84,12 +82,6 @@ npm audit fix --force
 ```
 
 Commit, push and check if the GitHub action tests are passing.
-
-## 🕊️ Pull request process
-
-1. Before sending a pull request, make sure the project still work as expected with the new changes properly integrated
-2. [Send a pull request](https://github.com/vemonet/setup-spark/compare) to the `main` branch 📤
-3. Project contributors will review your change, and answer the pull request as soon as they can
 
 ## 🏷️ Publish new version
 

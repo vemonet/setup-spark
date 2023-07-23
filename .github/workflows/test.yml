@@ -23,7 +23,7 @@ jobs:
     - name: Build action
       run: npm run build
 
-    - name: Check dist up-to-date
+    - name: Check dist/index.js is up-to-date with src/setup-spark.ts
       run: git diff --exit-code dist
 
 

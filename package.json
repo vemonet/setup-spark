@@ -6,7 +6,7 @@
   "private": true,
   "scripts": {
     "fmt": "prettier --write **/*.ts",
-    "build": "npm run fmt && tsc && ncc build lib/setup-spark.js",
+    "build": "npm run fmt && ncc build src/setup-spark.ts",
     "dev": "npm run build && act -j test-setup-spark-scala",
     "test": "prettier --check **/*.ts && eslint ./src/**.ts --ignore-path .gitignore",
     "release": "git tag -fa v1 -m 'v1' && git push -f origin v1",
@@ -25,9 +25,7 @@
     "eslint": "^8.0.1",
     "eslint-plugin-github": "^4.3.2",
     "eslint-plugin-prettier": "^5.0.0",
-    "prettier": "^3.0.0",
-    "ts-node": "^10.9.1",
-    "typescript": "^5.0.3"
+    "prettier": "^3.0.0"
   },
   "author": {
     "name": "Vincent Emonet",
