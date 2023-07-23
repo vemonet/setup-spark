@@ -1,6 +1,6 @@
 ### Checklist
 
-- [ ] I ran `npm run build` to re-build the `dist/index.js` file
+- [ ] I ran `npm run build` to re-build the `dist/index.js` file, and committed it.
 
 ### What does this PR solves?
 
