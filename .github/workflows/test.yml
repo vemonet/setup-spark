@@ -8,7 +8,24 @@ on:
 
 jobs:
 
-  # git diff --exit-code dist
+  build-setup-spark:
+    name: 📦 Lint and build setup-spark
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Run eslint checks
+      run: npm run test
+
+    - name: Build action
+      run: npm run build
+
+    - name: Check dist up-to-date
+      run: git diff --exit-code dist
+
 
   test-setup-spark:
     name: ☑️ Run setup-spark
@@ -35,8 +52,7 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v3
-
-    - name: npm install
+    - name: Install dependencies
       run: npm ci
 
     - name: Run setup-spark ${{ matrix.versions.spark }}
@@ -68,8 +84,7 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v3
-
-    - name: npm install
+    - name: Install dependencies
       run: npm ci
 
     - name: Run setup-spark ${{ matrix.versions.spark }}
@@ -98,7 +113,7 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v3
-    - name: npm install
+    - name: Install dependencies
       run: npm ci
 
     - name: Run setup-spark ${{ matrix.versions.spark }}
@@ -131,14 +146,6 @@ jobs:
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v2
 
-
-  lint:
-    name: ✅ Check with ESlint
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - run: npm ci
-      - run: npm run test
 
   check-license:
     name: 📜 Check licenses
