@@ -37,7 +37,7 @@ steps:
 
 See the [action.yml](action.yml) file for a complete rundown of the available parameters.
 
-You can also provide a specific URL to download the Spark `.tgz` and/or a use specific scala version:
+You can also define various options, such as providing a specific URL to download the Spark `.tgz`, or using a specific scala version:
 
 ```yaml
 - uses: vemonet/setup-spark@v1
@@ -46,6 +46,9 @@ You can also provide a specific URL to download the Spark `.tgz` and/or a use sp
     hadoop-version: '3'
     scala-version: '2.13'
     spark-url: 'https://archive.apache.org/dist/spark/spark-3.4.1/spark-3.4.1-bin-hadoop3-scala2.13.tgz'
+    xms: '1024M'
+    xmx: '2048M'
+    log-level: 'debug'
 ```
 
 ## ️🏷️ Available versions
@@ -54,11 +57,7 @@ Check for the latest Spark versions at https://spark.apache.org/downloads.html
 
 The Hadoop version stays quite stable.
 
-The `setup-spark` action is tested for various versions of Spark and Hadoop in `.github/workflows/test-setup-spark.yml`
-
-## 📜 License
-
-The scripts and documentation in this project are released under the [MIT License](LICENSE).
+The `setup-spark` action is tested for various versions of Spark and Hadoop in [`.github/workflows/test.yml`](https://github.com/vemonet/setup-spark/blob/main/.github/workflows/test.yml)
 
 ## 📝 Contributions
 

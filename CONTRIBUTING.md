@@ -42,7 +42,7 @@ We use the `test.yml` GitHub Actions workflow in `.github/workflows` to test set
 Install [`act`](https://github.com/nektos/act) to test running the action locally:
 
 ```bash
-act -j test-setup-spark
+act -j test-setup-spark-scala
 # Build and run act:
 npm run dev
 ```
