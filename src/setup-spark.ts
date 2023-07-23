@@ -2,25 +2,28 @@ import * as core from '@actions/core';
 import * as tc from '@actions/tool-cache';
 import * as fs from 'fs';
 
-// See docs to create JS action: https://docs.github.com/en/actions/creating-actions/creating-a-javascript-action
+// See docs to create gh action: https://docs.github.com/en/actions/creating-actions/creating-a-javascript-action
 const log = (msg: string) => {
   core.info(`${new Date().toLocaleTimeString('fr-FR')} - ${msg}`);
 };
 
-async function run(): Promise<void> {
+async function run() {
   try {
     const sparkVersion = core.getInput('spark-version');
     const hadoopVersion = core.getInput('hadoop-version');
     const scalaVersion = core.getInput('scala-version');
     const py4jVersion = core.getInput('py4j-version');
+    const xmx = core.getInput('xmx');
+    const xms = core.getInput('xms');
+    const logLevel = core.getInput('log-level');
     let sparkUrl = core.getInput('spark-url');
 
     // Try to write to the parent folder of the workflow workspace
-    const workspaceFolder: string = process.env.GITHUB_WORKSPACE || '/home/runner/work';
-    let installFolder: any = workspaceFolder.split('/').slice(0, -1).join('/');
+    const workspaceFolder = process.env.GITHUB_WORKSPACE || '/home/runner/work';
+    let installFolder = workspaceFolder.split('/').slice(0, -1).join('/');
     try {
       fs.accessSync(installFolder, fs.constants.R_OK);
-    } catch (err) {
+    } catch (error) {
       log(`Using $GITHUB_WORKSPACE to store Spark (${installFolder} not writable)`);
       installFolder = workspaceFolder;
     }
@@ -33,27 +36,27 @@ async function run(): Promise<void> {
     if (cachedSpark) {
       log(`Using Spark from cache ${cachedSpark}`);
       sparkHome = cachedSpark;
-    } else if (!sparkUrl) {
+    } else if (sparkUrl) {
+      // URL provided directly by user
+      await download(sparkUrl, installFolder);
+    } else {
       // If URL not provided directly, we try to download from official recommended https://spark.apache.org/downloads.html
       sparkUrl = `https://dlcdn.apache.org/spark/spark-${sparkVersion}/spark-${sparkVersion}-bin-hadoop${hadoopVersion}${scalaBit}.tgz`;
       try {
         await download(sparkUrl, installFolder);
-      } catch (error: any) {
+      } catch (error) {
         log(`Faster recommended download URL not available, downloading from Apache Archives.`);
         sparkUrl = `https://archive.apache.org/dist/spark/spark-${sparkVersion}/spark-${sparkVersion}-bin-hadoop${hadoopVersion}${scalaBit}.tgz`;
         await download(sparkUrl, installFolder);
       }
-    } else {
-      // URL provided directly by user
-      await download(sparkUrl, installFolder);
     }
 
     if (!fs.existsSync(`${sparkHome}/bin/spark-submit`)) {
-      throw new Error(`The Spark binary was not properly downloaded from ${sparkUrl}`);
+      throw new Error(`The Spark binary downloaded from ${sparkUrl} could not be found in ${sparkHome}`);
     }
 
-    log(`Binary downloaded, setting up environment variables`);
-    const SPARK_OPTS = `--driver-java-options=-Xms1024M --driver-java-options=-Xmx2048M --driver-java-options=-Dlog4j.logLevel=info`;
+    log(`Spark binary downloaded, setting up environment variables and cache`);
+    const SPARK_OPTS = `--driver-java-options=-Xms${xms} --driver-java-options=-Xmx${xmx} --driver-java-options=-Dlog4j.logLevel=${logLevel}`;
     const PYTHONPATH = `${sparkHome}/python:${sparkHome}/python/lib/py4j-${py4jVersion}-src.zip`;
     const PYSPARK_PYTHON = 'python';
 
@@ -66,18 +69,18 @@ async function run(): Promise<void> {
     core.exportVariable('PYTHONPATH', PYTHONPATH);
     core.exportVariable('SPARK_OPTS', SPARK_OPTS);
 
-    // Add Spark to path
+    // Add Spark to path and cache it
     core.addPath(`${sparkHome}/bin`);
-
     await tc.cacheDir(sparkHome, 'spark', sparkVersion);
 
     core.setOutput('spark-version', sparkVersion);
-  } catch (error: any) {
+  } catch (error) {
     log(
       `Issue installing Spark: check if the Spark version and Hadoop versions you are using are part of the ones proposed on the Spark download page at https://spark.apache.org/downloads.html`
     );
-    core.error(error);
-    core.setFailed(error.message);
+    const err = <Error>error;
+    core.error(err);
+    core.setFailed(err.message);
   }
 }
 
