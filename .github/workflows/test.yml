@@ -93,7 +93,6 @@ jobs:
         spark-version: ${{ matrix.versions.spark }}
         hadoop-version: ${{ matrix.versions.hadoop }}
         scala-version: ${{ matrix.versions.scala }}
-        # spark-url: 'https://archive.apache.org/dist/spark/spark-${{ matrix.spark-version }}/spark-${{ matrix.spark-version }}-bin-hadoop${{ matrix.hadoop-version }}.tgz'
 
     - name: Check Spark
       run: spark-submit --version
