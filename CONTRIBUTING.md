@@ -85,11 +85,19 @@ Commit, push and check if the GitHub action tests are passing.
 
 ## 🏷️ Publish new version
 
-Create a new release on GitHub following semantic versioning, e.g. `v1.2.0`
+1. Update version in `package.json`
 
-Then update the `v1` tag to the latest commit (`v1` should always be sync to the latest version)
+   ```bash
+   npm version patch
+   ```
 
-```bash
-npm run release
-```
+2. Create a new release on GitHub for this new tag
+
+3. Then update the `v1` tag to the latest commit (`v1` should always be sync to the latest version)
+
+   ```bash
+   npm run release
+   ```
+
+   
 
