@@ -18,13 +18,13 @@ Check for the latest Spark versions at https://spark.apache.org/downloads.html
 Basic workflow:
 ```yaml
 steps:
-- uses: actions/setup-python@v3
+- uses: actions/setup-python@v5
   with:
     python-version: '3.10'
 
-- uses: actions/setup-java@v3
+- uses: actions/setup-java@v4
   with:
-    java-version: '17'
+    java-version: '21'
     distribution: temurin
 
 - uses: vemonet/setup-spark@v1
