@@ -87,10 +87,6 @@ Commit, push and check if the GitHub action tests are passing.
 
 1. Update version in `package.json`
 
-   ```bash
-   npm version patch
-   ```
-
 2. Create a new release on GitHub for this new tag
 
 3. Then update the `v1` tag to the latest commit (`v1` should always be sync to the latest version)
