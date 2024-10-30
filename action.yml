@@ -28,6 +28,9 @@ inputs:
     description: "Min RAM passed to Spark options (-Xms)."
     default: "1024M"
     required: false
+  install-folder:
+    description: "Folder where to install Spark (will be automatically defined if not provided)"
+    required: false
   log-level:
     description: "Log level passed to Spark options (info/debug/warn)."
     default: "info"

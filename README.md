@@ -29,7 +29,7 @@ steps:
 
 - uses: vemonet/setup-spark@v1
   with:
-    spark-version: '3.4.1'
+    spark-version: '3.5.3'
     hadoop-version: '3'
 
 - run: spark-submit --version
@@ -42,13 +42,14 @@ You can also define various options, such as providing a specific URL to downloa
 ```yaml
 - uses: vemonet/setup-spark@v1
   with:
-    spark-version: '3.4.1'
+    spark-version: '3.5.3'
     hadoop-version: '3'
     scala-version: '2.13'
-    spark-url: 'https://archive.apache.org/dist/spark/spark-3.4.1/spark-3.4.1-bin-hadoop3-scala2.13.tgz'
+    spark-url: 'https://archive.apache.org/dist/spark/spark-3.5.3/spark-3.5.3-bin-hadoop3-scala2.13.tgz'
     xms: '1024M'
     xmx: '2048M'
     log-level: 'debug'
+    install-folder: '/home/runner/work'
 ```
 
 ## ️🏷️ Available versions

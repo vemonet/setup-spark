@@ -28315,11 +28315,13 @@ function run() {
             let sparkUrl = core.getInput('spark-url');
             // Try to write to the parent folder of the workflow workspace
             const workspaceFolder = process.env.GITHUB_WORKSPACE || '/home/runner/work';
-            let installFolder = workspaceFolder.split('/').slice(0, -1).join('/');
+            let installFolder = core.getInput('install-folder') || workspaceFolder.split('/').slice(0, -1).join('/');
             try {
                 fs.accessSync(installFolder, fs.constants.R_OK);
             }
             catch (error) {
+                if (core.getInput('install-folder'))
+                    throw new Error(`The install folder ${installFolder} is not writable`);
                 log(`Using $GITHUB_WORKSPACE to store Spark (${installFolder} not writable)`);
                 installFolder = workspaceFolder;
             }

@@ -34,10 +34,10 @@ jobs:
       matrix:
         versions:
           - os: 'ubuntu-latest'
-            spark: 3.5.0
+            spark: 3.5.3
             hadoop: 3
           - os: 'ubuntu-latest'
-            spark: 3.4.1
+            spark: 3.4.4
             hadoop: 3
           - os: 'ubuntu-latest'
             spark: 3.3.2
@@ -49,7 +49,7 @@ jobs:
             spark: 3.1.2
             hadoop: 3.2
           - os: 'macos-latest'
-            spark: 3.4.1
+            spark: 3.5.3
             hadoop: 3
 
     steps:
@@ -77,10 +77,10 @@ jobs:
     strategy:
       matrix:
         versions:
-          - spark: 3.4.1
+          - spark: 3.5.3
             hadoop: 3
             scala: 2.13
-          - spark: 3.2.1
+          - spark: 3.5.3
             hadoop: 3.2
             scala: 2.13
 
@@ -96,6 +96,7 @@ jobs:
         spark-version: ${{ matrix.versions.spark }}
         hadoop-version: ${{ matrix.versions.hadoop }}
         scala-version: ${{ matrix.versions.scala }}
+
 
     - name: Check Spark
       run: spark-submit --version
