@@ -80,7 +80,7 @@ jobs:
           - spark: 3.5.3
             hadoop: 3
             scala: 2.13
-          - spark: 3.5.3
+          - spark: 3.2.1
             hadoop: 3.2
             scala: 2.13
 
