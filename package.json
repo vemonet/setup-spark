@@ -10,7 +10,9 @@
     "build": "npm run fmt && npm run test && ncc build src/setup-spark.ts",
     "dev": "npm run build && act -j test-setup-spark-scala",
     "upgrade": "npx npm-check-updates -u && npm i",
-    "release": "git tag -fa v1 -m 'v1' && git push -f origin v1"
+    "changelog": "auto-changelog -p",
+    "version": "npm test && npm run build && auto-changelog -p && git add CHANGELOG.md",
+    "postversion": "git push origin v$(npm pkg get version | tr -d \\\") && git tag -fa v1 -m 'v1' && git push -f origin v1"
   },
   "dependencies": {
     "@actions/core": "^1.11.1",
@@ -21,6 +23,7 @@
     "@typescript-eslint/eslint-plugin": "^8.12.2",
     "@typescript-eslint/parser": "^8.12.2",
     "@vercel/ncc": "^0.38.2",
+    "auto-changelog": "^2.5.0",
     "eslint": "^8.57.1",
     "eslint-plugin-github": "^5.0.2",
     "eslint-plugin-prettier": "^5.2.1",
