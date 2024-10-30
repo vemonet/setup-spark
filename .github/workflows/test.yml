@@ -147,28 +147,3 @@ jobs:
       uses: github/codeql-action/autobuild@v2
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v2
-
-
-  check-license:
-    name: 📜 Check licenses
-    if: ${{ github.event_name == 'push' }}
-    runs-on: ubuntu-latest
-    permissions:
-      pull-requests: write
-      contents: write
-    steps:
-      - uses: actions/checkout@v4
-      - uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: ruby
-      - uses: github/setup-licensed@v1
-        with:
-          version: 4.x
-
-      - run: npm ci
-
-      - uses: github/licensed-ci@v1
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          commit_message: 📜 Auto-update license files
-          workflow: push

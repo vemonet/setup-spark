@@ -24,7 +24,7 @@ Checkout the only important file! The mighty [`src/setup-spark.ts` ✨](https://
 1. Install dependencies:
 
 ```bash
-npm install
+npm i
 ```
 
 2. Build the `dist/index.js` file with [vercel/ncc](https://github.com/vercel/ncc):
@@ -59,8 +59,6 @@ Run eslint checks:
 npm run test
 ```
 
-Third party dependencies licenses are checked automatically by a GitHub Action workflow using [Licensed](https://github.com/github/licensed).
-
 ## 🔼 Updating dependencies
 
 Update dependencies to latest version:
@@ -94,6 +92,3 @@ Commit, push and check if the GitHub action tests are passing.
    ```bash
    npm run release
    ```
-
-   
-
