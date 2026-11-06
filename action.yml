@@ -39,7 +39,7 @@ outputs:
   spark-version:
     description: "The installed Apache Spark version."
 runs:
-  using: "node20"
+  using: "node24"
   main: "dist/index.js"
 branding:
   icon: "star"
